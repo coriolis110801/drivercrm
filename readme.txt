@@ -13,3 +13,4 @@
     }
 
 通讯录API
+https://developers.mailerlite.com/docs/#mailerlite-api
