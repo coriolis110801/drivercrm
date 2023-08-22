@@ -29,7 +29,7 @@ const ContactCard = ({ contact, onOpen, getContactId, deleteContact }) => {
             <FontAwesomeIcon size="3x" icon={faUser} mr="4" />
           </Box>
           <Stack>
-            <Text>{contact.name}</Text>
+            <Text>{contact.customer_name}</Text>
             <Text>{contact.email}</Text>
           </Stack>
         </Flex>
