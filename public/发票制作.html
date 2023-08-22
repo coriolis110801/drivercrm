@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>发票制作</title>
+    <style>
+        /* 样式代码将在这里添加 */
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <h1>发票制作</h1>
+            <button id="cancelButton">取消</button>
+        </nav>
+    </header>
+
+    <section id="customerInfo">
+        <button id="addNewCustomerButton">添加新客户</button>
+        <div id="customerFields">
+            <!-- 客户字段将在弹窗中填写 -->
+        </div>
+        <div id="addedCustomers">
+            <!-- 已添加的客户信息将在此显示 -->
+        </div>
+    </section>
+
+    <section id="invoiceDateSelection">
+        <label for="invoiceDate">选择发票日期:</label>
+        <input type="date" id="invoiceDate">
+    </section>
+
+    <section id="productList">
+        <button id="addProductButton">添加商品</button>
+        <button id="selectAddedProductButton">选择通讯录商品</button>
+        <ul id="productItemList">
+            <!-- 商品列表项将通过JavaScript动态添加 -->
+        </ul>
+    </section>
+
+    <section id="totalAmountCalculation">
+        <div id="autoCalculationArea">
+            <p>总金额: <span id="totalAmount">0</span></p>
+        </div>
+    </section>
+
+    <footer>
+        <button id="saveInvoiceButton">保存发票</button>
+    </footer>
+
+    <!-- 添加客户的弹窗 -->
+    <div id="弹窗1" class="modal">
+        <div class="modal-content">
+            <h2>添加新客户</h2>
+            <label for="newCustomerName">客户名称:</label>
+            <input type="text" id="newCustomerName">
+            <label for="newCustomerAddress">客户地址:</label>
+            <input type="text" id="newCustomerAddress">
+            <label for="newCustomerCity">城市:</label>
+            <input type="text" id="newCustomerCity">
+            <label for="newCustomerPhone">电话:</label>
+            <input type="text" id="newCustomerPhone">
+            <label for="newCustomerPostcode">邮政编码:</label>
+            <input type="text" id="newCustomerPostcode">
+            <button id="selectFromContactsButton">从通讯录选择</button>
+            <button id="saveCustomerButton">保存</button>
+            <button id="cancelAddCustomerButton">取消</button>
+        </div>
+    </div>
+
+    <!-- 添加商品的弹窗 -->
+    <div id="弹窗2" class="modal">
+        <div class="modal-content">
+            <h2>添加商品</h2>
+            <label for="productName">商品名称:</label>
+            <input type="text" id="productName">
+            <label for="productPrice">价格:</label>
+            <input type="text" id="productPrice">
+            <label for="productQuantity">数量:</label>
+            <input type="number" id="productQuantity">
+            <label for="productDiscount">折扣:</label>
+            <input type="number" id="productDiscount">
+            <p>小计: <span id="productSubtotal">0</span></p>
+            <button id="saveProductButton">保存</button>
+            <button id="cancelAddProductButton">取消</button>
+        </div>
+    </div>
+
+    <!-- 选择已添加商品的弹窗 -->
+    <div id="弹窗3" class="modal">
+        <div class="modal-content">
+            <h2>选择通讯录商品</h2>
+            <div>
+                <label for="searchProduct">搜索商品:</label>
+                <input type="text" id="searchProduct">
+            </div>
+            <div>
+                <button id="selectProductButton">选择商品</button>
+            </div>
+            <h3>经常添加的商品:</h3>
+            <ul id="frequentProducts">
+                <li>商品1</li>
+                <li>商品2</li>
+                <li>商品3</li>
+                <!-- 以此类推，您可以用常量代替 -->
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const addNewCustomerButton = document.getElementById("addNewCustomerButton");
+        const addCustomerModal = document.getElementById("弹窗1");
+        const cancelAddCustomerButton = document.getElementById("cancelAddCustomerButton");
+        const addedCustomers = document.getElementById("addedCustomers");
+
+        const addProductButton = document.getElementById("addProductButton");
+        const addProductModal = document.getElementById("弹窗2");
+        const cancelAddProductButton = document.getElementById("cancelAddProductButton");
+
+        const selectAddedProductButton = document.getElementById("selectAddedProductButton");
+        const selectProductModal = document.getElementById("弹窗3");
+        const selectProductButton = document.getElementById("selectProductButton");
+
+        addNewCustomerButton.addEventListener("click", () => {
+            addCustomerModal.style.display = "block";
+        });
+
+        cancelAddCustomerButton.addEventListener("click", () => {
+            addCustomerModal.style.display = "none";
+        });
+
+        addProductButton.addEventListener("click", () => {
+            addProductModal.style.display = "block";
+        });
+
+        cancelAddProductButton.addEventListener("click", () => {
+            addProductModal.style.display = "none";
+        });
+
+        selectAddedProductButton.addEventListener("click", () => {
+            selectProductModal.style.display = "block";
+        });
+
+        selectProductButton.addEventListener("click", () => {
+            // 添加选择商品的逻辑
+            selectProductModal.style.display = "none";
+        });
+
+        // 其他 JavaScript 代码将在这里添加，以实现交互逻辑
+    </script>
+</body>
+</html>

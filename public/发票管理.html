@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice管理</title>
+    <style>
+        /* Add your CSS styles here */
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header>
+        <h1>Invoice管理</h1>
+    </header>
+    
+    <!-- 添加新Invoice按钮 -->
+    <button id="addInvoiceButton">添加新Invoice</button>
+    
+    <!-- 继续编辑区域 -->
+    <section>
+        <h2>继续编辑今天的发票</h2>
+        <ul id="invoiceList">
+            <!-- Placeholder for dynamically generated invoice items -->
+        </ul>
+    </section>
+    
+    <!-- 今日发票提交到管理员按钮 -->
+    <button id="submitToAdminButton">今日发票提交到管理员</button>
+    
+    <!-- JavaScript code to handle interactions and dynamic content -->
+    <script>
+        const invoiceList = document.getElementById("invoiceList");
+        const addInvoiceButton = document.getElementById("addInvoiceButton");
+        const submitToAdminButton = document.getElementById("submitToAdminButton");
+        
+        // Function to add a new invoice item to the list
+        function addInvoiceItem(invoiceNumber, customerName) {
+            const listItem = document.createElement("li");
+            listItem.textContent = `Invoice号码: ${invoiceNumber}, 客户名称: ${customerName}`;
+            invoiceList.appendChild(listItem);
+        }
+        
+        // Simulate adding sample invoice items
+        addInvoiceItem("12345", "客户A");
+        addInvoiceItem("67890", "客户B");
+        
+        // Add event listeners for button clicks
+        addInvoiceButton.addEventListener("click", () => {
+            // Show form for entering new invoice information
+            // You can implement this part using a modal or a separate page
+            window.location.href =  'http://localhost:3000/发票制作.html'
+        });
+        
+        submitToAdminButton.addEventListener("click", () => {
+            // Send today's edited invoices to the admin
+            // You can implement this part using AJAX or other communication methods
+            alert("今日发票提交到管理员");
+            
+            // Clear the invoice list
+            invoiceList.innerHTML = "";
+        });
+    </script>
+</body>
+</html>
