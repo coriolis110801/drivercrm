@@ -1,8 +1,9 @@
 import axios from "axios";
 
 let defaultData = {
-  driver_name:'xiaoming'
+  id:1
 }
+const  Rp = defaultData
 export const addContactOnServer = async (customer_name, email, customer_address, city, postcode, phone) => {
   try {
     const { data } = await axios.post(
@@ -17,9 +18,9 @@ export const addContactOnServer = async (customer_name, email, customer_address,
 
 export const getAllContacts = async () => {
   try {
-    const { data } = await axios.post(
-      `${process.env.REACT_APP_SERVER}/query-driver-customers/`,
-        {...defaultData}
+    const { data } = await axios.get(
+      `${process.env.REACT_APP_SERVER}/api/responsible_persons/${Rp.id}/customers/`,
+
     );
     return data;
   } catch (error) {
@@ -59,3 +60,64 @@ export const getContactById = async (id) => {
     console.log(error);
   }
 };
+
+
+export const Product_Add_DriverStock = async (product_name, discount_amount,price)=>{
+  try {
+    const { data } = await axios.post(
+        `${process.env.REACT_APP_SERVER}/responsible-persons/${Rp.id}/driver-stocks/`,{
+          product_name, discount_amount,price
+        }
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+export const Product_Update_DriverStock = async (product_name, discount_amount,price,id,responsible_person)=>{
+  try {
+    const { data } = await axios.put(
+        `${process.env.REACT_APP_SERVER}/responsible-persons/${Rp.id}/driver-stocks/${id}/`,{
+          product_name, discount_amount,price,responsible_person
+        }
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+export const Product_Delete_DriverStock = async (id)=>{
+  try {
+    const { data } = await axios.delete(
+        `${process.env.REACT_APP_SERVER}/responsible-persons/${Rp.id}/driver-stocks/${id}/`
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+export const Product_Get_DriverStock = async ()=>{
+  try {
+    const { data } = await axios.get(
+        `${process.env.REACT_APP_SERVER}/responsible-persons-query/${Rp.id}/driver-stocks/`
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

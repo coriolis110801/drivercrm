@@ -84,7 +84,7 @@ app.listen(3001, () => {
 
 
 const a = ['a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8','a9','a10']
-const b = Array.from({length: 10000}, (item, index) => 'b' + index)
+const b = Array.from({length: 10}, (item, index) => 'b' + index)
 
 let multiple = Math.ceil(b.length / a.length)
 let alen = a.length

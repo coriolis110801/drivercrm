@@ -28,10 +28,18 @@ const ContactCard = ({ contact, onOpen, getContactId, deleteContact }) => {
           <Box mr="4">
             <FontAwesomeIcon size="3x" icon={faUser} mr="4" />
           </Box>
-          <Stack>
-            <Text>{contact.customer_name}</Text>
-            <Text>{contact.email}</Text>
-          </Stack>
+          {contact.product_name && (
+              <Stack>
+                <Text>{contact.product_name}</Text>
+                <Text>{contact.price}</Text>
+              </Stack>
+          )}
+          {contact.customer_name && (
+              <Stack>
+                <Text>{contact.customer_name}</Text>
+                <Text>{contact.email}</Text>
+              </Stack>
+          )}
         </Flex>
       </Link>
 
