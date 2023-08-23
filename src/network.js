@@ -6,6 +6,7 @@ const  Rp = {
 let defaultData = {
   ...Rp,
   responsible_person_id:1,
+  driver_name:'xiaoming'
 }
 
 export const addContactOnServer = async (customer_name, email, customer_address, city, postcode, phone) => {
