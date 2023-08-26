@@ -5,20 +5,23 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Contact from "./Contact";
 import Header from "./components/header";
+import Make from "./components/make";
 ReactDOM.render(
-  <React.StrictMode>
+
     <ChakraProvider>
       <Router>
         <Switch>
-          <Route path="/" >
-            <Header></Header>
+          <Route path="/Make">
+            <Make></Make>
           </Route>
           <Route path="/contact/:id">
             <Contact />
           </Route>
+          <Route path="/" >
+            <Header></Header>
+          </Route>
         </Switch>
       </Router>
-    </ChakraProvider>
-  </React.StrictMode>,
+    </ChakraProvider>,
   document.getElementById("root")
 );

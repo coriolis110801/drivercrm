@@ -52,6 +52,9 @@ export default function Header(props) {
             <Route path="/home" exact>
                 <Home></Home>
             </Route>
+            <Route path="/" exact>
+                <Home></Home>
+            </Route>
         </div>
 
 

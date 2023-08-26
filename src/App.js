@@ -27,7 +27,6 @@ const App = () => {
     const [searchData, setSearchData] = useState("");
     const [contacts, setContacts] = useState([]);
     const [contactId, setContactId] = useState();
-
     useEffect(() => {
         const fetchContacts = async () => {
             const data = await getAllContacts();

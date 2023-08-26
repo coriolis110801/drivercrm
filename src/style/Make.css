@@ -1,0 +1,26 @@
+
+.btn_head{
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+}
+.main_make{
+  padding: 20px;
+}
+.main_make h1{
+    font-size: 30px;
+}
+.main_make .item_make{
+    margin-top: 20px;
+}
+.main_make .label,.DrawerBody_main .label{
+    font-size: 14px;
+    font-weight: bolder;
+    margin-bottom: 5px;
+}
+.DrawerBody_main{
+    margin-top: 20px;
+}

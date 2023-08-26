@@ -72,7 +72,6 @@ function setData(data) {
     })
 }
 
-//随机生成id
 function getRandomId() {
     return '_' + Math.random().toString(36).substr(2, 9);
 }

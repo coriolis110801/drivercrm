@@ -113,7 +113,31 @@ export const Product_Get_DriverStock = async ()=>{
 }
 
 
-
+export const SaveInvoice = async (obj)=>{
+  try {
+    const { data } = await axios.post(
+        `${process.env.REACT_APP_SERVER}/api/invoice/`,{
+          ...obj,
+          responsible_person_id:Rp.id,
+        }
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+export const ListInvoice = async ()=>{
+  try {
+    const { data } = await axios.post(
+        `${process.env.REACT_APP_SERVER}/api/unpaid_invoices/`,{
+          responsible_person_id:Rp.id,
+        }
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 
 
