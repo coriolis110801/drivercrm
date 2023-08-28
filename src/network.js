@@ -8,11 +8,11 @@ let defaultData = {
   responsible_person_id:1,
   driver_name:'xiaoming'
 }
-
+let REACT_APP_SERVER = "https://www.butt-and-co.co.uk"
 export const addContactOnServer = async (customer_name, email, customer_address, city, postcode, phone) => {
   try {
     const { data } = await axios.post(
-      `${process.env.REACT_APP_SERVER}/create-driver-customer/`,
+      `${REACT_APP_SERVER}/create-driver-customer/`,
       { customer_name, email,...defaultData, customer_address, city, postcode, phone }
     );
     return data;
@@ -24,7 +24,7 @@ export const addContactOnServer = async (customer_name, email, customer_address,
 export const getAllContacts = async () => {
   try {
     const { data } = await axios.get(
-      `${process.env.REACT_APP_SERVER}/api/responsible_persons/${Rp.id}/customers/`,
+      `${REACT_APP_SERVER}/api/responsible_persons/${Rp.id}/customers/`,
 
     );
     return data;
@@ -36,7 +36,7 @@ export const getAllContacts = async () => {
 export const updateContactOnServer = async (customer_name, email, id, customer_address, city, postcode, phone) => {
   try {
     const { data } = await axios.patch(
-        `${process.env.REACT_APP_SERVER}/api/responsible_persons_edit/${Rp.id}/customers/${id}/`,
+        `${REACT_APP_SERVER}/api/responsible_persons_edit/${Rp.id}/customers/${id}/`,
       { customer_name, email,...defaultData, customer_address, city, postcode, phone }
     );
     return data;
@@ -47,7 +47,7 @@ export const updateContactOnServer = async (customer_name, email, id, customer_a
 export const deleteContactOnServer = async (id) => {
   try {
     const { data } = await axios.delete(
-      `${process.env.REACT_APP_SERVER}/api/responsible_persons_edit/${Rp.id}/customers/${id}/`
+      `${REACT_APP_SERVER}/api/responsible_persons_edit/${Rp.id}/customers/${id}/`
     );
     return data;
   } catch (error) {
@@ -58,7 +58,7 @@ export const deleteContactOnServer = async (id) => {
 export const getContactById = async (id) => {
   try {
     const { data } = await axios.get(
-        `${process.env.REACT_APP_SERVER}/api/responsible_persons_edit/${Rp.id}/customers/${id}/`
+        `${REACT_APP_SERVER}/api/responsible_persons_edit/${Rp.id}/customers/${id}/`
     );
     return data;
   } catch (error) {
@@ -70,7 +70,7 @@ export const getContactById = async (id) => {
 export const Product_Add_DriverStock = async (product_name, discount_amount,price)=>{
   try {
     const { data } = await axios.post(
-        `${process.env.REACT_APP_SERVER}/responsible-persons/${Rp.id}/driver-stocks/`,{
+        `${REACT_APP_SERVER}/responsible-persons/${Rp.id}/driver-stocks/`,{
           product_name, discount_amount,price
         }
     );
@@ -82,7 +82,7 @@ export const Product_Add_DriverStock = async (product_name, discount_amount,pric
 export const Product_Update_DriverStock = async (product_name, discount_amount,price,id,responsible_person)=>{
   try {
     const { data } = await axios.put(
-        `${process.env.REACT_APP_SERVER}/responsible-persons/${Rp.id}/driver-stocks/${id}/`,{
+        `${REACT_APP_SERVER}/responsible-persons/${Rp.id}/driver-stocks/${id}/`,{
           product_name, discount_amount,price,responsible_person
         }
     );
@@ -94,7 +94,7 @@ export const Product_Update_DriverStock = async (product_name, discount_amount,p
 export const Product_Delete_DriverStock = async (id)=>{
   try {
     const { data } = await axios.delete(
-        `${process.env.REACT_APP_SERVER}/responsible-persons/${Rp.id}/driver-stocks/${id}/`
+        `${REACT_APP_SERVER}/responsible-persons/${Rp.id}/driver-stocks/${id}/`
     );
     return data;
   } catch (error) {
@@ -104,7 +104,7 @@ export const Product_Delete_DriverStock = async (id)=>{
 export const Product_Get_DriverStock = async ()=>{
   try {
     const { data } = await axios.get(
-        `${process.env.REACT_APP_SERVER}/responsible-persons-query/${Rp.id}/driver-stocks/`
+        `${REACT_APP_SERVER}/responsible-persons-query/${Rp.id}/driver-stocks/`
     );
     return data;
   } catch (error) {
@@ -116,7 +116,7 @@ export const Product_Get_DriverStock = async ()=>{
 export const SaveInvoice = async (obj)=>{
   try {
     const { data } = await axios.post(
-        `${process.env.REACT_APP_SERVER}/api/invoice/`,{
+        `${REACT_APP_SERVER}/api/invoice/`,{
           ...obj,
           responsible_person_id:Rp.id,
         }
@@ -129,7 +129,7 @@ export const SaveInvoice = async (obj)=>{
 export const ListInvoice = async ()=>{
   try {
     const { data } = await axios.post(
-        `${process.env.REACT_APP_SERVER}/api/unpaid_invoices/`,{
+        `${REACT_APP_SERVER}/api/unpaid_invoices/`,{
           responsible_person_id:Rp.id,
         }
     );
@@ -143,7 +143,7 @@ export const ListInvoice = async ()=>{
 export const UpDateInvoice = async (obj)=>{
   try {
     const { data } = await axios.post(
-        `${process.env.REACT_APP_SERVER}/api/invoiceupdate/${obj.id}/`,{
+        `${REACT_APP_SERVER}/api/invoiceupdate/${obj.id}/`,{
           ...obj,
           responsible_person_id:Rp.id,
         }
@@ -157,7 +157,7 @@ export const UpDateInvoice = async (obj)=>{
 export const DelInvoice = async (obj)=>{
   try {
     const { data } = await axios.post(
-        `${process.env.REACT_APP_SERVER}/api/invoicedelete/${obj.id}/`
+        `${REACT_APP_SERVER}/api/invoicedelete/${obj.id}/`
     );
     return data;
   } catch (error) {
@@ -167,7 +167,7 @@ export const DelInvoice = async (obj)=>{
 export const UPAllInvoice = async (obj)=>{
   try {
     const { data } = await axios.post(
-        `${process.env.REACT_APP_SERVER}/update_invoice_status/`,{
+        `${REACT_APP_SERVER}/update_invoice_status/`,{
           invoice_ids:obj,
         }
     );
