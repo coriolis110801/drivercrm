@@ -164,6 +164,18 @@ export const DelInvoice = async (obj)=>{
     console.log(error);
   }
 }
+export const UPAllInvoice = async (obj)=>{
+  try {
+    const { data } = await axios.post(
+        `${process.env.REACT_APP_SERVER}/update_invoice_status/`,{
+          invoice_ids:obj,
+        }
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 
 
