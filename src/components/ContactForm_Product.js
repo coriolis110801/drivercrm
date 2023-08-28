@@ -29,16 +29,16 @@ function HookUsage({value, Change}) {
         </HStack>
     )
 }
-const ContactForm = ({addNewContact, onClose, contact, updateContact,type=false}) => {
+const ContactForm = ({addNewContact, onClose, contact, updateContact,type=false,DelData}) => {
     const [product_name, setName] = useState(contact ? contact.product_name : "");
     const [discount_amount, setAmount] = useState(contact ? contact.discount_amount : "");
     const [price, setPrice] = useState(contact ? contact.price : "");
-    const [quantity, setQuantity] = useState( 1)
+    const [quantity, setQuantity] = useState( contact ? contact.quantity??1 : 1)
     const Total = useMemo(()=>{
         return (Number(price)-Number(discount_amount)) * Number(quantity)
     },[quantity,price,discount_amount])
     const subtotal = useMemo(()=>{
-        return Number(price) * Number(quantity)
+        return Number((Number(price) * Number(quantity)).toFixed(2))
     },[quantity,price,discount_amount])
     const onSubmit = () => {
         if (contact&&!type){
@@ -46,10 +46,13 @@ const ContactForm = ({addNewContact, onClose, contact, updateContact,type=false}
             updateContact(product_name, discount_amount,price, contact.id,contact.responsible_person);
             onClose();
         } else {
-            addNewContact(product_name, discount_amount,price,quantity);
+            addNewContact(product_name, discount_amount,price,quantity,contact.id);
             onClose();
         }
     };
+    function Del() {
+        DelData(contact.id)
+    }
 
     return (
         <Stack>
@@ -105,9 +108,19 @@ const ContactForm = ({addNewContact, onClose, contact, updateContact,type=false}
                 )
             }
             {contact ? (
-                <Button onClick={onSubmit} colorScheme="purple" alignSelf="flex-end">
-                    Update Contact
-                </Button>
+                <Flex style={{width:'100%'}} alignItems={'center'} justifyContent={'space-between'}>
+                    <Button onClick={onSubmit} colorScheme="purple" alignSelf="flex-end">
+                        Update Contact
+                    </Button>
+                    {
+                        contact.quantity&&(
+                            <Button onClick={Del} colorScheme="red" alignSelf="flex-end">
+                                删除
+                            </Button>
+                        )
+                    }
+                </Flex>
+
             ) : (
                 <Button onClick={onSubmit} colorScheme="purple" alignSelf="flex-end">
                     Add Contact

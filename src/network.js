@@ -138,9 +138,32 @@ export const ListInvoice = async ()=>{
     console.log(error);
   }
 }
+// /api/invoiceupdate/<invoice_id>/
 
+export const UpDateInvoice = async (obj)=>{
+  try {
+    const { data } = await axios.post(
+        `${process.env.REACT_APP_SERVER}/api/invoiceupdate/${obj.id}/`,{
+          ...obj,
+          responsible_person_id:Rp.id,
+        }
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-
+export const DelInvoice = async (obj)=>{
+  try {
+    const { data } = await axios.post(
+        `${process.env.REACT_APP_SERVER}/api/invoicedelete/${obj.id}/`
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 
 

@@ -11,18 +11,54 @@ import {
     RadioGroup, Table, TableContainer, Tbody, Td,
     Textarea, Th, Thead, Tr, useToast
 } from '@chakra-ui/react'
-import {useHistory} from 'react-router-dom';
-import {AddIcon, ChevronLeftIcon, EditIcon, LinkIcon, PlusSquareIcon, TriangleDownIcon} from "@chakra-ui/icons";
+import {useHistory, useLocation, useParams} from 'react-router-dom';
+import {
+    AddIcon,
+    ChevronLeftIcon,
+    DeleteIcon,
+    EditIcon,
+    LinkIcon,
+    PlusSquareIcon,
+    TriangleDownIcon
+} from "@chakra-ui/icons";
 import {Input} from "@chakra-ui/input";
 import dayjs from 'dayjs'
 import {Box, Flex, Stack, Text} from "@chakra-ui/layout";
 import {useDisclosure} from "@chakra-ui/hooks";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faUser} from "@fortawesome/free-solid-svg-icons";
-import {getAllContacts, Product_Add_DriverStock, Product_Get_DriverStock,SaveInvoice} from "../network";
+import {
+    DelInvoice,
+    getAllContacts,
+    Product_Add_DriverStock,
+    Product_Get_DriverStock,
+    SaveInvoice,
+    UpDateInvoice
+} from "../network";
 import ContactForm from "./ContactForm";
 import ContactForm_K from "./ContactForm_Product";
 import Kmodal from "./Kmodal";
+
+function eqs(v1,v2) {
+    if(typeof v1 !== 'object'|| v1===null||typeof v2 !== 'object'|| v2===null){
+        return v1===v2
+    }
+    let v1keys = Object.keys(v1)
+    let v2keys = Object.keys(v2)
+    if(v1keys.length!==v2keys.length){
+        return false
+    }
+    for (let key of v1keys){
+        if(!v2keys.includes(key)){
+            return false
+        }
+        if(!eqs(v1[key],v2[key])){
+            return false
+        }
+    }
+    return true
+}
+
 
 function Li({contact}) {
 
@@ -107,8 +143,8 @@ function PlacementExample({Open, onClose__, type, SetCustomer}) {
     const addNewContact = async (customer_name, email, customer_address, city, postcode, phone) => {
         www({customer_name, email, customer_address, city, postcode, phone})
     }
-    const addNewContact_2 = async (product_name, discount_amount, price, quantity) => {
-        www({product_name, discount_amount, price, quantity})
+    const addNewContact_2 = async (product_name, discount_amount, price, quantity,id) => {
+        www({product_name, discount_amount, price, quantity,id})
     };
     let {head, title} = OBJ[type]
     return (
@@ -158,12 +194,15 @@ function PlacementExample({Open, onClose__, type, SetCustomer}) {
     )
 }
 
-export default function Make() {
+export default function Make({...props}) {
     let history = useHistory();
+    const {state} = useLocation();
+    const {isOpen: isOpen2, onOpen: onOpen2, onClose: onClose2} = useDisclosure();
     const [Open, setOpen] = useState(false)
     const [type, setType] = useState('type1')
+    const [contact, setContact] = useState({})
     const toast = useToast()
-    const [params, setParams] = useState({
+    const [params, setParams] = useState(state ? state : {
         "customer_name": "",
         "customer_address": "",
         "customer_postal_code": "",
@@ -175,9 +214,8 @@ export default function Make() {
         "invoice_footer": '',
         "product_details": [],
         "discount": 0,
-        "total_amount":0
+        "total_amount": 0
     })
-
     function Cancel() {
         history.go(-1)
     }
@@ -189,6 +227,18 @@ export default function Make() {
 
     function onClose__() {
         setOpen(false)
+    }
+
+    function setpice(arr) {
+        let zong = arr.reduce((total, item) => {
+            total += item.quantity * (item.price - item.discount_amount)
+            return total
+        }, 0)
+        let discount = arr.reduce((total, item) => {
+            total += item.discount_amount
+            return total
+        }, 0)
+        return {zong, discount};
     }
 
     function SetCustomer(obj, T) {
@@ -208,20 +258,18 @@ export default function Make() {
 
         } else {
             let arr = params.product_details
+            let is = arr.findIndex(item => item.id === obj.id)
+            if (is !== -1) {
+                arr.splice(is, 1)
+            }
             arr.push({
                 name: obj.product_name,
                 price: Number(obj.price),
                 quantity: Number(obj.quantity),
-                discount_amount: Number(obj.discount_amount)
+                discount_amount: Number(obj.discount_amount),
+                id:obj.id
             })
-            let zong = arr.reduce((total, item) => {
-                total+= item.quantity *(item.price - item.discount_amount)
-                return total
-            },0)
-            let discount = arr.reduce((total, item) => {
-                total += item.discount_amount
-                return total
-            },0)
+            let {zong, discount} = setpice(arr);
             setParams({
                 ...params,
                 product_details: arr,
@@ -240,7 +288,7 @@ export default function Make() {
             title: '保存中。。。',
             isClosable: false,
         })
-        SaveInvoice(params).then(()=>{
+        SaveInvoice(params).then(() => {
             toast.closeAll()
             toast({
                 title: '保存成功。。。',
@@ -248,12 +296,86 @@ export default function Make() {
                 duration: 1000,
                 isClosable: false,
             })
+            history.push('/')
         })
     }
+
     function setTime(e) {
         console.log('%c 测试', 'color:#fff; background:red')
         console.log(e.target.value)
         setParams({...params, invoice_date: e.target.value})
+    }
+
+    function EDITFun(e) {
+        setContact({
+            ...e,
+            product_name: e.name,
+        })
+        onOpen2()
+    }
+
+    const addNewContact = (product_name, discount_amount, price, quantity, id) => {
+        let arr = params.product_details
+        arr.splice(arr.findIndex(item => item.id === id), 1, {
+            name: product_name,
+            price: Number(price),
+            quantity: Number(quantity),
+            discount_amount: Number(discount_amount)
+        })
+        let {zong, discount} = setpice(arr);
+        setParams({
+            ...params,
+            product_details: arr,
+            discount: discount,
+            total_amount: zong
+        })
+    }
+
+    function DelData(id) {
+        let arr = params.product_details
+        arr.splice(arr.findIndex(item => item.id === id), 1)
+        let {zong, discount} = setpice(arr);
+        setParams({
+            ...params,
+            product_details: arr,
+            discount: discount,
+            total_amount: zong
+        })
+        onClose2()
+    }
+    function EditSave() {
+        toast({
+            title: '保存中。。。',
+            isClosable: false,
+        })
+        UpDateInvoice(params).then(() => {
+            toast.closeAll()
+            toast({
+                title: '保存成功。。。',
+                status: 'success',
+                duration: 1000,
+                isClosable: false,
+            })
+            history.push('/')
+        })
+
+    }
+    function EditDel() {
+        toast({
+            title: '删除中。。。',
+            isClosable: false,
+        })
+        DelInvoice(params).then(() => {
+            toast.closeAll()
+            toast({
+                title: '删除成功。。。',
+                status: 'success',
+                duration: 1000,
+                isClosable: false,
+            })
+            history.push('/')
+        })
+
     }
     return (
         <div>
@@ -261,7 +383,7 @@ export default function Make() {
                 <Button colorScheme='blue' size='xs' onClick={Cancel} leftIcon={<ChevronLeftIcon/>}>取消</Button>
             </div>
             <div className='main_make'>
-                <h1>创建发票</h1>
+                <h1>{state?'编辑发票':'创建发票'}</h1>
                 <div className='item_make'>
                     <div className="label">客户</div>
                     <Button onClick={() => go('type1')} width={'100%'} colorScheme='blue'
@@ -275,7 +397,8 @@ export default function Make() {
                     <Button style={{marginTop: 20}} width={'100%'} colorScheme='gray'>
                         <Flex justifyContent={'space-between'} style={{width: '100%'}}>
                             <div>发票日期</div>
-                            <div> <input style={{background:'transparent'}} type="date" value={params.invoice_date} onChange={setTime} /></div>
+                            <div><input style={{background: 'transparent'}} type="date" value={params.invoice_date}
+                                        onChange={setTime}/></div>
                         </Flex>
 
                     </Button>
@@ -298,7 +421,7 @@ export default function Make() {
                                     {
                                         params.product_details && params.product_details.map((item, index) => {
                                             return (
-                                                <Tr key={item.name}>
+                                                <Tr key={item.name} onClick={EDITFun.bind(this, item)}>
                                                     <Td>{item.name}</Td>
                                                     <Td isNumeric>{item.price}</Td>
                                                     <Td isNumeric>{item.quantity}</Td>
@@ -330,15 +453,40 @@ export default function Make() {
                               onChange={(e) => setParams({...params, invoice_footer: e.target.value})}/>
                 </div>
                 <Grid templateColumns={'1fr'} gap={2}>
-                    <Button width={'100%'} colorScheme='linkedin' leftIcon={<LinkIcon/>}>下载</Button>
-                    <Button onClick={Save} width={'100%'} colorScheme='teal'
-                            leftIcon={<TriangleDownIcon/>}>保存</Button>
+                    {
+                        state ? (
+                            <>
+                                <Button  onClick={EditSave} width={'100%'} colorScheme='linkedin' leftIcon={<TriangleDownIcon/>}>保存</Button>
+                                <Button onClick={EditDel} width={'100%'} colorScheme='red'
+                                        leftIcon={<DeleteIcon/>}>删除</Button></>
+                        ) : (
+                            <>
+                                <Button width={'100%'} colorScheme='linkedin' leftIcon={<LinkIcon/>}>下载</Button>
+                                <Button onClick={Save} width={'100%'} colorScheme='teal'
+                                        leftIcon={<TriangleDownIcon/>}>保存</Button>
+                            </>
+                        )
+                    }
                 </Grid>
 
             </div>
             {
                 Open && (<PlacementExample SetCustomer={SetCustomer} type={type} Open={Open}
                                            onClose__={onClose__}></PlacementExample>)
+            }
+            {
+                state && (
+                    <Kmodal
+                        isOpen={isOpen2}
+                        title={'编辑项目'}
+                        onOpen={onOpen2}
+                        onClose={onClose2}
+                    >
+                        <ContactForm_K contact={contact} onClose={onClose2} addNewContact={addNewContact} DelData={DelData}
+                                       type={true}/>
+                    </Kmodal>
+
+                )
             }
         </div>
 
