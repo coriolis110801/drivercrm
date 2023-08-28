@@ -46,7 +46,7 @@ const ContactForm = ({addNewContact, onClose, contact, updateContact,type=false,
             updateContact(product_name, discount_amount,price, contact.id,contact.responsible_person);
             onClose();
         } else {
-            addNewContact(product_name, discount_amount,price,quantity,contact.id);
+            addNewContact(product_name, discount_amount,price,quantity,(contact?contact.id??null:null));
             onClose();
         }
     };
