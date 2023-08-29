@@ -17,3 +17,4 @@ https://developers.mailerlite.com/docs/#mailerlite-api
 
  git reset --hard origin/master
 git pull origin main
+-
