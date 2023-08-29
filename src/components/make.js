@@ -235,7 +235,7 @@ export default function Make({...props}) {
             return total
         }, 0)
         let discount = arr.reduce((total, item) => {
-            total += item.discount_amount
+            total += item.quantity *item.discount_amount
             return total
         }, 0)
         return {zong, discount};

@@ -4,6 +4,7 @@ import Make from "./components/make";
 import Contact from "./Contact";
 import LoginComponent from "./login";
 import Header from "./components/header";
+import Manager from "./components/manager";
 
 export default function FrontendAuth({location}) {
     console.log('%c FrontendAuth', 'color:#fff; background:red')
@@ -14,7 +15,8 @@ export default function FrontendAuth({location}) {
         if (location.pathname === '/login') {
             return <Redirect to='/'/>
         }
-        if (Number(info.driver) === 1) {
+        const {manager, driver} = info;
+        if (Number(driver) === 1) {
             return (
                 <>
                     <Route path="/Make">
@@ -28,15 +30,17 @@ export default function FrontendAuth({location}) {
                     </Route>
                 </>
             )
-        }else {
+        }else if(Number(manager)===1) {
             return (
                 <>
-                    <Route path="/home" >
-                        <div>
-                            未开放
-                        </div>
+                    <Route path="/home" component={Manager} >
+
                     </Route>
                 </>
+            )
+        }else {
+            return (
+                <div>1</div>
             )
         }
     } else {

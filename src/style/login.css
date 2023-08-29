@@ -1,0 +1,27 @@
+@media screen and (min-width: 768px) {
+    .Login_box {
+        width: 400px;
+        margin: 100px auto;
+        text-align: center;
+    }
+
+    .Login_box h2 {
+        font-weight: bolder;
+        font-size: 18px;
+    }
+}
+.heng{
+    height: 10px;
+}
+@media screen and (max-width: 768px) {
+    .Login_box {
+        width: 85%;
+        margin: 100px auto;
+        text-align: center;
+    }
+
+    .Login_box h2 {
+        font-weight: bolder;
+        font-size: 18px;
+    }
+}
