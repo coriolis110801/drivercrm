@@ -182,6 +182,18 @@ export const UPAllInvoice = async (obj)=>{
     console.log(error);
   }
 }
+export const UPAllcomplete = async (obj)=>{
+  try {
+    const { data } = await axios.post(
+        `${REACT_APP_SERVER}/update_invoice_complete/`,{
+          invoice_ids:obj,
+        }
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 export const Login = async (obj)=>{
   try {
@@ -194,8 +206,30 @@ export const Login = async (obj)=>{
   }
 }
 
-
-
+export  const  search_responsible_person = async (obj)=>{
+  try {
+    const { data } = await axios.get(
+        `${REACT_APP_SERVER}/api/search_responsible_person/`,{
+          params:obj
+        }
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+export  const  search_overdue_invoices = async (obj)=>{
+  try {
+    const { data } = await axios.post(
+        `${REACT_APP_SERVER}/api/overdue_invoices/`,{
+         ...obj
+        }
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 
 
