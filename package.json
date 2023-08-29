@@ -27,7 +27,7 @@
     "react-scripts": "4.0.3",
     "uuid": "^8.3.2",
     "web-vitals": "^1.0.1",
-    "react-select": "^4.4.2" // Added react-select package
+    "react-select": "^4.4.2"
   },
   "scripts": {
     "start": "react-scripts start",
