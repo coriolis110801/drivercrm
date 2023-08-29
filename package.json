@@ -2,7 +2,7 @@
   "name": "contact-manager",
   "version": "0.1.0",
   "engines": {
-    "node": "16.20,1"
+    "node": "14.17.4"
   },
   "private": true,
   "dependencies": {
