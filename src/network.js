@@ -3,10 +3,16 @@ import axios from "axios";
 const  Rp = {
   id:1,
 }
+
 let defaultData = {
   ...Rp,
   responsible_person_id:1,
   driver_name:'xiaoming'
+}
+export function getinfo() {
+  let info = localStorage.getItem('user_info')||'{}'
+  info = JSON.parse(info);
+  defaultData.responsible_person_id = info.responsible_person_id;
 }
 let REACT_APP_SERVER = "https://www.butt-and-co.co.uk"
 export const addContactOnServer = async (customer_name, email, customer_address, city, postcode, phone) => {
@@ -177,6 +183,16 @@ export const UPAllInvoice = async (obj)=>{
   }
 }
 
+export const Login = async (obj)=>{
+  try {
+    const { data } = await axios.post(
+        `${REACT_APP_SERVER}/api/manager/login/`,obj
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 
 

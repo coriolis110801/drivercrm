@@ -4,10 +4,9 @@ import {NavLink, Route} from "react-router-dom";
 import App from "../App";
 import Home from "./home";
 import ProductAddressBook from "../ProductAddressBook";
+import DashboardComponent from "../logout";
 
 export default function Header(props) {
-    console.log('%c 测试', 'color:#fff; background:red')
-    console.log(props)
     return (
         <div>
             <div className="header">
@@ -39,6 +38,9 @@ export default function Header(props) {
                                 产品通讯录
                             </div>
                         </NavLink>
+                    </div>
+                    <div style={{position:'absolute',right:10}}>
+                        <DashboardComponent></DashboardComponent>
                     </div>
                 </div>
 
