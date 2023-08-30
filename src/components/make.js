@@ -383,20 +383,20 @@ export default function Make({...props}) {
                 <Button colorScheme='blue' size='xs' onClick={Cancel} leftIcon={<ChevronLeftIcon/>}>取消</Button>
             </div>
             <div className='main_make'>
-                <h1>{state?'编辑发票':'创建发票'}</h1>
+                <h1>{state?'编辑发票Edit':'创建发票Create'}</h1>
                 <div className='item_make'>
-                    <div className="label">客户</div>
+                    <div className="label">客户Customer</div>
                     <Button onClick={() => go('type1')} width={'100%'} colorScheme='blue'
                             leftIcon={(!params.customer_name ? <AddIcon/> :
                                 <EditIcon/>)}>{params.customer_name || '选择客户'}</Button>
                 </div>
                 <div className='item_make'>
-                    <div className="label">发票摘要</div>
+                    <div className="label">发票摘要Summary</div>
                     <Input placeholder='描述' value={params.description}
                            onChange={(e) => setParams({...params, description: e.target.value})}/>
                     <Button style={{marginTop: 20}} width={'100%'} colorScheme='gray'>
                         <Flex justifyContent={'space-between'} style={{width: '100%'}}>
-                            <div>发票日期</div>
+                            <div>发票日期Date</div>
                             <div><input style={{background: 'transparent'}} type="date" value={params.invoice_date}
                                         onChange={setTime}/></div>
                         </Flex>
@@ -404,9 +404,9 @@ export default function Make({...props}) {
                     </Button>
                 </div>
                 <div className='item_make'>
-                    <div className="label">产品和服务</div>
+                    <div className="label">产品和服务Products&Service</div>
                     <Button onClick={() => go('type2')} width={'100%'} colorScheme='blue'
-                            leftIcon={<AddIcon/>}>添加项目</Button>
+                            leftIcon={<AddIcon/>}>添加项目Add Product</Button>
                     {
                         params.product_details.length > 0 && (<TableContainer>
                             <Table size='sm'>
@@ -437,28 +437,28 @@ export default function Make({...props}) {
                     }
                 </div>
                 <div className='item_make'>
-                    <div className="label">发票总额</div>
+                    <div className="label">发票总额Invoice Total</div>
                     <Flex justifyContent={'space-between'} align={'center'} style={{width: '100%', height: '40px'}}>
-                        <span>折扣小计:</span>
+                        <span>折扣小计Discount Total:</span>
                         <span>{params.discount}</span>
                     </Flex>
                     <Flex justifyContent={'space-between'} align={'center'} style={{width: '100%', height: '40px'}}>
-                        <span>总计:</span>
+                        <span>总计Total:</span>
                         <span>{params.total_amount}</span>
                     </Flex>
                 </div>
                 <div className='item_make'>
-                    <div className="label">发票页脚(可选)</div>
-                    <Textarea placeholder='添加注释或包括您的TC' value={params.invoice_footer}
+                    <div className="label">发票页脚Footer(可选Optional)</div>
+                    <Textarea placeholder='添加注释Add Note or include your T&Cs' value={params.invoice_footer}
                               onChange={(e) => setParams({...params, invoice_footer: e.target.value})}/>
                 </div>
                 <Grid templateColumns={'1fr'} gap={2}>
                     {
                         state ? (
                             <>
-                                <Button  onClick={EditSave} width={'100%'} colorScheme='linkedin' leftIcon={<TriangleDownIcon/>}>保存</Button>
+                                <Button  onClick={EditSave} width={'100%'} colorScheme='linkedin' leftIcon={<TriangleDownIcon/>}>保存Save</Button>
                                 <Button onClick={EditDel} width={'100%'} colorScheme='red'
-                                        leftIcon={<DeleteIcon/>}>删除</Button></>
+                                        leftIcon={<DeleteIcon/>}>删除Delete</Button></>
                         ) : (
                             <>
                                 <Button width={'100%'} colorScheme='linkedin' leftIcon={<LinkIcon/>}>下载</Button>
