@@ -113,7 +113,9 @@ function PlacementExample({Open, onClose__, type, SetCustomer}) {
     }, []);
 
     function Clo() {
-        onClose__()
+        setTimeout(()=>{
+            onClose__()
+        },300)
         onClose()
         setValue(null)
         setContacts([])
@@ -150,7 +152,7 @@ function PlacementExample({Open, onClose__, type, SetCustomer}) {
     let {head, title} = OBJ[type]
     return (
         <>
-            <Drawer placement={placement} onClose={Clo} isOpen={isOpen} size={'full'}>
+            <Drawer placement={placement} onClose={Clo}   isOpen={isOpen} size={'full'}    >
                 <DrawerOverlay/>
                 <DrawerContent>
                     <DrawerCloseButton/>
@@ -281,7 +283,7 @@ export default function Make({...props}) {
         }
         setTimeout(() => {
             onClose__()
-        }, 0)
+        }, 300)
     }
 
     function Save() {
