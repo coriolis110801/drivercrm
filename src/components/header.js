@@ -13,14 +13,14 @@ export default function Header(props) {
                     <div>
                         <NavLink activeClassName="active" to={'/info/home'}>
                             <div>
-                                Home
+                                GetPaid
                             </div>
                         </NavLink>
                     </div>
                     <div>
                         <NavLink activeClassName="active" to={'/info/home2'}>
                             <div>
-                                GetPaid
+                                MyStock
                             </div>
                         </NavLink>
                     </div>
