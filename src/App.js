@@ -103,7 +103,7 @@ const App = () => {
                 <Flex p="4" justify="center" align="center">
                     <Image src="/banner.png" w="150px" h="100px"/>
                     <Heading as="h1" textTransform="uppercase">
-                        Contact App
+                        Saved Contacts
                     </Heading>
                 </Flex>
                 <Box p="4">
