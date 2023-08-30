@@ -103,7 +103,7 @@ const ProductAddressBook = () => {
                 <Flex p="4" justify="center" align="center">
                     <Image src="/banner.png" w="150px" h="100px"/>
                     <Heading as="h1" textTransform="uppercase">
-                        Contact App
+                        Saved Products
                     </Heading>
                 </Flex>
                 <Box p="4">
@@ -116,7 +116,7 @@ const ProductAddressBook = () => {
                         colorScheme="purple"
                         onClick={onOpen}
                     >
-                        <AddIcon h="20px" w="20px" mr="4"/> Add Contact
+                        <AddIcon h="20px" w="20px" mr="4"/> Add Product
                     </Button>
                 </Box>
                 <Box p="4">
@@ -128,7 +128,7 @@ const ProductAddressBook = () => {
                         <Input
                             focusBorderColor="purple.400"
                             type="tel"
-                            placeholder="Search Contact..."
+                            placeholder="Search Product..."
                             onChange={(e) => setSearchData(e.target.value)}
                         />
                     </InputGroup>
