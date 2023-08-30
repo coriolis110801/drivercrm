@@ -20,4 +20,4 @@ git pull origin main
 
 
 codesandbox: change to:
-  "proxy": "http://127.0.0.1:8000",
+  "proxy": "http://127.0.0.1:8000", 把这个删掉
