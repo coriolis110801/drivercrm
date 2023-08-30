@@ -16,7 +16,10 @@ export default function FrontendAuth({location}) {
     info = JSON.parse(info);
     if (info) {
         if (location.pathname === '/login') {
-            return <Redirect to='/'/>
+            return <Redirect to='/info'/>
+        }
+        if (location.pathname === '/') {
+            return <Redirect to='/info'/>
         }
         const {manager, driver} = info;
         if (Number(driver) === 1) {
@@ -56,6 +59,9 @@ export default function FrontendAuth({location}) {
                 <><Route path="/info">
                     <Header>
                         <Route path="/info/home" exact  >
+                            <Manager></Manager>
+                        </Route>
+                        <Route path="/info/" exact  >
                             <Manager></Manager>
                         </Route>
                     </Header>

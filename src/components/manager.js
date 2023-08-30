@@ -7,8 +7,10 @@ import {Link, useHistory} from "react-router-dom";
 import {Code, useToast} from "@chakra-ui/react";
 import {ListInvoice, UPAllcomplete, search_responsible_person, search_overdue_invoices} from "../network";
 import AsyncSelect from "react-select/async";
+import useManual from "./open";
 
 export default function Manager() {
+    let [deng,jsx] =  useManual()
     const [searchData, setSearchData] = useState("");
     let history = useHistory();
     const toast = useToast()
@@ -23,22 +25,25 @@ export default function Manager() {
     }
 
     function submit() {
-        toast({
-            title: '确认中。。。',
-            isClosable: false,
-            position: 'top'
-        })
-        let params = List.map(it => it.id)
-        UPAllcomplete(params).then((res) => {
-            toast.closeAll()
+        deng({text:'是否确认提交？'}).then(res=>{
             toast({
-                title: res.message,
-                status: 'success',
-                duration: 2000,
+                title: '确认中。。。',
                 isClosable: false,
                 position: 'top'
             })
+            let params = List.map(it => it.id)
+            UPAllcomplete(params).then((res) => {
+                toast.closeAll()
+                toast({
+                    title: res.message,
+                    status: 'success',
+                    duration: 2000,
+                    isClosable: false,
+                    position: 'top'
+                })
+            })
         })
+
     }
 
     function Search() {
@@ -84,6 +89,7 @@ export default function Manager() {
         });
     return (
         <div>
+            {jsx}
             <Box p="4">
                 <Flex>
                     <div style={{width: '80%'}}>
