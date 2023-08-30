@@ -53,9 +53,9 @@ export default function FrontendAuth({location}) {
             )
         }else if(Number(manager)===1) {
             return (
-                <><Route path="/*">
+                <><Route path="/info">
                     <Header>
-                        <Route path="/home" exact  >
+                        <Route path="/info/home" exact  >
                             <Manager></Manager>
                         </Route>
                     </Header>
