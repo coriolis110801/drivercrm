@@ -44,7 +44,7 @@ export default function Home() {
     }, []);
     return (
         <div>
-            <Button onClick={go} style={but} colorScheme='blue' leftIcon={<AddIcon/>}>添加新Invoice</Button>
+            <Button onClick={go} style={but} colorScheme='blue' leftIcon={<AddIcon/>}>添加新Create New Invoice</Button>
             {
                 List.map((item, index) => {
 
@@ -76,7 +76,7 @@ export default function Home() {
             }
             <div style={{position: "fixed", width: "100%", bottom: '30px'}}>
                 <Button onClick={submit} style={{width: '100%'}} colorScheme='blue'
-                        leftIcon={<CheckIcon/>}>提交所有Invoice</Button>
+                        leftIcon={<CheckIcon/>}>提交所有Submit All Today Invoice</Button>
 
             </div>
         </div>
