@@ -363,9 +363,9 @@ export default function Make({...props}) {
 
     }
     function EditDel() {
-       deng({text:'是否确认删除此发票？'}).then(res=>{
+       deng({text:'Confirm delete this invoice？'}).then(res=>{
            toast({
-               title: '删除中。。。',
+               title: 'Deleting。。。',
                isClosable: false,
            })
            DelInvoice(params).then(() => {
