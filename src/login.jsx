@@ -21,7 +21,8 @@ const LoginComponent = (props) => {
             })
             console.log('%c 测试', 'color:#fff; background:red')
             console.log(response)
-           // response.driver=1
+            // response.driver=0
+            // response.manager=1
             getinfo()
             localStorage.setItem('access', response.access);
             localStorage.setItem('refresh', response.refresh);
