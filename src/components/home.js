@@ -20,9 +20,9 @@ export default function Home() {
     }
 
     function submit() {
-        deng({text:'是否确认提交所有invoice？'}).then(res=>{
+        deng({text:'Confirm to Submit all invoices？'}).then(res=>{
             toast({
-                title: '提交中。。。',
+                title: 'Submiting...',
                 isClosable: false,
             })
             let params =List.map(it=>it.id)
