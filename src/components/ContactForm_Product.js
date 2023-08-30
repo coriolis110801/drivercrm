@@ -123,7 +123,7 @@ const ContactForm = ({addNewContact, onClose, contact, updateContact,type=false,
 
             ) : (
                 <Button onClick={onSubmit} colorScheme="purple" alignSelf="flex-end">
-                    Add Contact
+                    Add Product
                 </Button>
             )}
         </Stack>
