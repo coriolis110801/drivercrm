@@ -62,7 +62,7 @@ const App = () => {
     };
 
     const deleteContact = (id) => {
-        deng({text:'是否删除？'}).then(async res=>{
+        deng({text:'是否删除？Confirm deleting?'}).then(async res=>{
             const data = await deleteContactOnServer(id);
             if (!data) {
                 setContacts((prev) => [
