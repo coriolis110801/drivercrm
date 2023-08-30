@@ -15,10 +15,11 @@ import {useEffect, useState} from "react";
 import ContactCard from "./components/ContactCard";
 import ContactForm from "./components/ContactForm_Product";
 import Kmodal from "./components/Kmodal";
+import useManual from "./components/open";
 
 const ProductAddressBook = () => {
     const {isOpen, onOpen, onClose} = useDisclosure();
-
+    let [deng,jsx] =  useManual()
     const {
         isOpen: isOpenEdit,
         onOpen: onOpenEdit,
@@ -68,17 +69,20 @@ const ProductAddressBook = () => {
     };
 
     const deleteContact = async (id) => {
-        const data = await Product_Delete_DriverStock(id);
-        if (!data) {
-            setContacts((prev) => [
-                ...contacts.filter((contact) => contact.id !== id),
-            ]);
-        }
+        deng({text:'是否删除？'}).then(async res=>{
+            const data = await Product_Delete_DriverStock(id);
+            if (!data) {
+                setContacts((prev) => [
+                    ...contacts.filter((contact) => contact.id !== id),
+                ]);
+            }
+        })
+
     };
     let selectContact = contacts.find((contact) => contact.id === contactId);
 
     return (
-        <>
+        <> {jsx}
             <Kmodal
                 isOpen={isOpen}
                 title={"Add New Contact"}

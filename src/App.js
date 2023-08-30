@@ -3,22 +3,18 @@ import {useDisclosure} from "@chakra-ui/hooks";
 import {AddIcon, Search2Icon} from "@chakra-ui/icons";
 import {Image} from "@chakra-ui/image";
 import {Input, InputGroup, InputLeftElement} from "@chakra-ui/input";
-import {
-    addContactOnServer,
-    getAllContacts,
-    updateContactOnServer,
-    deleteContactOnServer,
-} from "./network";
-import {Heading, Flex, Box} from "@chakra-ui/layout";
+import {addContactOnServer, deleteContactOnServer, getAllContacts, updateContactOnServer,} from "./network";
+import {Box, Flex, Heading} from "@chakra-ui/layout";
 import {useEffect, useState} from "react";
 
 import ContactCard from "./components/ContactCard";
 import ContactForm from "./components/ContactForm";
 import Kmodal from "./components/Kmodal";
+import useManual from "./components/open";
 
 const App = () => {
+    let [deng,jsx] =  useManual()
     const {isOpen, onOpen, onClose} = useDisclosure();
-
     const {
         isOpen: isOpenEdit,
         onOpen: onOpenEdit,
@@ -43,11 +39,9 @@ const App = () => {
     }, []);
 
     const addNewContact = async (customer_name, email, customer_address, city, postcode, phone) => {
-
-        const data = await addContactOnServer(customer_name, email, customer_address, city, postcode, phone);
-        console.log(data);
-        setContacts([...contacts, data]);
-
+            const data = await addContactOnServer(customer_name, email, customer_address, city, postcode, phone);
+            console.log(data);
+            setContacts([...contacts, data]);
     };
 
     let searchContacts = contacts.filter((contact) =>
@@ -67,18 +61,25 @@ const App = () => {
         ]);
     };
 
-    const deleteContact = async (id) => {
-        const data = await deleteContactOnServer(id);
-        if (!data) {
-            setContacts((prev) => [
-                ...contacts.filter((contact) => contact.id !== id),
-            ]);
-        }
+    const deleteContact = (id) => {
+        deng({text:'是否删除？'}).then(async res=>{
+            const data = await deleteContactOnServer(id);
+            if (!data) {
+                setContacts((prev) => [
+                    ...contacts.filter((contact) => contact.id !== id),
+                ]);
+            }
+        })
+
+
     };
     let selectContact = contacts.find((contact) => contact.id === contactId);
 
     return (
         <>
+            {
+                jsx
+            }
             <Kmodal
                 isOpen={isOpen}
                 title={"Add New Contact"}

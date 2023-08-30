@@ -4,8 +4,10 @@ import {AddIcon, CheckIcon} from "@chakra-ui/icons";
 import {useHistory, Link} from 'react-router-dom';
 import {ListInvoice, UPAllInvoice} from "../network";
 import {Flex} from "@chakra-ui/layout";
+import useManual from "./open";
 
 export default function Home() {
+    let [deng,jsx] =  useManual()
     let history = useHistory();
     const toast = useToast()
     const [List, setList] = useState([])
@@ -18,21 +20,24 @@ export default function Home() {
     }
 
     function submit() {
-        toast({
-            title: '提交中。。。',
-            isClosable: false,
-        })
-        let params =List.map(it=>it.id)
-        UPAllInvoice(params).then(() => {
-            toast.closeAll()
+        deng({text:'是否确认提交所有invoice？'}).then(res=>{
             toast({
-                title: '提交成功。。。',
-                status: 'success',
-                duration: 1000,
+                title: '提交中。。。',
                 isClosable: false,
             })
-            history.push('/')
+            let params =List.map(it=>it.id)
+            UPAllInvoice(params).then(() => {
+                toast.closeAll()
+                toast({
+                    title: '提交成功。。。',
+                    status: 'success',
+                    duration: 1000,
+                    isClosable: false,
+                })
+                history.push('/')
+            })
         })
+
     }
 
     useEffect(() => {
@@ -79,6 +84,7 @@ export default function Home() {
                         leftIcon={<CheckIcon/>}>提交所有Submit All Today Invoice</Button>
 
             </div>
+            {jsx}
         </div>
     )
 }

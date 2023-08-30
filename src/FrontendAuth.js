@@ -1,5 +1,5 @@
 import React from 'react'
-import {Redirect, Route} from "react-router-dom";
+import {Redirect, Route, Switch} from "react-router-dom";
 import Make from "./components/make";
 import Contact from "./Contact";
 import LoginComponent from "./login";
@@ -22,27 +22,30 @@ export default function FrontendAuth({location}) {
         if (Number(driver) === 1) {
             return (
                 <>
-                    <Route path="/Make">
+                    <Route path="/Make" exact>
                         <Make></Make>
                     </Route>
-                    <Route path="/contact/:id">
+                    <Route path="/contact/:id" exact>
                         <Contact/>
                     </Route>
-                    <Route path="/*" >
+                    <Route path="/info"  >
                         <Header>
                             <div>
-                                <Route path="/home3" exact>
-                                    <App></App>
-                                </Route>
-                                <Route path="/home4" exact>
-                                    <ProductAddressBook></ProductAddressBook>
-                                </Route>
-                                <Route path="/home" exact>
-                                    <Home></Home>
-                                </Route>
-                                <Route path="/" exact>
-                                    <Home></Home>
-                                </Route>
+                                <Switch>
+                                    <Route path="/info/home3" exact >
+                                        <App></App>
+                                    </Route>
+                                    <Route path="/info/home4" exact >
+                                        <ProductAddressBook></ProductAddressBook>
+                                    </Route>
+                                    <Route path="/info/home" exact>
+                                        <Home></Home>
+                                    </Route>
+                                    <Route path="/info/"  exact>
+                                        <Home></Home>
+                                    </Route>
+                                </Switch>
+
                             </div>
                         </Header>
                     </Route>

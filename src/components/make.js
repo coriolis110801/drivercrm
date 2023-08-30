@@ -38,6 +38,7 @@ import {
 import ContactForm from "./ContactForm";
 import ContactForm_K from "./ContactForm_Product";
 import Kmodal from "./Kmodal";
+import useManual from "./open";
 
 function eqs(v1,v2) {
     if(typeof v1 !== 'object'|| v1===null||typeof v2 !== 'object'|| v2===null){
@@ -195,6 +196,7 @@ function PlacementExample({Open, onClose__, type, SetCustomer}) {
 }
 
 export default function Make({...props}) {
+    let [deng,jsx] =  useManual()
     let history = useHistory();
     const {state} = useLocation();
     const {isOpen: isOpen2, onOpen: onOpen2, onClose: onClose2} = useDisclosure();
@@ -296,7 +298,7 @@ export default function Make({...props}) {
                 duration: 1000,
                 isClosable: false,
             })
-            history.push('/')
+            history.push('/info')
         })
     }
 
@@ -356,29 +358,32 @@ export default function Make({...props}) {
                 duration: 1000,
                 isClosable: false,
             })
-            history.push('/')
+            history.push('/info')
         })
 
     }
     function EditDel() {
-        toast({
-            title: '删除中。。。',
-            isClosable: false,
-        })
-        DelInvoice(params).then(() => {
-            toast.closeAll()
-            toast({
-                title: '删除成功。。。',
-                status: 'success',
-                duration: 1000,
-                isClosable: false,
-            })
-            history.push('/')
-        })
+       deng({text:'是否确认删除此发票？'}).then(res=>{
+           toast({
+               title: '删除中。。。',
+               isClosable: false,
+           })
+           DelInvoice(params).then(() => {
+               toast.closeAll()
+               toast({
+                   title: '删除成功。。。',
+                   status: 'success',
+                   duration: 1000,
+                   isClosable: false,
+               })
+               history.push('/info')
+           })
+       })
 
     }
     return (
         <div>
+            {jsx}
             <div className='btn_head'>
                 <Button colorScheme='blue' size='xs' onClick={Cancel} leftIcon={<ChevronLeftIcon/>}>返回Back</Button>
             </div>

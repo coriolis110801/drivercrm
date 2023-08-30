@@ -11,28 +11,28 @@ export default function Header(props) {
             <div className="header">
                 <div className="header__left">
                     <div>
-                        <NavLink activeClassName="active" to={'/home'}>
+                        <NavLink activeClassName="active" to={'/info/home'}>
                             <div>
                                 Home
                             </div>
                         </NavLink>
                     </div>
                     <div>
-                        <NavLink activeClassName="active" to={'/home2'}>
+                        <NavLink activeClassName="active" to={'/info/home2'}>
                             <div>
                                 GetPaid
                             </div>
                         </NavLink>
                     </div>
                     <div>
-                        <NavLink activeClassName="active" to={'/home3'}>
+                        <NavLink activeClassName="active" to={'/info/home3'}>
                             <div>
                                 Contacts
                             </div>
                         </NavLink>
                     </div>
                     <div>
-                        <NavLink activeClassName="active" to={'/home4'}>
+                        <NavLink activeClassName="active" to={'/info/home4'}>
                             <div>
                                 Products
                             </div>

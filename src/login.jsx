@@ -33,7 +33,7 @@ const LoginComponent = (props) => {
                 duration: 1000,
                 isClosable: false,
             })
-            props.history.push('/home');
+            props.history.push('/info/home');
         } catch (e) {
             setError('登录失败，请检查用户名或密码.');
         }finally {
