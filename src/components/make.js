@@ -380,7 +380,7 @@ export default function Make({...props}) {
     return (
         <div>
             <div className='btn_head'>
-                <Button colorScheme='blue' size='xs' onClick={Cancel} leftIcon={<ChevronLeftIcon/>}>取消</Button>
+                <Button colorScheme='blue' size='xs' onClick={Cancel} leftIcon={<ChevronLeftIcon/>}>返回Back</Button>
             </div>
             <div className='main_make'>
                 <h1>{state?'编辑发票Edit':'创建发票Create'}</h1>
