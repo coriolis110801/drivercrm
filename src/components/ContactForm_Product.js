@@ -110,7 +110,7 @@ const ContactForm = ({addNewContact, onClose, contact, updateContact,type=false,
             {contact ? (
                 <Flex style={{width:'100%'}} alignItems={'center'} justifyContent={'space-between'}>
                     <Button onClick={onSubmit} colorScheme="purple" alignSelf="flex-end">
-                        Update Contact
+                        Update Product
                     </Button>
                     {
                         contact.quantity&&(
