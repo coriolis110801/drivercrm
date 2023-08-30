@@ -17,3 +17,7 @@ https://developers.mailerlite.com/docs/#mailerlite-api
 
  git reset --hard origin/master
 git pull origin main
+
+
+codesandbox: change to:
+  "proxy": "http://127.0.0.1:8000",
