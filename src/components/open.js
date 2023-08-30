@@ -19,7 +19,7 @@ function ManualClose({text , onOk}) {
             <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={() => Save(2)} isCentered size={'xs'}>
                 <ModalOverlay/>
                 <ModalContent>
-                    <ModalHeader>确认框</ModalHeader>
+                    <ModalHeader>确认框Confirm box</ModalHeader>
                     <ModalCloseButton/>
                     <ModalBody pb={6}>
                         <p>
@@ -29,9 +29,9 @@ function ManualClose({text , onOk}) {
 
                     <ModalFooter>
                         <Button colorScheme='blue' mr={3} onClick={() => Save(1)}>
-                            确认
+                            确认Confirm
                         </Button>
-                        <Button onClick={() => Save(2)}>取消</Button>
+                        <Button onClick={() => Save(2)}>取消Cancel</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
