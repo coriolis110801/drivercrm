@@ -13,7 +13,7 @@ export default function Header(props) {
                     <div>
                         <NavLink activeClassName="active" to={'/home'}>
                             <div>
-                                首页
+                                首页Home
                             </div>
                         </NavLink>
                     </div>
@@ -27,14 +27,14 @@ export default function Header(props) {
                     <div>
                         <NavLink activeClassName="active" to={'/home3'}>
                             <div>
-                                客户通讯录
+                                客户通讯录Contacts
                             </div>
                         </NavLink>
                     </div>
                     <div>
                         <NavLink activeClassName="active" to={'/home4'}>
                             <div>
-                                产品通讯录
+                                产品通讯录Products
                             </div>
                         </NavLink>
                     </div>
