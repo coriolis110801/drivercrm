@@ -6,23 +6,35 @@ import {Stack} from "@chakra-ui/layout";
 import React, {useState} from "react";
 import {Textarea} from "@chakra-ui/react";
 
-const ContactForm = ({addNewContact, onClose, contact, updateContact}) => {
+const ContactForm = ({ addNewContact, onClose, contact, updateContact }) => {
     const [customer_name, setName] = useState(contact ? contact.customer_name : "");
     const [email, setEmail] = useState(contact ? contact.email : "");
     const [customer_address, setCustomerAddress] = useState(contact ? contact.customer_address : "");
     const [city, setCity] = useState(contact ? contact.city : "");
     const [postcode, setPostcode] = useState(contact ? contact.postcode : "");
     const [phone, setPhone] = useState(contact ? contact.phone : "");
-    console.log(contact);
+    const [isEmailValid, setEmailValid] = useState(true); // Track email validity
+
+    const validateEmail = (email) => {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailPattern.test(email);
+    };
+
     const onSubmit = () => {
+        if (!validateEmail(email)) {
+            setEmailValid(false);
+            return;
+        }
+
+        setEmailValid(true);
+
         if (contact) {
-            console.log("print");
             updateContact(customer_name, email, contact.id, customer_address, city, postcode, phone);
-            onClose();
         } else {
             addNewContact(customer_name, email, customer_address, city, postcode, phone);
-            onClose();
         }
+
+        onClose();
     };
 
     return (
@@ -64,7 +76,11 @@ const ContactForm = ({addNewContact, onClose, contact, updateContact}) => {
                 <Input
                     value={email}
                     type="email"
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                        setEmail(e.target.value);
+                        setEmailValid(true); // Reset validation when user types
+                    }}
+                    isInvalid={!isEmailValid} // Apply Chakra UI validation style
                 />
             </FormControl>
             <FormControl id="customer_address">
