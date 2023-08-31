@@ -69,7 +69,7 @@ const ProductAddressBook = () => {
     };
 
     const deleteContact = async (id) => {
-        deng({text:'是否删除? Confirm deleting？'}).then(async res=>{
+        deng({text:'Confirm deleting？'}).then(async res=>{
             const data = await Product_Delete_DriverStock(id);
             if (!data) {
                 setContacts((prev) => [

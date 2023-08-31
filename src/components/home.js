@@ -29,7 +29,7 @@ export default function Home() {
             UPAllInvoice(params).then(() => {
                 toast.closeAll()
                 toast({
-                    title: '提交成功。。。',
+                    title: 'Submit Success。。。',
                     status: 'success',
                     duration: 1000,
                     isClosable: false,
@@ -81,7 +81,7 @@ export default function Home() {
             }
             <div style={{position: "fixed", width: "100%", bottom: '30px'}}>
                 <Button onClick={submit} style={{width: '100%'}} colorScheme='blue'
-                        leftIcon={<CheckIcon/>}>提交所有Submit All Today Invoice</Button>
+                        leftIcon={<CheckIcon/>}>Submit All Today Invoice</Button>
 
             </div>
             {jsx}

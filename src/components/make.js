@@ -85,12 +85,12 @@ function PlacementExample({Open, onClose__, type, SetCustomer}) {
     const [contact, setContact] = useState({})
     const [OBJ, setObj] = useState({
         type1: {
-            title: '选择客户',
-            head: '添加新客户'
+            title: 'Choose Customer',
+            head: 'Add New Customer'
         },
         type2: {
-            title: '选择产品',
-            head: '添加新产品'
+            title: 'Choose Product',
+            head: 'Add New Product'
         }
     })
     useEffect(() => {
@@ -161,7 +161,7 @@ function PlacementExample({Open, onClose__, type, SetCustomer}) {
                         <Button leftIcon={<PlusSquareIcon/>} colorScheme='green'
                                 style={{width: '100%'}} onClick={onOpen2}>{head}</Button>
                         <div className='DrawerBody_main'>
-                            <div className="label">近期客户</div>
+                            <div className="label">Saved Contacts</div>
                             <RadioGroup onChange={ChangeRadio} value={value}>
                                 {
                                     contacts.map((item, index) => {
@@ -289,13 +289,13 @@ export default function Make({...props}) {
     function Save() {
 
         toast({
-            title: '保存中。。。',
+            title: 'Saving。。。',
             isClosable: false,
         })
         SaveInvoice(params).then(() => {
             toast.closeAll()
             toast({
-                title: '保存成功。。。',
+                title: 'Save success。。。',
                 status: 'success',
                 duration: 1000,
                 isClosable: false,
@@ -349,13 +349,13 @@ export default function Make({...props}) {
     }
     function EditSave() {
         toast({
-            title: '保存中。。。',
+            title: 'Saving。。。',
             isClosable: false,
         })
         UpDateInvoice(params).then(() => {
             toast.closeAll()
             toast({
-                title: '保存成功。。。',
+                title: 'success。。。',
                 status: 'success',
                 duration: 1000,
                 isClosable: false,
@@ -373,7 +373,7 @@ export default function Make({...props}) {
            DelInvoice(params).then(() => {
                toast.closeAll()
                toast({
-                   title: '删除成功。。。',
+                   title: 'Delete Success。。。',
                    status: 'success',
                    duration: 1000,
                    isClosable: false,
@@ -387,23 +387,23 @@ export default function Make({...props}) {
         <div>
             {jsx}
             <div className='btn_head'>
-                <Button colorScheme='blue' size='xs' onClick={Cancel} leftIcon={<ChevronLeftIcon/>}>返回Back</Button>
+                <Button colorScheme='blue' size='xs' onClick={Cancel} leftIcon={<ChevronLeftIcon/>}>Back</Button>
             </div>
             <div className='main_make'>
-                <h1>{state?'编辑发票Edit':'创建发票Create'}</h1>
+                <h1>{state?'Edit':'Create'}</h1>
                 <div className='item_make'>
                     <div className="label">客户Customer</div>
                     <Button onClick={() => go('type1')} width={'100%'} colorScheme='blue'
                             leftIcon={(!params.customer_name ? <AddIcon/> :
-                                <EditIcon/>)}>{params.customer_name || '选择客户'}</Button>
+                                <EditIcon/>)}>{params.customer_name || 'Choose Customer'}</Button>
                 </div>
                 <div className='item_make'>
-                    <div className="label">发票摘要Summary</div>
+                    <div className="label">Summary</div>
                     <Input placeholder='描述' value={params.description}
                            onChange={(e) => setParams({...params, description: e.target.value})}/>
                     <Button style={{marginTop: 20}} width={'100%'} colorScheme='gray'>
                         <Flex justifyContent={'space-between'} style={{width: '100%'}}>
-                            <div>发票日期Date</div>
+                            <div>Date</div>
                             <div><input style={{background: 'transparent'}} type="date" value={params.invoice_date}
                                         onChange={setTime}/></div>
                         </Flex>
@@ -411,9 +411,9 @@ export default function Make({...props}) {
                     </Button>
                 </div>
                 <div className='item_make'>
-                    <div className="label">产品和服务Products&Service</div>
+                    <div className="label">Products&Service</div>
                     <Button onClick={() => go('type2')} width={'100%'} colorScheme='blue'
-                            leftIcon={<AddIcon/>}>添加项目Add Product</Button>
+                            leftIcon={<AddIcon/>}>Add Product</Button>
                     {
                         params.product_details.length > 0 && (<TableContainer>
                             <Table size='sm'>
@@ -444,33 +444,33 @@ export default function Make({...props}) {
                     }
                 </div>
                 <div className='item_make'>
-                    <div className="label">发票总额Invoice Total</div>
+                    <div className="label">Invoice Total</div>
                     <Flex justifyContent={'space-between'} align={'center'} style={{width: '100%', height: '40px'}}>
-                        <span>折扣小计Discount Total:</span>
+                        <span>Discount Total:</span>
                         <span>{params.discount}</span>
                     </Flex>
                     <Flex justifyContent={'space-between'} align={'center'} style={{width: '100%', height: '40px'}}>
-                        <span>总计Total:</span>
+                        <span>Total:</span>
                         <span>{params.total_amount}</span>
                     </Flex>
                 </div>
                 <div className='item_make'>
-                    <div className="label">发票页脚Footer(可选Optional)</div>
-                    <Textarea placeholder='添加注释Add Note or include your T&Cs' value={params.invoice_footer}
+                    <div className="label">Footer(Optional)</div>
+                    <Textarea placeholder='Add Note or include your T&Cs' value={params.invoice_footer}
                               onChange={(e) => setParams({...params, invoice_footer: e.target.value})}/>
                 </div>
                 <Grid templateColumns={'1fr'} gap={2}>
                     {
                         state ? (
                             <>
-                                <Button  onClick={EditSave} width={'100%'} colorScheme='linkedin' leftIcon={<TriangleDownIcon/>}>保存Save</Button>
+                                <Button  onClick={EditSave} width={'100%'} colorScheme='linkedin' leftIcon={<TriangleDownIcon/>}>Save</Button>
                                 <Button onClick={EditDel} width={'100%'} colorScheme='red'
-                                        leftIcon={<DeleteIcon/>}>删除Delete</Button></>
+                                        leftIcon={<DeleteIcon/>}>Delete</Button></>
                         ) : (
                             <>
-                                <Button width={'100%'} colorScheme='linkedin' leftIcon={<LinkIcon/>}>下载</Button>
+                                <Button width={'100%'} colorScheme='linkedin' leftIcon={<LinkIcon/>}>Download</Button>
                                 <Button onClick={Save} width={'100%'} colorScheme='teal'
-                                        leftIcon={<TriangleDownIcon/>}>保存</Button>
+                                        leftIcon={<TriangleDownIcon/>}>Save</Button>
                             </>
                         )
                     }
@@ -485,7 +485,7 @@ export default function Make({...props}) {
                 state && (
                     <Kmodal
                         isOpen={isOpen2}
-                        title={'编辑项目'}
+                        title={'Edit Product'}
                         onOpen={onOpen2}
                         onClose={onClose2}
                     >

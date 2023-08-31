@@ -85,20 +85,20 @@ const ContactForm = ({addNewContact, onClose, contact, updateContact,type=false,
                 type&&(
                     <div>
                         <FormControl id="quantity">
-                            <FormLabel>销售</FormLabel>
+                            <FormLabel>Sales Detail</FormLabel>
                             <Flex align={'center'} justifyContent={'space-between'}>
-                                <div>数量</div>
+                                <div>Quantity</div>
                                 <HookUsage value={quantity} Change={(e) => setQuantity(e)}></HookUsage>
                             </Flex>
                         </FormControl>
                         <div className='item_make' style={{marginTop:40}}>
-                            <div className="label">项目金额</div>
+                            <div className="label">Price</div>
                             <Flex justifyContent={'space-between'} align={'center'} style={{width: '100%', height: '40px'}}>
-                                <span>小计:</span>
+                                <span>Subtotal:</span>
                                 <span>{subtotal}</span>
                             </Flex>
                             <Flex justifyContent={'space-between'} align={'center'} style={{width: '100%', height: '40px'}}>
-                                <span>总额:</span>
+                                <span>Total:</span>
                                 <span>{Total}</span>
                             </Flex>
                         </div>
@@ -115,7 +115,7 @@ const ContactForm = ({addNewContact, onClose, contact, updateContact,type=false,
                     {
                         contact.quantity&&(
                             <Button onClick={Del} colorScheme="red" alignSelf="flex-end">
-                                删除
+                                Delete
                             </Button>
                         )
                     }
