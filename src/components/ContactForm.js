@@ -5,6 +5,8 @@ import {Input} from "@chakra-ui/input";
 import {Stack} from "@chakra-ui/layout";
 import React, {useState} from "react";
 import {Textarea} from "@chakra-ui/react";
+import { Text } from "@chakra-ui/react";
+
 
 const ContactForm = ({ addNewContact, onClose, contact, updateContact }) => {
     const [customer_name, setName] = useState(contact ? contact.customer_name : "");
