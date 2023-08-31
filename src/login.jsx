@@ -5,8 +5,8 @@ import {FormControl, FormLabel} from "@chakra-ui/form-control";
 import {Input} from "@chakra-ui/input";
 import './style/login.css'
 const LoginComponent = (props) => {
-    const [username, setUsername] = useState('ceshi3@qq.com');
-    const [password, setPassword] = useState('admin');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
     const toast = useToast();
     const handleLogin = async () => {

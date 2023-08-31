@@ -152,7 +152,7 @@ function PlacementExample({Open, onClose__, type, SetCustomer}) {
     let {head, title} = OBJ[type]
     return (
         <>
-            <Drawer placement={placement} onClose={Clo}   isOpen={isOpen} size={'full'}    >
+            <Drawer placement={placement} onClose={Clo}   isOpen={isOpen} size={'full'}  id={'ZuoFull'}   >
                 <DrawerOverlay/>
                 <DrawerContent>
                     <DrawerCloseButton/>
