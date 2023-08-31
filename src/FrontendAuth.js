@@ -8,6 +8,7 @@ import Manager from "./components/manager";
 import App from "./App";
 import ProductAddressBook from "./ProductAddressBook";
 import Home from "./components/home";
+import {getinfo} from "./network";
 
 export default function FrontendAuth({location}) {
     console.log('%c FrontendAuth', 'color:#fff; background:red')
@@ -15,6 +16,7 @@ export default function FrontendAuth({location}) {
     let info = localStorage.getItem('user_info');
     info = JSON.parse(info);
     if (info) {
+        getinfo()
         if (location.pathname === '/login') {
             return <Redirect to='/info'/>
         }

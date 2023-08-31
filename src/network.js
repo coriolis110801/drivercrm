@@ -13,6 +13,7 @@ export function getinfo() {
   let info = localStorage.getItem('user_info')||'{}'
   info = JSON.parse(info);
   defaultData.responsible_person_id = info.responsible_person_id;
+  Rp.id = info.responsible_person_id;
 }
 let REACT_APP_SERVER = "https://www.butt-and-co.co.uk"
 export const addContactOnServer = async (customer_name, email, customer_address, city, postcode, phone) => {
