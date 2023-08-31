@@ -82,6 +82,11 @@ const ContactForm = ({ addNewContact, onClose, contact, updateContact }) => {
                     }}
                     isInvalid={!isEmailValid} // Apply Chakra UI validation style
                 />
+                {!isEmailValid && (
+                    <Text color="red" fontSize="sm">
+                        Please enter a valid email address.
+                    </Text>
+                )}
             </FormControl>
             <FormControl id="customer_address">
                 <FormLabel>customer_address</FormLabel>
@@ -93,15 +98,13 @@ const ContactForm = ({ addNewContact, onClose, contact, updateContact }) => {
                 />
 
             </FormControl>
-            {contact ? (
-                <Button onClick={onSubmit} colorScheme="purple" alignSelf="flex-end">
-                    Update Contact
-                </Button>
-            ) : (
-                <Button onClick={onSubmit} colorScheme="purple" alignSelf="flex-end">
-                    Add Contact
-                </Button>
-            )}
+            <Button
+                onClick={onSubmit}
+                colorScheme="purple"
+                alignSelf="flex-end"
+            >
+                {contact ? "Update Contact" : "Add Contact"}
+            </Button>
         </Stack>
     );
 };
