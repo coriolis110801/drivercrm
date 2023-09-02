@@ -60,6 +60,18 @@ function eqs(v1,v2) {
     return true
 }
 
+//随机生成16位id
+function generateRandomId() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let id = '';
+
+    for (let i = 0; i < 16; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        id += characters.charAt(randomIndex);
+    }
+
+    return id;
+}
 
 function Li({contact}) {
 
@@ -147,6 +159,9 @@ function PlacementExample({Open, onClose__, type, SetCustomer}) {
         www({customer_name, email, customer_address, city, postcode, phone})
     }
     const addNewContact_2 = async (product_name, discount_amount, price, quantity,id) => {
+        if([null,undefined,''].includes(id)){
+            id = generateRandomId()
+        }
         www({product_name, discount_amount, price, quantity,id})
     };
     let {head, title} = OBJ[type]
