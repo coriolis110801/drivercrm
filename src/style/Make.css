@@ -29,7 +29,9 @@
     height: 70svh;
     overflow: auto;
 }
-
+#CanvasSave{
+    transition: all 0.5s;
+}
 #chakra-modal-ZuoFull{
     height: 100svh !important;
 }
