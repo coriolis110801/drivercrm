@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Button, ButtonGroup, useToast} from '@chakra-ui/react'
+import {Button, ButtonGroup, Code, useToast} from '@chakra-ui/react'
 import {AddIcon, CheckIcon} from "@chakra-ui/icons";
 import {useHistory, Link} from 'react-router-dom';
 import {ListInvoice, UPAllInvoice} from "../network";
@@ -14,7 +14,10 @@ export default function Home() {
     let but = {
         margin: '40px'
     }
-
+    const [jia, setJia] = useState({
+        discount:0,
+        total_amount:0
+    })
     function go() {
         history.push('/Make')
     }
@@ -45,6 +48,18 @@ export default function Home() {
             console.log('%c 测试', 'color:#fff; background:red')
             console.log(res)
             setList(res?.invoices)
+            let arr = res?.invoices || []
+            let discount=0
+            let zong =   arr.reduce((prev,currentValue)=>{
+                prev+=currentValue.total_amount
+                discount+=currentValue.discount
+                return prev
+            },0)
+            setList(arr)
+            setJia({
+                discount,
+                total_amount: zong
+            })
         })
     }, []);
     return (
@@ -80,6 +95,10 @@ export default function Home() {
                 })
             }
             <div style={{position: "fixed", width: "100%", bottom: '30px'}}>
+                <div style={{position: 'absolute', right: 20, top: -65}}>
+                    <div>总折扣: <Code colorScheme='red' children={jia.discount}/></div>
+                    <div>总金额: <Code colorScheme='red' children={jia.total_amount}/></div>
+                </div>
                 <Button onClick={submit} style={{width: '100%'}} colorScheme='blue'
                         leftIcon={<CheckIcon/>}>Submit All Today Invoice</Button>
 

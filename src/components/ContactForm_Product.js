@@ -31,7 +31,7 @@ function HookUsage({value, Change}) {
 }
 const ContactForm = ({addNewContact, onClose, contact, updateContact,type=false,DelData}) => {
     const [product_name, setName] = useState(contact ? contact.product_name : "");
-    const [discount_amount, setAmount] = useState(contact ? contact.discount_amount : "");
+    const [discount_amount, setAmount] = useState(contact ? contact.discount_amount||0 : 0);
     const [price, setPrice] = useState(contact ? contact.price : "");
     const [quantity, setQuantity] = useState( contact ? contact.quantity??1 : 1)
     const Total = useMemo(()=>{

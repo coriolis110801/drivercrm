@@ -24,6 +24,12 @@
 .DrawerBody_main{
     margin-top: 20px;
 }
+.DrawerBody_main .over{
+    margin-top: 20px;
+    height: 70svh;
+    overflow: auto;
+}
+
 #chakra-modal-ZuoFull{
     height: 100svh !important;
 }

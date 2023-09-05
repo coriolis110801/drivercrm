@@ -174,23 +174,30 @@ function PlacementExample({Open, onClose__, type, SetCustomer}) {
                     <DrawerHeader borderBottomWidth='1px'>{title}</DrawerHeader>
                     <DrawerBody>
                         <Button leftIcon={<PlusSquareIcon/>} colorScheme='green'
-                                style={{width: '100%'}} onClick={onOpen2}>{head}</Button>
+                                style={{width: '100%'}} onClick={()=>{
+                            setValue(1)
+                            setContact(null)
+                            onOpen2()
+                        }}>{head}</Button>
                         <div className='DrawerBody_main'>
                             <div className="label">Saved Contacts</div>
-                            <RadioGroup onChange={ChangeRadio} value={value}>
-                                {
-                                    contacts.map((item, index) => {
-                                        return (
-                                            <Flex style={{height: '50px'}} align={'center'} key={item.id}>
-                                                <Radio size='lg' value={item.id}>
-                                                    <Li contact={item}></Li>
-                                                </Radio>
-                                            </Flex>
+                            <div className="over">
+                                <RadioGroup onChange={ChangeRadio} value={value}>
+                                    {
+                                        contacts.map((item, index) => {
+                                            return (
+                                                <Flex style={{height: '50px'}} align={'center'} key={item.id}>
+                                                    <Radio size='lg' value={item.id}>
+                                                        <Li contact={item}></Li>
+                                                    </Radio>
+                                                </Flex>
 
-                                        )
-                                    })
-                                }
-                            </RadioGroup>
+                                            )
+                                        })
+                                    }
+                                </RadioGroup>
+                            </div>
+
 
                         </div>
                     </DrawerBody>
