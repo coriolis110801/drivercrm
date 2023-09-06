@@ -533,7 +533,7 @@ export default function Make({...props}) {
                                            onClose__={onClose__}></PlacementExample>)
             }
             {
-                state && (
+                 (
                     <Kmodal
                         isOpen={isOpen2}
                         title={'Edit Product'}
