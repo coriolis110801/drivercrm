@@ -65,6 +65,7 @@ export default function Home() {
     return (
         <div>
             <Button onClick={go} style={but} colorScheme='blue' leftIcon={<AddIcon/>}>添加新Create New Invoice</Button>
+            <div style={{height:'60vh',overflow:'auto'}}>
             {
                 List.map((item, index) => {
 
@@ -94,7 +95,8 @@ export default function Home() {
                     )
                 })
             }
-            <div style={{position: "fixed", width: "100%", bottom: '30px'}}>
+            </div>
+            <div style={{position: "fixed", width: "100%", bottom: '10px'}}>
                 <div style={{position: 'absolute', right: 20, top: -65}}>
                     <div>总折扣: <Code colorScheme='red' children={jia.discount}/></div>
                     <div>总金额: <Code colorScheme='red' children={jia.total_amount}/></div>

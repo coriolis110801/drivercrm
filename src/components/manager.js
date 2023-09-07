@@ -107,39 +107,42 @@ export default function Manager() {
 
 
             </Box>
-            {
-                List.map((item, index) => {
+            <div style={{height:'60vh',overflow:'auto'}}>
+                {
+                    List.map((item, index) => {
 
-                    return (
-                        <Link to={{pathname: '/make', state: item}} key={item.id}>
-                            <div  style={{
-                                padding: 10,
-                                backgroundColor: 'pink',
-                                borderRadius: 5,
-                                margin: '5px auto 0 auto',
-                                width: '95%'
-                            }}>
-                                <Flex alignItems={'center'} justifyContent={'space-between'}>
-                                    <div>
-                                        <p>{item.customer_name}</p>
-                                        <p>{item.invoice_date}</p>
-                                    </div>
-                                    <div>
-                                        {
-                                            item.total_amount
-                                        }
-                                    </div>
-                                </Flex>
-                            </div>
-                        </Link>
+                        return (
+                            <Link to={{pathname: '/make', state: item}} key={item.id}>
+                                <div  style={{
+                                    padding: 10,
+                                    backgroundColor: 'pink',
+                                    borderRadius: 5,
+                                    margin: '5px auto 0 auto',
+                                    width: '95%'
+                                }}>
+                                    <Flex alignItems={'center'} justifyContent={'space-between'}>
+                                        <div>
+                                            <p>{item.customer_name}</p>
+                                            <p>{item.invoice_date}</p>
+                                        </div>
+                                        <div>
+                                            {
+                                                item.total_amount
+                                            }
+                                        </div>
+                                    </Flex>
+                                </div>
+                            </Link>
 
-                    )
-                })
-            }
+                        )
+                    })
+                }
+            </div>
+
             <div style={{
                 position: "fixed",
                 width: "100%",
-                bottom: '30px',
+                bottom: '10px',
                 display: 'flex',
                 rowGap: '20px',
                 flexWrap: 'wrap'
