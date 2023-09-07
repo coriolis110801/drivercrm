@@ -237,7 +237,7 @@ export default function Make({...props}) {
         "customer_phone": "",
         "description": "",
         "invoice_date": dayjs().format('YYYY-MM-DD'),
-        "invoice_footer": '',
+        "footerdescription": '',
         "product_details": [],
         "discount": 0,
         "total_amount": 0
@@ -504,8 +504,8 @@ export default function Make({...props}) {
                     </div>
                     <div className='item_make'>
                         <div className="label">Footer(Optional)</div>
-                        <Textarea placeholder='Add Note or include your T&Cs' value={params.invoice_footer}
-                                  onChange={(e) => setParams({...params, invoice_footer: e.target.value})}/>
+                        <Textarea placeholder='Add Note or include your T&Cs' value={params.footerdescription}
+                                  onChange={(e) => setParams({...params, footerdescription: e.target.value})}/>
                     </div>
                 </div>
 

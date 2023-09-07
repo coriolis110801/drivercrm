@@ -4,7 +4,7 @@ import {FormControl} from "@chakra-ui/form-control";
 import {Input} from "@chakra-ui/input";
 import {Flex, Stack} from "@chakra-ui/layout";
 import React, {useEffect, useState,useMemo} from "react";
-import {HStack, Textarea, useMenu, useNumberInput} from "@chakra-ui/react";
+import {HStack, Text, Textarea, useMenu, useNumberInput} from "@chakra-ui/react";
 function HookUsage({value, Change}) {
     const {value:va, getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
         useNumberInput({
@@ -30,6 +30,7 @@ function HookUsage({value, Change}) {
     )
 }
 const ContactForm = ({addNewContact, onClose, contact, updateContact,type=false,DelData}) => {
+    const [Cli, setCli] = useState(false)
     const [product_name, setName] = useState(contact ? contact.product_name : "");
     const [discount_amount, setAmount] = useState(contact ? contact.discount_amount||0 : 0);
     const [price, setPrice] = useState(contact ? contact.price : "");
@@ -41,6 +42,14 @@ const ContactForm = ({addNewContact, onClose, contact, updateContact,type=false,
         return Number((Number(price) * Number(quantity)).toFixed(2))
     },[quantity,price,discount_amount])
     const onSubmit = () => {
+        setCli(true)
+        if(!required(product_name)){
+            return
+        }
+        if(!isNumber(price)||!isNumber(discount_amount)){
+            return
+        }
+
         if (contact&&!type){
             console.log("print");
             updateContact(product_name, discount_amount,price, contact.id,contact.responsible_person);
@@ -53,33 +62,73 @@ const ContactForm = ({addNewContact, onClose, contact, updateContact,type=false,
     function Del() {
         DelData(contact.id)
     }
+   //必填
+    const required = (value) => {
+        return Boolean(value.toString().trim().length);
 
+    }
+    //验证必须是数字
+    const isNumber = (value) => {
+        return Boolean(value.toString().trim().length)&&!isNaN(Number(value))
+    }
+    let requi= (name,text,type=1)=>{
+        if(type===1){
+            if(!required(name)&&Cli){
+                return (
+                    <Text color="red" fontSize="sm">
+                        {text}
+                    </Text>
+                )
+            }
+        }else {
+            if(!isNumber(name)&&Cli){
+                return (
+                    <Text color="red" fontSize="sm">
+                        {text}
+                    </Text>
+                )
+            }
+        }
+
+    }
     return (
         <Stack>
-            <FormControl id="product_name">
+            <FormControl id="product_name" isRequired>
                 <FormLabel>product_name</FormLabel>
                 <Input
                     value={product_name}
                     type="text"
                     onChange={(e) => setName(e.target.value)}
+                    isInvalid={requi(product_name,'')}
                 />
+                {
+                    requi(product_name,'Please enter product_name')
+                }
             </FormControl>
-            <FormControl id="price">
+            <FormControl id="price" isRequired>
                 <FormLabel>price</FormLabel>
                 <Input
                     value={price}
                     type="text"
                     onChange={(e) => setPrice(e.target.value)}
+                    isInvalid={!isNumber(price)&&Cli}
                 />
+                {
+                    requi(price,'Please enter price Must be a number',2)
+                }
             </FormControl>
 
-            <FormControl id="discount_amount">
+            <FormControl id="discount_amount" isRequired>
                 <FormLabel>discount_amount</FormLabel>
                 <Input
                     value={discount_amount}
                     type="discount_amount"
                     onChange={(e) => setAmount(e.target.value)}
+                    isInvalid={!isNumber(discount_amount)&&Cli}
                 />
+                {
+                    requi(discount_amount,'Please enter price Must be a number',2)
+                }
             </FormControl>
             {
                 type&&(
