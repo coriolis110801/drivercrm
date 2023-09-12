@@ -3,7 +3,7 @@ import {Input, InputGroup, InputLeftElement} from "@chakra-ui/input";
 import {CheckIcon, Search2Icon} from "@chakra-ui/icons";
 import {Box, Flex} from "@chakra-ui/layout";
 import {Button} from "@chakra-ui/button";
-import {Link, useHistory} from "react-router-dom";
+import {Link, useHistory, useLocation,useParams} from "react-router-dom";
 import {Code, useToast} from "@chakra-ui/react";
 import {ListInvoice, UPAllcomplete, search_responsible_person, search_overdue_invoices} from "../network";
 import AsyncSelect from "react-select/async";
@@ -112,7 +112,7 @@ export default function Manager() {
                     List.map((item, index) => {
 
                         return (
-                            <Link to={{pathname: '/make', state: item}} key={item.id}>
+                            <Link to={{pathname: '/Make', state: {...item,readonly:true},}} key={item.id}>
                                 <div  style={{
                                     padding: 10,
                                     backgroundColor: 'pink',

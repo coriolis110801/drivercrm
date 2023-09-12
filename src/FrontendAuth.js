@@ -68,6 +68,9 @@ export default function FrontendAuth({location}) {
                         </Route>
                     </Header>
                 </Route>
+                    <Route path="/Make" exact>
+                        <Make></Make>
+                    </Route>
                 </>
             )
         }else {

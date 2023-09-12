@@ -40,6 +40,7 @@ import ContactForm_K from "./ContactForm_Product";
 import Kmodal from "./Kmodal";
 import useManual from "./open";
 import html2canvas from 'html2canvas'
+import {set} from "express/lib/application";
 function eqs(v1,v2) {
     if(typeof v1 !== 'object'|| v1===null||typeof v2 !== 'object'|| v2===null){
         return v1===v2
@@ -221,6 +222,7 @@ function PlacementExample({Open, onClose__, type, SetCustomer}) {
 
 export default function Make({...props}) {
     let [deng,jsx] =  useManual()
+    const [isCanvas, setIsCanvas] = useState(true)
     let history = useHistory();
     const {state} = useLocation();
     const {isOpen: isOpen2, onOpen: onOpen2, onClose: onClose2} = useDisclosure();
@@ -412,23 +414,29 @@ export default function Make({...props}) {
         })
         document.getElementById('CanvasSave').style.padding='20px'
         let time = Date.now()
-        html2canvas(document.getElementById('CanvasSave')).then(function(canvas) {
-            let a = document.createElement('a');
-            a.href = canvas.toDataURL('image/png');
-            a.download = 'invoice.png';
-            let time2 = Date.now()
-            a.click();
-            setTimeout(()=>{
-                document.getElementById('CanvasSave').style.padding='initial'
-            },500-(time2-time))
-            toast.closeAll()
-            toast({
-                title: ' Success。。。',
-                status: 'success',
-                duration: 1000,
-                isClosable: false,
+        setIsCanvas(false)
+        queueMicrotask(()=>{
+            html2canvas(document.getElementById('CanvasSave')).then(function(canvas) {
+                let a = document.createElement('a');
+                a.href = canvas.toDataURL('image/png');
+                a.download = 'invoice.png';
+                let time2 = Date.now()
+                a.click();
+                setTimeout(()=>{
+                    document.getElementById('CanvasSave').style.padding='initial'
+                    setIsCanvas(true)
+                },500-(time2-time))
+                toast.closeAll()
+                toast({
+                    title: ' Success。。。',
+                    status: 'success',
+                    duration: 1000,
+                    isClosable: false,
+                })
             })
         })
+
+
     }
     return (
         <div>
@@ -441,26 +449,35 @@ export default function Make({...props}) {
                 <div id='CanvasSave'>
                     <div className='item_make'>
                         <div className="label">客户Customer</div>
-                        <Button onClick={() => go('type1')} width={'100%'} colorScheme='blue'
+                        <Button onClick={() =>!state.readonly&&go('type1')} width={'100%'} colorScheme='blue'
                                 leftIcon={(!params.customer_name ? <AddIcon/> :
                                     <EditIcon/>)}>{params.customer_name || 'Choose Customer'}</Button>
                     </div>
                     <div className='item_make'>
                         <div className="label">Summary</div>
-                        <Input placeholder='描述' value={params.description}
+                        <Input disabled={state.readonly} placeholder='描述' value={params.description}
                                onChange={(e) => setParams({...params, description: e.target.value})}/>
                         <Button style={{marginTop: 20}} width={'100%'} colorScheme='gray'>
                             <Flex justifyContent={'space-between'} style={{width: '100%'}}>
                                 <div>Date</div>
-                                <div><input style={{background: 'transparent'}} type="date" value={params.invoice_date}
-                                            onChange={setTime}/></div>
+                                <div>
+                                    {
+                                        isCanvas&&!state.readonly?(
+                                            <input  style={{background: 'transparent'}} type="date" value={params.invoice_date}
+                                                   onChange={setTime}/>
+                                        ):(
+                                            <div>{params.invoice_date}</div>
+                                        )
+                                    }
+
+                                </div>
                             </Flex>
 
                         </Button>
                     </div>
                     <div className='item_make'>
                         <div className="label">Products&Service</div>
-                        <Button onClick={() => go('type2')} width={'100%'} colorScheme='blue'
+                        <Button onClick={() =>!state.readonly&& go('type2')} width={'100%'} colorScheme='blue'
                                 leftIcon={<AddIcon/>}>Add Product</Button>
                         {
                             params.product_details.length > 0 && (<TableContainer>
@@ -476,7 +493,7 @@ export default function Make({...props}) {
                                         {
                                             params.product_details && params.product_details.map((item, index) => {
                                                 return (
-                                                    <Tr key={item.name} onClick={EDITFun.bind(this, item)}>
+                                                    <Tr key={item.name} onClick={()=>!state.readonly&&EDITFun.bind(this, item)}>
                                                         <Td>{item.name}</Td>
                                                         <Td isNumeric>{item.price}</Td>
                                                         <Td isNumeric>{item.quantity}</Td>
@@ -504,7 +521,7 @@ export default function Make({...props}) {
                     </div>
                     <div className='item_make'>
                         <div className="label">Footer(Optional)</div>
-                        <Textarea placeholder='Add Note or include your T&Cs' value={params.footerdescription}
+                        <Textarea disabled={state.readonly} placeholder='Add Note or include your T&Cs' value={params.footerdescription}
                                   onChange={(e) => setParams({...params, footerdescription: e.target.value})}/>
                     </div>
                 </div>
@@ -514,9 +531,16 @@ export default function Make({...props}) {
                         state ? (
                             <>
                                 <Button width={'100%'} onClick={DownloadPng} colorScheme='linkedin' leftIcon={<LinkIcon/>}>Download</Button>
-                                <Button  onClick={EditSave} width={'100%'} colorScheme='linkedin' leftIcon={<TriangleDownIcon/>}>Save</Button>
-                                <Button onClick={EditDel} width={'100%'} colorScheme='red'
-                                        leftIcon={<DeleteIcon/>}>Delete</Button></>
+                                {
+                                    state.readonly?null:(
+                                        <>
+                                            <Button  onClick={EditSave} width={'100%'} colorScheme='linkedin' leftIcon={<TriangleDownIcon/>}>Save</Button>
+                                            <Button onClick={EditDel} width={'100%'} colorScheme='red'
+                                                    leftIcon={<DeleteIcon/>}>Delete</Button>
+                                        </>
+                                    )
+                                }
+                            </>
                         ) : (
                             <>
                                 <Button width={'100%'} onClick={DownloadPng} colorScheme='linkedin' leftIcon={<LinkIcon/>}>Download</Button>
