@@ -70,7 +70,7 @@ export default function Home() {
                 List.map((item, index) => {
 
                     return (
-                        <Link to={{pathname: '/make', state: item}}>
+                        <Link to={{pathname: '/make', state: {...item,readonly:false}}}>
                             <div key={index} style={{
                                 padding: 10,
                                 backgroundColor: '#a8b0b7',
