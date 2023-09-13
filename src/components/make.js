@@ -449,20 +449,20 @@ export default function Make({...props}) {
                 <div id='CanvasSave'>
                     <div className='item_make'>
                         <div className="label">客户Customer</div>
-                        <Button onClick={() =>!state.readonly&&go('type1')} width={'100%'} colorScheme='blue'
+                        <Button onClick={() =>!state?.readonly&&go('type1')} width={'100%'} colorScheme='blue'
                                 leftIcon={(!params.customer_name ? <AddIcon/> :
                                     <EditIcon/>)}>{params.customer_name || 'Choose Customer'}</Button>
                     </div>
                     <div className='item_make'>
                         <div className="label">Summary</div>
-                        <Input disabled={state.readonly} placeholder='描述' value={params.description}
+                        <Input disabled={state?.readonly} placeholder='描述' value={params.description}
                                onChange={(e) => setParams({...params, description: e.target.value})}/>
                         <Button style={{marginTop: 20}} width={'100%'} colorScheme='gray'>
                             <Flex justifyContent={'space-between'} style={{width: '100%'}}>
                                 <div>Date</div>
                                 <div>
                                     {
-                                        isCanvas&&!state.readonly?(
+                                        isCanvas&&!state?.readonly?(
                                             <input  style={{background: 'transparent'}} type="date" value={params.invoice_date}
                                                    onChange={setTime}/>
                                         ):(
@@ -477,7 +477,7 @@ export default function Make({...props}) {
                     </div>
                     <div className='item_make'>
                         <div className="label">Products&Service</div>
-                        <Button onClick={() =>!state.readonly&& go('type2')} width={'100%'} colorScheme='blue'
+                        <Button onClick={() =>!state?.readonly&& go('type2')} width={'100%'} colorScheme='blue'
                                 leftIcon={<AddIcon/>}>Add Product</Button>
                         {
                             params.product_details.length > 0 && (<TableContainer>
@@ -493,7 +493,7 @@ export default function Make({...props}) {
                                         {
                                             params.product_details && params.product_details.map((item, index) => {
                                                 return (
-                                                    <Tr key={item.name} onClick={()=>!state.readonly&&EDITFun.bind(this, item)}>
+                                                    <Tr key={item.name} onClick={()=>!state?.readonly&&EDITFun.bind(this, item)}>
                                                         <Td>{item.name}</Td>
                                                         <Td isNumeric>{item.price}</Td>
                                                         <Td isNumeric>{item.quantity}</Td>
@@ -521,7 +521,7 @@ export default function Make({...props}) {
                     </div>
                     <div className='item_make'>
                         <div className="label">Footer(Optional)</div>
-                        <Textarea disabled={state.readonly} placeholder='Add Note or include your T&Cs' value={params.footerdescription}
+                        <Textarea disabled={state?.readonly} placeholder='Add Note or include your T&Cs' value={params.footerdescription}
                                   onChange={(e) => setParams({...params, footerdescription: e.target.value})}/>
                     </div>
                 </div>
@@ -532,7 +532,7 @@ export default function Make({...props}) {
                             <>
                                 <Button width={'100%'} onClick={DownloadPng} colorScheme='linkedin' leftIcon={<LinkIcon/>}>Download</Button>
                                 {
-                                    state.readonly?null:(
+                                    state?.readonly?null:(
                                         <>
                                             <Button  onClick={EditSave} width={'100%'} colorScheme='linkedin' leftIcon={<TriangleDownIcon/>}>Save</Button>
                                             <Button onClick={EditDel} width={'100%'} colorScheme='red'
