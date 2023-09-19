@@ -454,6 +454,8 @@ export default function Make({...props}) {
                                     <EditIcon/>)}>{params.customer_name || 'Choose Customer'}</Button>
                     </div>
                     <div className='item_make'>
+                        <div className="label">customer_address</div>
+                        <Textarea disabled={true} placeholder='customer_address' value={`${params.customer_city+'  '+params.customer_postal_code +'  '+params.customer_phone}\n${params.customer_email}\n${params.customer_address}`}/>
                         <div className="label">Summary</div>
                         <Input disabled={state?.readonly} placeholder='描述' value={params.description}
                                onChange={(e) => setParams({...params, description: e.target.value})}/>
