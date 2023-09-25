@@ -335,6 +335,9 @@ export default function Make({...props}) {
     }
 
     function EDITFun(e) {
+        if (state?.readonly) {
+            return
+        }
         setContact({
             ...e,
             product_name: e.name,
@@ -495,7 +498,7 @@ export default function Make({...props}) {
                                         {
                                             params.product_details && params.product_details.map((item, index) => {
                                                 return (
-                                                    <Tr key={item.name} onClick={()=>!state?.readonly&&EDITFun.bind(this, item)}>
+                                                    <Tr key={item.name} onClick={()=>EDITFun(item)}>
                                                         <Td>{item.name}</Td>
                                                         <Td isNumeric>{item.price}</Td>
                                                         <Td isNumeric>{item.quantity}</Td>
