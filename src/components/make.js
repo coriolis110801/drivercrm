@@ -451,7 +451,7 @@ export default function Make({...props}) {
                 <h1>{state?'Edit':'Create'}</h1>
                 <div id='CanvasSave'>
                     <div className='item_make'>
-                        <div className="label">客户Customer</div>
+                        <div className="label">客户Customer     Purchase Invoice</div>
                         <Button onClick={() =>!state?.readonly&&go('type1')} width={'100%'} colorScheme='blue'
                                 leftIcon={(!params.customer_name ? <AddIcon/> :
                                     <EditIcon/>)}>{params.customer_name || 'Choose Customer'}</Button>
@@ -460,7 +460,7 @@ export default function Make({...props}) {
                         <div className="label">customer_address</div>
                         <Textarea disabled={true} placeholder='customer_address' value={`${params.customer_city+'  '+params.customer_postal_code +'  '+params.customer_phone}\n${params.customer_email}\n${params.customer_address}`}/>
                         <div className="label">Summary</div>
-                        <Input disabled={state?.readonly} placeholder='描述' value={params.description}
+                        <Input disabled={state?.readonly} placeholder='description' value={params.description}
                                onChange={(e) => setParams({...params, description: e.target.value})}/>
                         <Button style={{marginTop: 20}} width={'100%'} colorScheme='gray'>
                             <Flex justifyContent={'space-between'} style={{width: '100%'}}>
