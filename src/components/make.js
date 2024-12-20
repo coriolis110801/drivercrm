@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import SavedContactsForm from './SavedContactsForm';
 import '../style/Make.css'
 import {
     Button,
@@ -182,6 +183,7 @@ function PlacementExample({Open, onClose__, type, SetCustomer}) {
                         }}>{head}</Button>
                         <div className='DrawerBody_main'>
                             <div className="label">Saved Contacts</div>
+                            <SavedContactsForm />
                             <div className="over">
                                 <RadioGroup onChange={ChangeRadio} value={value}>
                                     {
