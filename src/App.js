@@ -11,6 +11,8 @@ import ContactCard from "./components/ContactCard";
 import ContactForm from "./components/ContactForm";
 import Kmodal from "./components/Kmodal";
 import useManual from "./components/open";
+import SavedContactsForm from './SavedContactsForm';
+
 
 const App = () => {
     let [deng,jsx] =  useManual()
@@ -106,6 +108,7 @@ const App = () => {
                     <Heading as="h1" textTransform="uppercase">
                         Saved Contacts
                     </Heading>
+                    <SavedContactsForm />
                 </Flex>
                 <Box p="4">
                     <Button
