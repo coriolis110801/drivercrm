@@ -6,34 +6,27 @@ import { Input, InputGroup, InputLeftElement } from "@chakra-ui/input";
 import { addContactOnServer, deleteContactOnServer, getAllContacts, updateContactOnServer } from "./network";
 import { Box, Flex, Heading } from "@chakra-ui/layout";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 import ContactCard from "./components/ContactCard";
 import ContactForm from "./components/ContactForm";
 import Kmodal from "./components/Kmodal";
 import useManual from "./components/open";
 import SavedContactsForm from './SavedContactsForm';
-import axios from 'axios';
 
 const App = () => {
     let [deng, jsx] = useManual();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: isOpenEdit, onOpen: onOpenEdit, onClose: onCloseEdit } = useDisclosure();
     const [searchData, setSearchData] = useState("");
-    const [contacts, setContacts] = useState([]);
+    const [contacts, setContacts] = useState([]); // Ensure contacts is always an array
     const [contactId, setContactId] = useState();
     const responsiblePersonId = 1; // Replace this with the actual responsible person ID
 
     useEffect(() => {
         const fetchContacts = async () => {
             const data = await getAllContacts();
-            const tempArray = [];
-            if (data !== null) {
-                Object.entries(data).forEach(([key, value]) => {
-                    tempArray.push({ id: key, ...value });
-                });
-            }
-
-            setContacts(tempArray);
+            setContacts(Array.isArray(data) ? data : []); // Ensure data is an array
         };
         fetchContacts();
     }, []);
@@ -42,23 +35,25 @@ const App = () => {
         const fetchSearchedContacts = async () => {
             if (searchData.trim() === "") {
                 const data = await getAllContacts();
-                setContacts(data);
+                setContacts(Array.isArray(data) ? data : []);
                 return;
             }
 
             try {
-                const response = await axios.get(`/api/responsible_persons/${responsiblePersonId}/customers/search/`, {
-                    params: { q: searchData }
-                });
-                setContacts(response.data);
+                const response = await axios.get(
+                    `/api/responsible_persons/${responsiblePersonId}/customers/search/`,
+                    { params: { q: searchData } }
+                );
+                setContacts(Array.isArray(response.data) ? response.data : []);
             } catch (error) {
                 console.error("Error fetching search results:", error);
+                setContacts([]); // Handle errors gracefully
             }
         };
 
-        const debounceSearch = setTimeout(fetchSearchedContacts, 500); // Debounce the search by 500ms
+        const debounceSearch = setTimeout(fetchSearchedContacts, 500); // Debounce search
 
-        return () => clearTimeout(debounceSearch); // Cleanup the debounce
+        return () => clearTimeout(debounceSearch); // Cleanup debounce
     }, [searchData]);
 
     const addNewContact = async (customer_name, email, customer_address, city, postcode, phone) => {
@@ -89,7 +84,9 @@ const App = () => {
         });
     };
 
-    let selectContact = contacts.find((contact) => contact.id === contactId);
+    let selectContact = Array.isArray(contacts)
+        ? contacts.find((contact) => contact.id === contactId)
+        : null;
 
     return (
         <>
@@ -151,15 +148,19 @@ const App = () => {
                     </InputGroup>
                 </Box>
                 <Box p="4">
-                    {contacts.map((contact) => (
-                        <ContactCard
-                            getContactId={getContactId}
-                            onOpen={onOpenEdit}
-                            contact={contact}
-                            key={contact.id}
-                            deleteContact={deleteContact}
-                        />
-                    ))}
+                    {contacts.length === 0 ? (
+                        <p>No contacts found</p>
+                    ) : (
+                        contacts.map((contact) => (
+                            <ContactCard
+                                getContactId={getContactId}
+                                onOpen={onOpenEdit}
+                                contact={contact}
+                                key={contact.id}
+                                deleteContact={deleteContact}
+                            />
+                        ))
+                    )}
                 </Box>
             </Box>
         </>
