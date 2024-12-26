@@ -1,30 +1,32 @@
-import {Button} from "@chakra-ui/button";
-import {useDisclosure} from "@chakra-ui/hooks";
-import {AddIcon, Search2Icon} from "@chakra-ui/icons";
-import {Image} from "@chakra-ui/image";
-import {Input, InputGroup, InputLeftElement} from "@chakra-ui/input";
-import {addContactOnServer, deleteContactOnServer, getAllContacts, updateContactOnServer,} from "./network";
-import {Box, Flex, Heading} from "@chakra-ui/layout";
-import {useEffect, useState} from "react";
-
+import {
+    addContactOnServer,
+    deleteContactOnServer,
+    getAllContacts,
+    UPAllInvoice,
+    updateContactOnServer,
+} from "./network";
+import React, {useEffect, useState} from "react";
 import ContactCard from "./components/ContactCard";
 import ContactForm from "./components/ContactForm";
 import Kmodal from "./components/Kmodal";
 import useManual from "./components/open";
 import SavedContactsForm from './SavedContactsForm';
+import { Button, Input, Flex, Typography, message, Modal } from 'antd';
+import { ExclamationCircleFilled, PlusOutlined, SearchOutlined } from '@ant-design/icons';
+import styles from './style/App.module.css';
+const { confirm } = Modal;
+const { Title } = Typography;
 
 
 const App = () => {
-    let [deng,jsx] =  useManual()
-    const {isOpen, onOpen, onClose} = useDisclosure();
-    const {
-        isOpen: isOpenEdit,
-        onOpen: onOpenEdit,
-        onClose: onCloseEdit,
-    } = useDisclosure();
+    const [open, setOpen] = useState(false)
+    const [editOpen, setEditOpen] = useState(false)
     const [searchData, setSearchData] = useState("");
     const [contacts, setContacts] = useState([]);
     const [contactId, setContactId] = useState();
+
+    const [messageApi, contextHolder] = message.useMessage();
+
     useEffect(() => {
         const fetchContacts = async () => {
             const data = await getAllContacts();
@@ -64,91 +66,87 @@ const App = () => {
     };
 
     const deleteContact = (id) => {
-        deng({text:'是否删除？Confirm deleting?'}).then(async res=>{
-            const data = await deleteContactOnServer(id);
-            if (!data) {
-                setContacts((prev) => [
-                    ...contacts.filter((contact) => contact.id !== id),
-                ]);
-            }
-        })
-
+        confirm({
+            title: 'Delete confirm',
+            icon: <ExclamationCircleFilled />,
+            content: '是否删除？Confirm deleting?',
+            async onOk() {
+                const data = await deleteContactOnServer(id);
+                if (!data) {
+                    setContacts((prev) => [
+                        ...contacts.filter((contact) => contact.id !== id),
+                    ]);
+                }
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
 
     };
     let selectContact = contacts.find((contact) => contact.id === contactId);
 
     return (
         <>
-            {
-                jsx
-            }
+            {contextHolder}
             <Kmodal
-                isOpen={isOpen}
+                isOpen={open}
                 title={"Add New Contact"}
-                onOpen={onOpen}
-                onClose={onClose}
+                onOpen={() => setOpen(true)}
+                onClose={() => setOpen(false)}
             >
-                <ContactForm addNewContact={addNewContact} onClose={onClose}/>
+                <ContactForm addNewContact={addNewContact} onClose={() => setOpen(false)}/>
             </Kmodal>
             <Kmodal
-                isOpen={isOpenEdit}
+                isOpen={editOpen}
                 title={"Update New Contact"}
-                onOpen={onOpenEdit}
-                onClose={onCloseEdit}
+                onOpen={() => setEditOpen(true)}
+                onClose={() => setEditOpen(false)}
             >
                 <ContactForm
                     updateContact={updateContact}
                     contact={selectContact}
-                    onClose={onCloseEdit}
+                    onClose={() => setEditOpen(false)}
                 />
             </Kmodal>
-            <Box>
-                <Flex p="4" justify="center" align="center">
-                    <Image src="/banner.png" w="150px" h="100px"/>
-                    <Heading as="h1" textTransform="uppercase">
-                        Saved Contacts
-                    </Heading>
+            <div>
+                <Flex className={styles.savedContacts} justify="center" align="center">
+                    <img src="/banner.png" width="150px" height="100px"/>
+                    <Title className={styles.title}>Saved Contacts</Title>
                     <SavedContactsForm />
                 </Flex>
-                <Box p="4">
+                <div className={styles.pContent}>
                     <Button
-                        bg="purple.700"
-                        color="white"
-                        w="full"
-                        fontSize="xl"
-                        fontWeight="bold"
-                        colorScheme="purple"
-                        onClick={onOpen}
+                        type="primary"
+                        block
+                        onClick={() => setOpen(true)}
+                        icon={<PlusOutlined />}
                     >
-                        <AddIcon h="20px" w="20px" mr="4"/> Add Contact
+                        Add Contact
                     </Button>
-                </Box>
-                <Box p="4">
-                    <InputGroup>
-                        <InputLeftElement
-                            pointerEvents="none"
-                            children={<Search2Icon color="gray.300"/>}
-                        />
-                        <Input
-                            focusBorderColor="purple.400"
-                            type="tel"
-                            placeholder="Search Contact..."
-                            onChange={(e) => setSearchData(e.target.value)}
-                        />
-                    </InputGroup>
-                </Box>
-                <Box p="4">
+                </div>
+                <div className={styles.pContent}>
+                    <Input
+                      size="large"
+                      type="tel"
+                      placeholder="Search Contact..."
+                      prefix={<SearchOutlined />}
+                      value={searchData}
+                      onChange={(e) => setSearchData(e.target.value)}
+                    />
+                </div>
+                <div className={styles.pContent}>
                     {searchContacts.map((contact) => (
                         <ContactCard
                             getContactId={getContactId}
-                            onOpen={onOpenEdit}
+                            onOpen={() => setEditOpen(true)}
                             contact={contact}
                             key={contact.id}
                             deleteContact={deleteContact}
                         />
                     ))}
-                </Box>
-            </Box>
+                </div>
+            </div>
         </>
     );
 };

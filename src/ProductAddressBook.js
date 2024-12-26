@@ -1,30 +1,23 @@
-import {Button} from "@chakra-ui/button";
-import {useDisclosure} from "@chakra-ui/hooks";
-import {AddIcon, Search2Icon} from "@chakra-ui/icons";
-import {Image} from "@chakra-ui/image";
-import {Input, InputGroup, InputLeftElement} from "@chakra-ui/input";
 import {
     Product_Add_DriverStock,
     Product_Get_DriverStock,
     Product_Update_DriverStock,
-    Product_Delete_DriverStock
+    Product_Delete_DriverStock,
 } from "./network";
-import {Heading, Flex, Box} from "@chakra-ui/layout";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 
 import ContactCard from "./components/ContactCard";
 import ContactForm from "./components/ContactForm_Product";
 import Kmodal from "./components/Kmodal";
-import useManual from "./components/open";
+import styles from './style/ProductAddressBook.module.css'
+import { Flex, Typography, Button, Input, Modal } from 'antd';
+import { ExclamationCircleFilled, PlusOutlined, SearchOutlined } from '@ant-design/icons';
+const { Title } = Typography;
+const { confirm } = Modal;
 
 const ProductAddressBook = () => {
-    const {isOpen, onOpen, onClose} = useDisclosure();
-    let [deng,jsx] =  useManual()
-    const {
-        isOpen: isOpenEdit,
-        onOpen: onOpenEdit,
-        onClose: onCloseEdit,
-    } = useDisclosure();
+    const [open, setOpen] = useState(false)
+    const [editOpen, setEditOpen] = useState(false)
     const [searchData, setSearchData] = useState("");
     const [contacts, setContacts] = useState([]);
     const [contactId, setContactId] = useState();
@@ -69,86 +62,84 @@ const ProductAddressBook = () => {
     };
 
     const deleteContact = async (id) => {
-        deng({text:'Confirm deleting？'}).then(async res=>{
-            const data = await Product_Delete_DriverStock(id);
-            if (!data) {
-                setContacts((prev) => [
-                    ...contacts.filter((contact) => contact.id !== id),
-                ]);
-            }
-        })
-
+        confirm({
+            title: 'Delete confirm',
+            icon: <ExclamationCircleFilled />,
+            content: 'Confirm deleting？',
+            async onOk() {
+                const data = await Product_Delete_DriverStock(id);
+                if (!data) {
+                    setContacts((prev) => [
+                        ...contacts.filter((contact) => contact.id !== id),
+                    ]);
+                }
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
     };
     let selectContact = contacts.find((contact) => contact.id === contactId);
 
     return (
-        <> {jsx}
+        <>
             <Kmodal
-                isOpen={isOpen}
+                isOpen={open}
                 title={"Add New Contact"}
-                onOpen={onOpen}
-                onClose={onClose}
+                onOpen={() => setOpen(true)}
+                onClose={() => setOpen(false)}
             >
-                <ContactForm addNewContact={addNewContact} onClose={onClose}/>
+                <ContactForm addNewContact={addNewContact} onClose={() => setOpen(false)}/>
             </Kmodal>
             <Kmodal
-                isOpen={isOpenEdit}
+                isOpen={editOpen}
                 title={"Update New Contact"}
-                onOpen={onOpenEdit}
-                onClose={onCloseEdit}
+                onOpen={() => setEditOpen(true)}
+                onClose={() => setEditOpen(false)}
             >
                 <ContactForm
                     updateContact={updateContact}
                     contact={selectContact}
-                    onClose={onCloseEdit}
+                    onClose={() => setEditOpen(false)}
                 />
             </Kmodal>
-            <Box>
-                <Flex p="4" justify="center" align="center">
-                    <Image src="/banner.png" w="150px" h="100px"/>
-                    <Heading as="h1" textTransform="uppercase">
-                        Saved Products
-                    </Heading>
+            <div>
+                <Flex className={styles.p4} justify="center" align="center">
+                    <img src="/banner.png" width="150px" height="100px"/>
+                    <Title className={styles.title}>Saved Products</Title>
                 </Flex>
-                <Box p="4">
+                <div className={styles.p4}>
                     <Button
-                        bg="purple.700"
-                        color="white"
-                        w="full"
-                        fontSize="xl"
-                        fontWeight="bold"
-                        colorScheme="purple"
-                        onClick={onOpen}
+                      type="primary"
+                      block
+                      icon={<PlusOutlined />}
+                      onClick={() => setOpen(true)}
                     >
-                        <AddIcon h="20px" w="20px" mr="4"/> Add Product
+                        Add Product
                     </Button>
-                </Box>
-                <Box p="4">
-                    <InputGroup>
-                        <InputLeftElement
-                            pointerEvents="none"
-                            children={<Search2Icon color="gray.300"/>}
-                        />
-                        <Input
-                            focusBorderColor="purple.400"
-                            type="tel"
-                            placeholder="Search Product..."
-                            onChange={(e) => setSearchData(e.target.value)}
-                        />
-                    </InputGroup>
-                </Box>
-                <Box p="4">
+                </div>
+                <div className={styles.p4}>
+                    <Input
+                      size="large"
+                      type="tel"
+                      placeholder="Search Product..."
+                      prefix={<SearchOutlined />}
+                      value={searchData}
+                      onChange={(e) => setSearchData(e.target.value)}
+                    />
+                </div>
+                <div className={styles.p4}>
                     {searchContacts.map((contact) => (
                         <ContactCard
                             getContactId={getContactId}
-                            onOpen={onOpenEdit}
+                            onOpen={() => setEditOpen(true)}
                             contact={contact}
                             key={contact.id}
                             deleteContact={deleteContact}
                         />
                     ))}
-                </Box>
-            </Box>
+                </div>
+            </div>
         </>
     );
 };

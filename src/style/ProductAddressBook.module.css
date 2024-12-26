@@ -1,0 +1,11 @@
+.p4 {
+    padding: 32px;
+}
+
+.title {
+    font-size: 2.25rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 0 !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";;
+    text-transform: uppercase;
+}

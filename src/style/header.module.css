@@ -1,32 +1,41 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 100px;
+}
+
+.headerRight {
+
+}
+
 @media screen and (min-width: 768px) {
 
     .header{
         margin: 0;
-        padding: 0;
-        background-color: #333;
+        background-color: #001529;
         color: #fff;
         height: 80px;
         width: 100%;
     }
-    .header__left{
-        float: left;
+    .headerLeft{
         width: 50%;
         height: 100%;
         display: flex;
         align-items: center;
         gap: 30px;
-        margin-left: 100px;
         position: relative;
     }
-    .header__left a>div{
-        padding: 20px;
+    .headerLeft a>div{
+        padding: 12px 20px;
+        border-radius: 8px;
         cursor: pointer;
         transition: all 0.3s ease-in-out;
     }
-    .header__left .active>div,.header__left a>div:hover{
-        background-color: white;
-        color: #333333;
-        padding: 20px;
+    .headerLeft .active>div,.headerLeft a>div:hover{
+        background-color: #1677ff;
+        color: #ffffff;
+        padding: 12px 20px;
     }
 
 }
@@ -34,13 +43,13 @@
 
     .header{
         margin: 0;
-        padding: 0;
-        background-color: #333;
+        padding: 0 10px;
+        background-color: #001529;
         color: #fff;
         height: 50px;
         width: 100%;
     }
-    .header__left{
+    .headerLeft{
         float: left;
         width: 100%;
         height: 100%;
@@ -52,14 +61,15 @@
         white-space: nowrap;
         position: relative;
     }
-    .header__left a>div{
+    .headerLeft a>div{
         padding: 10px;
+        border-radius: 8px;
         cursor: pointer;
         transition: all 0.3s ease-in-out;
     }
-    .header__left .active>div,.header__left a>div:hover{
-        background-color: white;
-        color: #333333;
+    .headerLeft .active>div,.headerLeft a>div:hover{
+        background-color: #1677ff;
+        color: #ffffff;
         padding: 10px;
     }
 

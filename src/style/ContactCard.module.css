@@ -1,0 +1,22 @@
+.container {
+    display: flex;
+    justify-content: space-between;
+    color: #ffffff;
+    background: #6B46C1;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    margin-bottom: 1rem;
+}
+
+.mr4 {
+    margin-right: 1rem;
+}
+
+.text {
+    color: #ffffff;
+}
+
+.text + .text {
+    margin-top: 0.5rem;
+}

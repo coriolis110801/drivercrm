@@ -1,8 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import '../style/Make.css'
 import {
-    Button,
-    ButtonGroup,
     Drawer, DrawerBody, DrawerCloseButton,
     DrawerContent,
     DrawerHeader, DrawerOverlay,
@@ -13,20 +10,15 @@ import {
 } from '@chakra-ui/react'
 import {useHistory, useLocation, useParams} from 'react-router-dom';
 import {
-    AddIcon,
-    ChevronLeftIcon,
     DeleteIcon,
-    EditIcon,
     LinkIcon,
     PlusSquareIcon,
     TriangleDownIcon
 } from "@chakra-ui/icons";
-import {Input} from "@chakra-ui/input";
+
 import dayjs from 'dayjs'
 import {Box, Flex, Stack, Text} from "@chakra-ui/layout";
 import {useDisclosure} from "@chakra-ui/hooks";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faUser} from "@fortawesome/free-solid-svg-icons";
 import {
     DelInvoice,
     getAllContacts,
@@ -40,7 +32,13 @@ import ContactForm_K from "./ContactForm_Product";
 import Kmodal from "./Kmodal";
 import useManual from "./open";
 import html2canvas from 'html2canvas'
-import {set} from "express/lib/application";
+
+import { Button, Input } from 'antd';
+import { CaretDownOutlined, EditOutlined, LeftOutlined, LinkOutlined, PlusOutlined } from '@ant-design/icons';
+import styles from '../style/Make.module.css';
+
+const { TextArea } = Input
+
 function eqs(v1,v2) {
     if(typeof v1 !== 'object'|| v1===null||typeof v2 !== 'object'|| v2===null){
         return v1===v2
@@ -445,25 +443,25 @@ export default function Make({...props}) {
     return (
         <div>
             {jsx}
-            <div className='btn_head'>
-                <Button colorScheme='blue' size='xs' onClick={Cancel} leftIcon={<ChevronLeftIcon/>}>Back</Button>
+            <div className={styles.btn_head}>
+                <Button type="primary" onClick={Cancel} icon={<LeftOutlined />}>Back</Button>
             </div>
-            <div className='main_make'>
+            <div className={styles.main_make}>
                 <h1>{state?'Edit':'Create'}</h1>
                 <div id='CanvasSave'>
-                    <div className='item_make'>
-                        <div className="label">客户Customer     Purchase Invoice</div>
-                        <Button onClick={() =>!state?.readonly&&go('type1')} width={'100%'} colorScheme='blue'
-                                leftIcon={(!params.customer_name ? <AddIcon/> :
-                                    <EditIcon/>)}>{params.customer_name || 'Choose Customer'}</Button>
+                    <div className={styles.item_make}>
+                        <div className={styles.label}>客户Customer     Purchase Invoice</div>
+                        <Button onClick={() =>!state?.readonly&&go('type1')} block type="primary"
+                                icon={(!params.customer_name ? <PlusOutlined /> :
+                                  <EditOutlined />)}>{params.customer_name || 'Choose Customer'}</Button>
                     </div>
-                    <div className='item_make'>
-                        <div className="label">customer_address</div>
-                        <Textarea disabled={true} placeholder='customer_address' value={`${params.customer_city+'  '+params.customer_postal_code +'  '+params.customer_phone}\n${params.customer_email}\n${params.customer_address}`}/>
-                        <div className="label">Summary</div>
-                        <Input disabled={state?.readonly} placeholder='description' value={params.description}
+                    <div className={styles.item_make}>
+                        <div className={styles.label}>customer_address</div>
+                        <TextArea rows={4} disabled={true} placeholder='customer_address' value={`${params.customer_city+'  '+params.customer_postal_code +'  '+params.customer_phone}\n${params.customer_email}\n${params.customer_address}`}/>
+                        <div className={styles.label}>Summary</div>
+                        <TextArea rows={4} disabled={state?.readonly} placeholder='description' value={params.description}
                                onChange={(e) => setParams({...params, description: e.target.value})}/>
-                        <Button style={{marginTop: 20}} width={'100%'} colorScheme='gray'>
+                        <div className={styles.date}>
                             <Flex justifyContent={'space-between'} style={{width: '100%'}}>
                                 <div>Date</div>
                                 <div>
@@ -479,12 +477,12 @@ export default function Make({...props}) {
                                 </div>
                             </Flex>
 
-                        </Button>
+                        </div>
                     </div>
-                    <div className='item_make'>
-                        <div className="label">Products&Service</div>
-                        <Button onClick={() =>!state?.readonly&& go('type2')} width={'100%'} colorScheme='blue'
-                                leftIcon={<AddIcon/>}>Add Product</Button>
+                    <div className={styles.item_make}>
+                        <div className={styles.label}>Products&Service</div>
+                        <Button onClick={() =>!state?.readonly&& go('type2')} block type="primary"
+                                icon={<PlusOutlined/>}>Add Product</Button>
                         {
                             params.product_details.length > 0 && (<TableContainer>
                                 <Table size='sm'>
@@ -514,8 +512,8 @@ export default function Make({...props}) {
 
                         }
                     </div>
-                    <div className='item_make'>
-                        <div className="label">Invoice Total</div>
+                    <div className={styles.item_make}>
+                        <div className={styles.label}>Invoice Total</div>
                         <Flex justifyContent={'space-between'} align={'center'} style={{width: '100%', height: '40px'}}>
                             <span>Discount Total:</span>
                             <span>{params.discount}</span>
@@ -525,14 +523,14 @@ export default function Make({...props}) {
                             <span>{params.total_amount}</span>
                         </Flex>
                     </div>
-                    <div className='item_make'>
-                        <div className="label">Footer(Optional)</div>
-                        <Textarea disabled={state?.readonly} placeholder='Add Note or include your T&Cs' value={params.footerdescription}
+                    <div className={styles.item_make}>
+                        <div className={styles.label}>Footer(Optional)</div>
+                        <TextArea rows={4} disabled={state?.readonly} placeholder='Add Note or include your T&Cs' value={params.footerdescription}
                                   onChange={(e) => setParams({...params, footerdescription: e.target.value})}/>
                     </div>
                 </div>
 
-                <Grid templateColumns={'1fr'} gap={2}>
+                <div className={styles.actions}>
                     {
                         state ? (
                             <>
@@ -549,13 +547,13 @@ export default function Make({...props}) {
                             </>
                         ) : (
                             <>
-                                <Button width={'100%'} onClick={DownloadPng} colorScheme='linkedin' leftIcon={<LinkIcon/>}>Download</Button>
-                                <Button onClick={Save} width={'100%'} colorScheme='teal'
-                                        leftIcon={<TriangleDownIcon/>}>Save</Button>
+                                <Button block type="primary" onClick={DownloadPng} icon={<LinkOutlined />}>Download</Button>
+                                <Button onClick={Save} block type="primary"
+                                        icon={<CaretDownOutlined />}>Save</Button>
                             </>
                         )
                     }
-                </Grid>
+                </div>
 
             </div>
             {

@@ -1,0 +1,9 @@
+.alignSelfEnd {
+    align-self: flex-end;
+}
+
+.hStack {
+    display: flex;
+    align-items: center;
+    max-width: 320px;
+}

@@ -1,9 +1,11 @@
-import { Box, Flex, Stack, Text } from "@chakra-ui/layout";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 import { getContactById } from "./network";
+import { Flex, Typography } from 'antd';
+import styles from './style/Contact.module.css';
+
 const Contact = () => {
   const [contact, setContact] = useState();
 
@@ -22,24 +24,16 @@ const Contact = () => {
     <>
       {contact && (
         <Flex
-          m="4"
-          color="white"
-          justify="space-between"
-          bg="purple.600"
-          p="4"
-          height="200px"
-          borderRadius="xl"
-          boxShadow="xl"
-          mb="4"
+          className={styles.container}
         >
           <Flex align="center">
-            <Box mr="4">
+            <div style={{marginRight: 32}}>
               <FontAwesomeIcon size="3x" icon={faUser} mr="4" />
-            </Box>
-            <Stack>
-              <Text>{contact.name}</Text>
-              <Text>{contact.email}</Text>
-            </Stack>
+            </div>
+            <div>
+              <Typography className={styles.text}>{contact.name}</Typography>
+              <Typography className={styles.text}>{contact.email}</Typography>
+            </div>
           </Flex>
         </Flex>
       )}

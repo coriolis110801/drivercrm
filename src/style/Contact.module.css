@@ -1,0 +1,15 @@
+.container {
+    margin: 32px;
+    color: #ffffff;
+    justify-content: space-between;
+    background-color: #6B46C1;
+    padding: 32px;
+    height: 200px;
+    border-radius: 0.75rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    margin-bottom: 32px;
+}
+
+.text {
+    color: #ffffff;
+}

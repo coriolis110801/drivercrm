@@ -1,19 +1,19 @@
 import React, {useEffect, useState} from 'react'
-import {Button, ButtonGroup, Code, useToast} from '@chakra-ui/react'
-import {AddIcon, CheckIcon} from "@chakra-ui/icons";
 import {useHistory, Link} from 'react-router-dom';
 import {ListInvoice, UPAllInvoice} from "../network";
-import {Flex} from "@chakra-ui/layout";
 import useManual from "./open";
+import { Button, message, Flex, Modal } from 'antd';
+import { CheckOutlined, ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons';
+import styles from '../style/home.module.css';
+
+const { confirm } = Modal;
 
 export default function Home() {
-    let [deng,jsx] =  useManual()
     let history = useHistory();
-    const toast = useToast()
+    const [messageApi, contextHolder] = message.useMessage();
+
     const [List, setList] = useState([])
-    let but = {
-        margin: '40px'
-    }
+
     const [jia, setJia] = useState({
         discount:0,
         total_amount:0
@@ -23,24 +23,22 @@ export default function Home() {
     }
 
     function submit() {
-        deng({text:'Confirm to Submit all invoices？'}).then(res=>{
-            toast({
-                title: 'Submiting...',
-                isClosable: false,
-            })
-            let params =List.map(it=>it.id)
-            UPAllInvoice(params).then(() => {
-                toast.closeAll()
-                toast({
-                    title: 'Submit Success。。。',
-                    status: 'success',
-                    duration: 1000,
-                    isClosable: false,
+        confirm({
+            title: 'Submit confirm',
+            icon: <ExclamationCircleFilled />,
+            content: 'Confirm to Submit all invoices？',
+            onOk() {
+                messageApi.info('Submiting...')
+                let params =List.map(it=>it.id)
+                UPAllInvoice(params).then(() => {
+                    messageApi.success('Submit Success。。。')
+                    history.push('/')
                 })
-                history.push('/')
-            })
-        })
-
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
     }
 
     useEffect(() => {
@@ -63,9 +61,9 @@ export default function Home() {
         })
     }, []);
     return (
-        <div>
-            <Button onClick={go} style={but} colorScheme='blue' leftIcon={<AddIcon/>}>添加新Create New Invoice</Button>
-            <div style={{height:'60vh',overflow:'auto'}}>
+        <div className={styles.container}>
+            <Button className={styles.createBtn} onClick={go} type="primary" icon={<PlusOutlined />}>添加新Create New Invoice</Button>
+            <div className={styles.content}>
             {
                 List.map((item, index) => {
 
@@ -76,9 +74,9 @@ export default function Home() {
                                 backgroundColor: '#a8b0b7',
                                 borderRadius: 5,
                                 margin: '5px auto 0 auto',
-                                width: '95%'
+                                width: '100%'
                             }}>
-                                <Flex alignItems={'center'} justifyContent={'space-between'}>
+                                <Flex align={'center'} justify={'space-between'}>
                                     <div>
                                         <p>{item.customer_name}</p>
                                         <p>{item.invoice_date}</p>
@@ -96,16 +94,16 @@ export default function Home() {
                 })
             }
             </div>
-            <div style={{position: "fixed", width: "100%", bottom: '10px'}}>
-                <div style={{position: 'absolute', right: 20, top: -65}}>
-                    <div>总折扣: <Code colorScheme='red' children={jia.discount}/></div>
-                    <div>总金额: <Code colorScheme='red' children={jia.total_amount}/></div>
+            <div className={styles.bottom}>
+                <div className={styles.priceWrapper}>
+                    <div>总折扣: <span className={styles.price}>{jia.discount}</span></div>
+                    <div>总金额: <span className={styles.price}>{jia.total_amount}</span></div>
                 </div>
-                <Button onClick={submit} style={{width: '100%'}} colorScheme='blue'
-                        leftIcon={<CheckIcon/>}>Submit All Today Invoice</Button>
+                <Button onClick={submit} style={{width: '100%'}} type="primary"
+                        icon={<CheckOutlined />}>Submit All Today Invoice</Button>
 
             </div>
-            {jsx}
+            {contextHolder}
         </div>
     )
 }

@@ -1,8 +1,10 @@
-import { Box, Flex, Stack, Text } from "@chakra-ui/layout";
 import React from "react";
 import { faEdit, faTrash, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
+import styles from '../style/ContactCard.module.css';
+import { Flex, Typography } from 'antd';
+
 const ContactCard = ({ contact, onOpen, getContactId, deleteContact }) => {
   const updateHandler = (id) => {
     getContactId(id);
@@ -15,41 +17,35 @@ const ContactCard = ({ contact, onOpen, getContactId, deleteContact }) => {
 
   return (
     <Flex
-      color="white"
-      justify="space-between"
-      bg="purple.600"
-      p="4"
-      borderRadius="xl"
-      boxShadow="xl"
-      mb="4"
+      className={styles.container}
     >
       <Link to={`/contact/${contact.id}`}>
         <Flex align="center">
-          <Box mr="4">
+          <div className={styles.mr4}>
             <FontAwesomeIcon size="3x" icon={faUser} mr="4" />
-          </Box>
+          </div>
           {contact.product_name && (
-              <Stack>
-                <Text>{contact.product_name}</Text>
-                <Text>{contact.price}</Text>
-              </Stack>
+              <div>
+                <Typography className={styles.text}>{contact.product_name}</Typography>
+                <Typography className={styles.text}>{contact.price}</Typography>
+              </div>
           )}
           {contact.customer_name && (
-              <Stack>
-                <Text>{contact.customer_name}</Text>
-                <Text>{contact.email}</Text>
-              </Stack>
+              <div>
+                <Typography className={styles.text}>{contact.customer_name}</Typography>
+                <Typography className={styles.text}>{contact.email}</Typography>
+              </div>
           )}
         </Flex>
       </Link>
 
       <Flex align="center">
-        <Box mr="4" onClick={() => updateHandler(contact.id)}>
+        <div className={styles.mr4} onClick={() => updateHandler(contact.id)}>
           <FontAwesomeIcon size="2x" icon={faEdit} />
-        </Box>
-        <Box color="red.300" onClick={() => deleteContactHandler(contact.id)}>
+        </div>
+        <div color="red.300" onClick={() => deleteContactHandler(contact.id)}>
           <FontAwesomeIcon size="2x" icon={faTrash} />
-        </Box>
+        </div>
       </Flex>
     </Flex>
   );

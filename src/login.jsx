@@ -1,19 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {getinfo, Login} from "./network";
-import {Button, useToast} from "@chakra-ui/react";
-import {FormControl, FormLabel} from "@chakra-ui/form-control";
-import {Input} from "@chakra-ui/input";
-import './style/login.css'
+import styles from './style/login.module.css';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { Button, Form, Input, message } from 'antd';
+
 const LoginComponent = (props) => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState(null);
-    const toast = useToast();
-    const handleLogin = async () => {
-        toast({
-            title: '登陆中。。。',
-            isClosable: false,
-        })
+
+    const [messageApi, contextHolder] = message.useMessage();
+
+    const handleLogin = async (values) => {
+        const { username, password } = values
+        messageApi.info('登陆中。。。')
         try {
             const response = await Login({
                 username,
@@ -27,35 +24,42 @@ const LoginComponent = (props) => {
             localStorage.setItem('access', response.access);
             localStorage.setItem('refresh', response.refresh);
             localStorage.setItem('user_info', JSON.stringify(response));
-            toast({
-                title: '登陆成功。。。',
-                status: 'success',
-                duration: 1000,
-                isClosable: false,
-            })
+            messageApi.success('登陆成功。。。')
             props.history.push('/info/home');
         } catch (e) {
-            setError('登录失败，请检查用户名或密码.');
-        }finally {
-            setTimeout(()=>{
-                toast.closeAll()
-            },300)
+            messageApi.error('登录失败，请检查用户名或密码.');
         }
     }
 
     return (
-        <div className="Login_box">
-            <h2>Login</h2>
-            <FormControl isRequired>
-                <FormLabel>Username</FormLabel>
-                <Input placeholder='Username' type="text" value={username} onChange={e => setUsername(e.target.value)}  />
-                <div className='heng'></div>
-                <FormLabel>Password</FormLabel>
-                <Input type="password" value={password} onChange={e => setPassword(e.target.value)} />
-
-            </FormControl>
-            <div className='heng'></div>
-            <Button style={{width:'100%'}} onClick={handleLogin}  colorScheme='blue' >Login</Button>
+        <div className={styles.container}>
+            {contextHolder}
+            <div className={styles.LoginBox}>
+                <h2>Login</h2>
+                <Form
+                  name="login"
+                  initialValues={{ remember: true }}
+                  onFinish={handleLogin}
+                >
+                    <Form.Item
+                      name="username"
+                      rules={[{ required: true, message: 'Please input your Username!' }]}
+                    >
+                        <Input prefix={<UserOutlined />} placeholder="Username" />
+                    </Form.Item>
+                    <Form.Item
+                      name="password"
+                      rules={[{ required: true, message: 'Please input your Password!' }]}
+                    >
+                        <Input prefix={<LockOutlined />} type="password" placeholder="Password" />
+                    </Form.Item>
+                    <Form.Item>
+                        <Button block type="primary" htmlType="submit">
+                            Login
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </div>
         </div>
     );
 }
