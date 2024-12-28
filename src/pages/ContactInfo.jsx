@@ -1,8 +1,8 @@
-import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { getContactById } from "../apis/contact";
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { getContactById } from '../apis/contact';
 import { Flex, Typography } from 'antd';
 import styles from '../style/Contact.module.css';
 
@@ -23,11 +23,9 @@ const ContactInfo = () => {
   return (
     <>
       {contact && (
-        <Flex
-          className={styles.container}
-        >
+        <Flex className={styles.container}>
           <Flex align="center">
-            <div style={{marginRight: 32}}>
+            <div style={{ marginRight: 32 }}>
               <FontAwesomeIcon size="3x" icon={faUser} mr="4" />
             </div>
             <div>

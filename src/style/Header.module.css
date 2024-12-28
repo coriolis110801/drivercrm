@@ -1,76 +1,73 @@
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 100px;
 }
 
 .headerRight {
-
 }
 
 @media screen and (min-width: 768px) {
-
-    .header{
-        margin: 0;
-        background-color: #001529;
-        color: #fff;
-        height: 80px;
-        width: 100%;
-    }
-    .headerLeft{
-        width: 50%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        gap: 30px;
-        position: relative;
-    }
-    .headerLeft a>div{
-        padding: 12px 20px;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s ease-in-out;
-    }
-    .headerLeft .active>div,.headerLeft a>div:hover{
-        background-color: #1677ff;
-        color: #ffffff;
-        padding: 12px 20px;
-    }
-
+  .header {
+    margin: 0;
+    background-color: #001529;
+    color: #fff;
+    height: 80px;
+    width: 100%;
+  }
+  .headerLeft {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    position: relative;
+  }
+  .headerLeft a > div {
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  .headerLeft .active > div,
+  .headerLeft a > div:hover {
+    background-color: #1677ff;
+    color: #ffffff;
+    padding: 12px 20px;
+  }
 }
 @media screen and (max-width: 768px) {
-
-    .header{
-        margin: 0;
-        padding: 0 10px;
-        background-color: #001529;
-        color: #fff;
-        height: 50px;
-        width: 100%;
-    }
-    .headerLeft{
-        float: left;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        font-size: 12px;
-        white-space: nowrap;
-        position: relative;
-    }
-    .headerLeft a>div{
-        padding: 10px;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s ease-in-out;
-    }
-    .headerLeft .active>div,.headerLeft a>div:hover{
-        background-color: #1677ff;
-        color: #ffffff;
-        padding: 10px;
-    }
-
+  .header {
+    margin: 0;
+    padding: 0 10px;
+    background-color: #001529;
+    color: #fff;
+    height: 50px;
+    width: 100%;
+  }
+  .headerLeft {
+    float: left;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 12px;
+    white-space: nowrap;
+    position: relative;
+  }
+  .headerLeft a > div {
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  .headerLeft .active > div,
+  .headerLeft a > div:hover {
+    background-color: #1677ff;
+    color: #ffffff;
+    padding: 10px;
+  }
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import { Modal } from 'antd';
 
 const KModal = ({ onOpen, isOpen, onClose, children, title }) => {

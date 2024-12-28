@@ -10,7 +10,8 @@ import { PlusSquareOutlined } from '@ant-design/icons';
 
 //随机生成16位id
 function generateRandomId() {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const characters =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let id = '';
 
   for (let i = 0; i < 16; i++) {
@@ -21,28 +22,29 @@ function generateRandomId() {
   return id;
 }
 
-function ChooseDrawer({open, onClose, type, SetCustomer}) {
+function ChooseDrawer({ open, onClose, type, SetCustomer }) {
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [contacts, setContacts] = useState([]);
-  const [value, setValue] = useState(null)
-  const [contact, setContact] = useState({})
+  const [value, setValue] = useState(null);
+  const [contact, setContact] = useState({});
   const [OBJ, setObj] = useState({
     type1: {
       title: 'Choose Customer',
-      head: 'Add New Customer'
+      head: 'Add New Customer',
     },
     type2: {
       title: 'Choose Product',
-      head: 'Add New Product'
-    }
-  })
+      head: 'Add New Product',
+    },
+  });
 
   const fetchContacts = async () => {
-    const data = type === 'type1' ? await getAllContacts() : await productGetDriverStock()
+    const data =
+      type === 'type1' ? await getAllContacts() : await productGetDriverStock();
     const tempArray = [];
     if (data !== null) {
       Object.entries(data).forEach(([key, value]) => {
-        tempArray.push({id: key, ...value});
+        tempArray.push({ id: key, ...value });
       });
     }
     setContacts(tempArray);
@@ -53,48 +55,71 @@ function ChooseDrawer({open, onClose, type, SetCustomer}) {
   }, [fetchContacts]);
 
   function closeDrawer() {
-    setTimeout(()=>{
-      onClose()
-    },300)
-    setValue(null)
-    setContacts([])
+    setTimeout(() => {
+      onClose();
+    }, 300);
+    setValue(null);
+    setContacts([]);
   }
 
   function handleChoose(e) {
     if (typeof e !== 'object') {
-      SetCustomer(contacts.find(item => item.id === Number(e)), type)
+      SetCustomer(
+        contacts.find((item) => item.id === Number(e)),
+        type,
+      );
     } else {
-      SetCustomer(e, type)
+      SetCustomer(e, type);
     }
 
     setTimeout(() => {
-      closeDrawer()
-    }, 0)
+      closeDrawer();
+    }, 0);
   }
 
   function ChangeRadio(e) {
-    const value = e.target.value
-    setValue(Number(value))
+    const value = e.target.value;
+    setValue(Number(value));
     if (type === 'type1') {
       handleChoose(value);
     } else {
-      setContact(contacts.find(item => item.id === Number(value)))
-      setAddModalOpen(true)
+      setContact(contacts.find((item) => item.id === Number(value)));
+      setAddModalOpen(true);
     }
   }
 
-  const addNewContact = async (customer_name, email, customer_address, city, postcode, phone) => {
-    handleChoose({customer_name, email, customer_address, city, postcode, phone})
-  }
-
-  const addNewProduct = async (product_name, discount_amount, price, quantity,id) => {
-    if([null,undefined,''].includes(id)){
-      id = generateRandomId()
-    }
-    handleChoose({product_name, discount_amount, price, quantity,id})
+  const addNewContact = async (
+    customer_name,
+    email,
+    customer_address,
+    city,
+    postcode,
+    phone,
+  ) => {
+    handleChoose({
+      customer_name,
+      email,
+      customer_address,
+      city,
+      postcode,
+      phone,
+    });
   };
 
-  let {head, title} = OBJ[type]
+  const addNewProduct = async (
+    product_name,
+    discount_amount,
+    price,
+    quantity,
+    id,
+  ) => {
+    if ([null, undefined, ''].includes(id)) {
+      id = generateRandomId();
+    }
+    handleChoose({ product_name, discount_amount, price, quantity, id });
+  };
+
+  let { head, title } = OBJ[type];
 
   return (
     <>
@@ -108,32 +133,33 @@ function ChooseDrawer({open, onClose, type, SetCustomer}) {
       >
         <Button
           icon={<PlusSquareOutlined />}
-          type='primary'
+          type="primary"
           block
-          onClick={()=>{
-            setValue(1)
-            setContact(null)
-            setAddModalOpen(true)
+          onClick={() => {
+            setValue(1);
+            setContact(null);
+            setAddModalOpen(true);
           }}
         >
           {head}
         </Button>
-        <div className='DrawerBody_main'>
+        <div className="DrawerBody_main">
           <div className="label">Saved Contacts</div>
           <div className="over">
             <Radio.Group onChange={ChangeRadio} value={value}>
-              {
-                contacts.map((item, index) => {
-                  return (
-                    <Flex style={{height: '50px'}} align={'center'} key={item.id}>
-                      <Radio size='lg' value={item.id}>
-                        <ContactItem contact={item}></ContactItem>
-                      </Radio>
-                    </Flex>
-
-                  )
-                })
-              }
+              {contacts.map((item, index) => {
+                return (
+                  <Flex
+                    style={{ height: '50px' }}
+                    align={'center'}
+                    key={item.id}
+                  >
+                    <Radio size="lg" value={item.id}>
+                      <ContactItem contact={item}></ContactItem>
+                    </Radio>
+                  </Flex>
+                );
+              })}
             </Radio.Group>
           </div>
         </div>
@@ -144,36 +170,33 @@ function ChooseDrawer({open, onClose, type, SetCustomer}) {
         onOpen={() => setAddModalOpen(true)}
         onClose={() => setAddModalOpen(false)}
       >
-        {
-          type === 'type1' ? (
-              <ContactForm
-                onClose={() => setAddModalOpen(false)}
-                addNewContact={addNewContact}
-              />
-            ) :
-            (
-              <ProductForm
-                contact={contact}
-                onClose={() => setAddModalOpen(false)}
-                addNewContact={addNewProduct}
-                type={true}
-              />
-            )
-        }
+        {type === 'type1' ? (
+          <ContactForm
+            onClose={() => setAddModalOpen(false)}
+            addNewContact={addNewContact}
+          />
+        ) : (
+          <ProductForm
+            contact={contact}
+            onClose={() => setAddModalOpen(false)}
+            addNewContact={addNewProduct}
+            type={true}
+          />
+        )}
       </KModal>
     </>
-  )
+  );
 }
 
-function ContactItem({contact}) {
+function ContactItem({ contact }) {
   return (
     <Flex align="center" gap={20}>
-      <div>
-        First
-      </div>
-      <Typography>{contact.product_name ? contact.product_name : contact.customer_name}</Typography>
+      <div>First</div>
+      <Typography>
+        {contact.product_name ? contact.product_name : contact.customer_name}
+      </Typography>
     </Flex>
-  )
+  );
 }
 
-export default ChooseDrawer
+export default ChooseDrawer;
