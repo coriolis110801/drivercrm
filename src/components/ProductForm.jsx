@@ -1,36 +1,8 @@
 import React, {useState,useMemo} from "react";
 import { Button, Form, Input, Flex } from 'antd';
-import styles from '../style/ContactForm_Product.module.css'
+import styles from '../style/ProductForm.module.css'
 
-function HookUsage({value, Change}) {
-    return (
-        <div className={styles.hStack}>
-            <Button
-              color="danger"
-              variant="solid"
-              onClick={() => {
-                if (value > 1) {
-                    Change(value - 1)
-                }
-              }}
-            >
-                -
-            </Button>
-            <Input width={20} value={value} onChange={(e) => Change(e.target.value)} />
-            <Button
-              type="primary"
-              onClick={() => {
-                if (value < 100) {
-                    Change(value + 1)
-                }
-              }}
-            >
-                +
-            </Button>
-        </div>
-    )
-}
-const ContactForm = ({addNewContact, onClose, contact, updateContact,type=false,DelData}) => {
+const ProductForm = ({addNewContact, onClose, contact, updateContact,type=false,DelData}) => {
     const [quantity, setQuantity] = useState( contact ? contact.quantity??1 : 1)
 
     const { price, discount_amount, product_name } = contact || {};
@@ -168,4 +140,33 @@ const ContactForm = ({addNewContact, onClose, contact, updateContact,type=false,
     );
 };
 
-export default ContactForm;
+function HookUsage({value, Change}) {
+  return (
+    <div className={styles.hStack}>
+      <Button
+        color="danger"
+        variant="solid"
+        onClick={() => {
+          if (value > 1) {
+            Change(value - 1)
+          }
+        }}
+      >
+        -
+      </Button>
+      <Input style={{width: 40}} value={value} onChange={(e) => Change(e.target.value)} />
+      <Button
+        type="primary"
+        onClick={() => {
+          if (value < 100) {
+            Change(value + 1)
+          }
+        }}
+      >
+        +
+      </Button>
+    </div>
+  )
+}
+
+export default ProductForm;

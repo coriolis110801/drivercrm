@@ -1,59 +1,62 @@
 import {
-    Product_Add_DriverStock,
-    Product_Get_DriverStock,
-    Product_Update_DriverStock,
-    Product_Delete_DriverStock,
-} from "./network";
+    addContactOnServer,
+    deleteContactOnServer,
+    getAllContacts,
+    updateContactOnServer,
+} from "../apis/contact";
+
 import React, {useEffect, useState} from "react";
-
-import ContactCard from "./components/ContactCard";
-import ContactForm from "./components/ContactForm_Product";
-import Kmodal from "./components/Kmodal";
-import styles from './style/ProductAddressBook.module.css'
-import { Flex, Typography, Button, Input, Modal } from 'antd';
+import ContactCard from "../components/ContactCard";
+import ContactForm from "../components/ContactForm";
+import KModal from "../components/KModal";
+import SavedContactsForm from '../components/SavedContactsForm';
+import { Button, Input, Flex, Typography, message, Modal } from 'antd';
 import { ExclamationCircleFilled, PlusOutlined, SearchOutlined } from '@ant-design/icons';
-const { Title } = Typography;
+import styles from '../style/App.module.css';
 const { confirm } = Modal;
+const { Title } = Typography;
 
-const ProductAddressBook = () => {
+
+const Contacts = () => {
     const [open, setOpen] = useState(false)
     const [editOpen, setEditOpen] = useState(false)
     const [searchData, setSearchData] = useState("");
     const [contacts, setContacts] = useState([]);
     const [contactId, setContactId] = useState();
 
+    const [messageApi, contextHolder] = message.useMessage();
+
     useEffect(() => {
         const fetchContacts = async () => {
-            const data = await Product_Get_DriverStock();
+            const data = await getAllContacts();
             const tempArray = [];
             if (data !== null) {
                 Object.entries(data).forEach(([key, value]) => {
                     tempArray.push({id: key, ...value});
                 });
             }
+
             setContacts(tempArray);
         };
         fetchContacts();
     }, []);
 
-    const addNewContact = async (product_name, discount_amount,price) => {
-
-        const data = await Product_Add_DriverStock(product_name, discount_amount,price);
-        console.log(data);
-        setContacts([...contacts, data]);
-
+    const addNewContact = async (customer_name, email, customer_address, city, postcode, phone) => {
+            const data = await addContactOnServer(customer_name, email, customer_address, city, postcode, phone);
+            console.log(data);
+            setContacts([...contacts, data]);
     };
 
     let searchContacts = contacts.filter((contact) =>
-        contact.product_name.includes(searchData)
+        contact.customer_name.includes(searchData)
     );
 
     const getContactId = (id) => {
         setContactId(id);
     };
 
-    const updateContact = async (product_name, discount_amount,price,id,responsible_person) => {
-        const data = await Product_Update_DriverStock(product_name, discount_amount,price,id,responsible_person);
+    const updateContact = async (customer_name, email, id, customer_address, city, postcode, phone) => {
+        const data = await updateContactOnServer(customer_name, email, id, customer_address, city, postcode, phone);
 
         setContacts((prev) => [
             ...contacts.filter((contact) => contact.id !== id),
@@ -61,13 +64,13 @@ const ProductAddressBook = () => {
         ]);
     };
 
-    const deleteContact = async (id) => {
+    const deleteContact = (id) => {
         confirm({
             title: 'Delete confirm',
             icon: <ExclamationCircleFilled />,
-            content: 'Confirm deleting？',
+            content: '是否删除？Confirm deleting?',
             async onOk() {
-                const data = await Product_Delete_DriverStock(id);
+                const data = await deleteContactOnServer(id);
                 if (!data) {
                     setContacts((prev) => [
                         ...contacts.filter((contact) => contact.id !== id),
@@ -78,20 +81,22 @@ const ProductAddressBook = () => {
                 console.log('Cancel');
             },
         });
+
     };
     let selectContact = contacts.find((contact) => contact.id === contactId);
 
     return (
         <>
-            <Kmodal
+            {contextHolder}
+            <KModal
                 isOpen={open}
                 title={"Add New Contact"}
                 onOpen={() => setOpen(true)}
                 onClose={() => setOpen(false)}
             >
                 <ContactForm addNewContact={addNewContact} onClose={() => setOpen(false)}/>
-            </Kmodal>
-            <Kmodal
+            </KModal>
+            <KModal
                 isOpen={editOpen}
                 title={"Update New Contact"}
                 onOpen={() => setEditOpen(true)}
@@ -102,33 +107,34 @@ const ProductAddressBook = () => {
                     contact={selectContact}
                     onClose={() => setEditOpen(false)}
                 />
-            </Kmodal>
+            </KModal>
             <div>
-                <Flex className={styles.p4} justify="center" align="center">
+                <Flex className={styles.savedContacts} justify="center" align="center">
                     <img src="/banner.png" width="150px" height="100px"/>
-                    <Title className={styles.title}>Saved Products</Title>
+                    <Title className={styles.title}>Saved Contacts</Title>
+                    <SavedContactsForm />
                 </Flex>
-                <div className={styles.p4}>
+                <div className={styles.pContent}>
                     <Button
-                      type="primary"
-                      block
-                      icon={<PlusOutlined />}
-                      onClick={() => setOpen(true)}
+                        type="primary"
+                        block
+                        onClick={() => setOpen(true)}
+                        icon={<PlusOutlined />}
                     >
-                        Add Product
+                        Add Contact
                     </Button>
                 </div>
-                <div className={styles.p4}>
+                <div className={styles.pContent}>
                     <Input
                       size="large"
                       type="tel"
-                      placeholder="Search Product..."
+                      placeholder="Search Contact..."
                       prefix={<SearchOutlined />}
                       value={searchData}
                       onChange={(e) => setSearchData(e.target.value)}
                     />
                 </div>
-                <div className={styles.p4}>
+                <div className={styles.pContent}>
                     {searchContacts.map((contact) => (
                         <ContactCard
                             getContactId={getContactId}
@@ -144,4 +150,4 @@ const ProductAddressBook = () => {
     );
 };
 
-export default ProductAddressBook;
+export default Contacts;

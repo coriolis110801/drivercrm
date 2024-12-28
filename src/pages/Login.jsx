@@ -1,8 +1,8 @@
 import React from 'react';
-import {getinfo, Login} from "./network";
-import styles from './style/login.module.css';
+import styles from '../style/login.module.css';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input, message } from 'antd';
+import { login } from '../apis/user';
 
 const LoginComponent = (props) => {
 
@@ -12,15 +12,10 @@ const LoginComponent = (props) => {
         const { username, password } = values
         messageApi.info('登陆中。。。')
         try {
-            const response = await Login({
+            const response = await login({
                 username,
                 password
             })
-            console.log('%c 测试', 'color:#fff; background:red')
-            console.log(response)
-            // response.driver=0
-            // response.manager=1
-            getinfo()
             localStorage.setItem('access', response.access);
             localStorage.setItem('refresh', response.refresh);
             localStorage.setItem('user_info', JSON.stringify(response));

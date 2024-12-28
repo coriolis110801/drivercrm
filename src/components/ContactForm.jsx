@@ -3,7 +3,6 @@ import { Button, Form, Input } from 'antd';
 import styles from '../style/ContactForm.module.css';
 const { TextArea } = Input;
 
-
 const ContactForm = ({ addNewContact, onClose, contact, updateContact }) => {
     const onSubmit = (values) => {
         const { email, customer_name, customer_address, city, postcode, phone } = values;

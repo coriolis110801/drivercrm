@@ -1,47 +1,49 @@
 import React from 'react'
 import {Redirect, Route, Switch} from "react-router-dom";
-import Make from "./components/make";
-import Contact from "./Contact";
-import LoginComponent from "./login";
-import Header from "./components/header";
-import Manager from "./components/manager";
-import App from "./App";
-import ProductAddressBook from "./ProductAddressBook";
-import Home from "./components/home";
-import {getinfo} from "./network";
+import MakeNewInvoice from "./pages/MakeNewInvoice";
+import ContactInfo from "./pages/ContactInfo";
+import LoginComponent from "./pages/Login";
+import Header from "./components/Header";
+import Manager from "./pages/Manager";
+import Contacts from "./pages/Contacts";
+import Products from "./pages/Products";
+import Home from "./pages/Home";
 
-export default function FrontendAuth({location}) {
+export default function AuthRoutes({location}) {
     console.log('%c FrontendAuth', 'color:#fff; background:red')
     console.log(location)
-    let info = localStorage.getItem('user_info');
+
+    let info = localStorage.getItem('user_info') || '{}';
     info = JSON.parse(info);
+
     if (info) {
-        getinfo()
         if (location.pathname === '/login') {
             return <Redirect to='/info'/>
         }
         if (location.pathname === '/') {
             return <Redirect to='/info'/>
         }
+
         const {manager, driver} = info;
+
         if (Number(driver) === 1) {
             return (
                 <>
-                    <Route path="/Make" exact>
-                        <Make></Make>
+                    <Route path="/make" exact>
+                        <MakeNewInvoice></MakeNewInvoice>
                     </Route>
                     <Route path="/contact/:id" exact>
-                        <Contact/>
+                        <ContactInfo/>
                     </Route>
                     <Route path="/info"  >
                         <Header>
                             <div>
                                 <Switch>
-                                    <Route path="/info/home3" exact >
-                                        <App></App>
+                                    <Route path="/info/contacts" exact >
+                                        <Contacts></Contacts>
                                     </Route>
-                                    <Route path="/info/home4" exact >
-                                        <ProductAddressBook></ProductAddressBook>
+                                    <Route path="/info/products" exact >
+                                        <Products></Products>
                                     </Route>
                                     <Route path="/info/home" exact>
                                         <Home></Home>
@@ -68,8 +70,8 @@ export default function FrontendAuth({location}) {
                         </Route>
                     </Header>
                 </Route>
-                    <Route path="/Make" exact>
-                        <Make></Make>
+                    <Route path="/make" exact>
+                        <MakeNewInvoice></MakeNewInvoice>
                     </Route>
                 </>
             )
@@ -85,6 +87,4 @@ export default function FrontendAuth({location}) {
             return (<Route path='/login' exact component={LoginComponent}/>)
         }
     }
-
-
 }

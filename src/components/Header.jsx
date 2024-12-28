@@ -1,7 +1,7 @@
-import React, {Children} from 'react'
-import styles from '../style/header.module.css'
+import React from 'react'
+import styles from '../style/Header.module.css'
 import {NavLink} from "react-router-dom";
-import DashboardComponent from "../logout";
+import Logout from './Logout';
 
 export default function Header(props) {
     console.log('%c 测试', 'color:#fff; background:red')
@@ -18,21 +18,21 @@ export default function Header(props) {
                         </NavLink>
                     </div>
                     <div>
-                        <NavLink activeClassName={styles.active} to={'/info/home2'}>
+                        <NavLink activeClassName={styles.active} to={'/info/stock'}>
                             <div>
                                 MyStock
                             </div>
                         </NavLink>
                     </div>
                     <div>
-                        <NavLink activeClassName={styles.active} to={'/info/home3'}>
+                        <NavLink activeClassName={styles.active} to={'/info/contacts'}>
                             <div>
                                 Contacts
                             </div>
                         </NavLink>
                     </div>
                     <div>
-                        <NavLink activeClassName={styles.active} to={'/info/home4'}>
+                        <NavLink activeClassName={styles.active} to={'/info/products'}>
                             <div>
                                 Products
                             </div>
@@ -40,7 +40,7 @@ export default function Header(props) {
                     </div>
                 </div>
                 <div className={styles.headerRight}>
-                    <DashboardComponent></DashboardComponent>
+                    <Logout></Logout>
                 </div>
             </div>
             {

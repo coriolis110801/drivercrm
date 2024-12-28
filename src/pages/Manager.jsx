@@ -1,53 +1,44 @@
-import React, {useEffect, useState} from 'react'
-import {Input, InputGroup, InputLeftElement} from "@chakra-ui/input";
-import {CheckIcon, Search2Icon} from "@chakra-ui/icons";
-import {Box, Flex} from "@chakra-ui/layout";
-import {Button} from "@chakra-ui/button";
-import {Link, useHistory, useLocation,useParams} from "react-router-dom";
-import {Code, useToast} from "@chakra-ui/react";
-import {ListInvoice, UPAllcomplete, search_responsible_person, search_overdue_invoices} from "../network";
+import React, {useState} from 'react'
+import {Link} from "react-router-dom";
+import { upAllComplete } from "../apis/invoice";
+import {searchResponsiblePerson, searchOverdueInvoices} from "../apis/search";
 import AsyncSelect from "react-select/async";
-import useManual from "./open";
+import { message, Modal, Button, Flex } from 'antd';
+import { CheckOutlined, ExclamationCircleFilled } from '@ant-design/icons';
+import styles from '../style/Manager.module.css';
+
+const { confirm } = Modal;
 
 export default function Manager() {
-    let [deng,jsx] =  useManual()
     const [searchData, setSearchData] = useState("");
-    let history = useHistory();
-    const toast = useToast()
     const [List, setList] = useState([])
     const [jia, setJia] = useState({
         discount:0,
         total_amount:0
     })
 
-    function go() {
-        history.push('/Make')
-    }
+    const [messageApi, contextHolder] = message.useMessage();
 
     function submit() {
-        deng({text:'是否确认提交？'}).then(res=>{
-            toast({
-                title: '确认中。。。',
-                isClosable: false,
-                position: 'top'
-            })
-            let params = List.map(it => it.id)
-            UPAllcomplete(params).then((res) => {
-                toast.closeAll()
-                toast({
-                    title: res.message,
-                    status: 'success',
-                    duration: 2000,
-                    isClosable: false,
-                    position: 'top'
+        confirm({
+            title: 'Submit confirm',
+            icon: <ExclamationCircleFilled />,
+            content: '是否确认提交？',
+            async onOk() {
+                messageApi.info('确认中。。。')
+                let params = List.map(it => it.id)
+                upAllComplete(params).then((res) => {
+                    messageApi.success(res.message)
                 })
-            })
-        })
-
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
     }
 
     function Search() {
-        search_overdue_invoices({
+        searchOverdueInvoices({
             responsible_person_id: searchData.value
         }).then(res => {
             console.log('%c 测试', 'color:#fff; background:red')
@@ -75,7 +66,7 @@ export default function Manager() {
 
     const promiseOptions = (inputValue) =>
         new Promise((resolve) => {
-            search_responsible_person({
+            searchResponsiblePerson({
                 query: inputValue
             }).then((res) => {
                 let arr = (res.results && res.results.map(it => {
@@ -87,10 +78,11 @@ export default function Manager() {
                 resolve(arr)
             })
         });
+
+
     return (
         <div>
-            {jsx}
-            <Box p="4">
+            <div style={{padding: 32}}>
                 <Flex>
                     <div style={{width: '80%'}}>
                         <AsyncSelect styles={{
@@ -100,19 +92,19 @@ export default function Manager() {
                             }),
                         }} cacheOptions loadOptions={promiseOptions} onChange={Select}/>
                     </div>
-                    <Button style={{marginLeft: 20}} colorScheme='pink' variant='solid' onClick={Search}>
+                    <Button style={{marginLeft: 20}} type="primary" variant='solid' onClick={Search}>
                         搜索
                     </Button>
                 </Flex>
 
 
-            </Box>
+            </div>
             <div style={{height:'60vh',overflow:'auto'}}>
                 {
                     List.map((item, index) => {
 
                         return (
-                            <Link to={{pathname: '/Make', state: {...item,readonly:true},}} key={item.id}>
+                            <Link to={{pathname: '/make', state: {...item,readonly:true},}} key={item.id}>
                                 <div  style={{
                                     padding: 10,
                                     backgroundColor: 'pink',
@@ -120,7 +112,7 @@ export default function Manager() {
                                     margin: '5px auto 0 auto',
                                     width: '95%'
                                 }}>
-                                    <Flex alignItems={'center'} justifyContent={'space-between'}>
+                                    <Flex align={'center'} justify={'space-between'}>
                                         <div>
                                             <p>{item.customer_name}</p>
                                             <p>{item.invoice_date}</p>
@@ -139,23 +131,16 @@ export default function Manager() {
                 }
             </div>
 
-            <div style={{
-                position: "fixed",
-                width: "100%",
-                bottom: '10px',
-                display: 'flex',
-                rowGap: '20px',
-                flexWrap: 'wrap'
-            }}>
-                <div style={{position: 'absolute', right: 20, top: -65}}>
-                    <div>总折扣: <Code colorScheme='red' children={jia.discount}/></div>
-                    <div>总金额: <Code colorScheme='red' children={jia.total_amount}/></div>
+            <div className={styles.bottom}>
+                <div className={styles.priceWrapper}>
+                    <div>总折扣: <span className={styles.price}>{jia.discount}</span></div>
+                    <div>总金额: <span className={styles.price}>{jia.total_amount}</span></div>
                 </div>
-                <Button style={{width: '100%'}} colorScheme='pink'>打印统计</Button>
-                <Button onClick={submit} style={{width: '100%'}} colorScheme='blue'
-                        leftIcon={<CheckIcon/>}>确认</Button>
-
+                <Button block type="primary">打印统计</Button>
+                <Button onClick={submit} block type="primary" icon={<CheckOutlined />}>确认</Button>
             </div>
+
+            {contextHolder}
         </div>
     )
 }

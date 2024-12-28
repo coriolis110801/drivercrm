@@ -2,11 +2,11 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getContactById } from "./network";
+import { getContactById } from "../apis/contact";
 import { Flex, Typography } from 'antd';
-import styles from './style/Contact.module.css';
+import styles from '../style/Contact.module.css';
 
-const Contact = () => {
+const ContactInfo = () => {
   const [contact, setContact] = useState();
 
   const params = useParams();
@@ -41,4 +41,4 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+export default ContactInfo;

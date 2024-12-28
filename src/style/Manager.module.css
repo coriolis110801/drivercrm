@@ -1,0 +1,25 @@
+.price {
+    display: inline-block;
+    font-size: 0.875rem;;
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;;
+    -webkit-padding-start: 0.2em;
+    padding-inline-start: 0.2em;
+    -webkit-padding-end: 0.2em;
+    padding-inline-end: 0.2em;
+    border-radius: 0.125rem;
+    background: #FED7D7;
+    color: #822727;
+}
+
+.bottom {
+    position: fixed;
+    width: calc(100% - 80px);
+    bottom: 10px;
+    left: 40px;
+}
+
+.priceWrapper {
+    position: absolute;
+    right: 20px;
+    top: -65px;
+}

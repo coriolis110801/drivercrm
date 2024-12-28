@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
-import styles from './style/SavedContactsForm.module.css';
+import styles from '../style/SavedContactsForm.module.css';
 
 function SavedContactsForm() {
     const [responseMessage, setResponseMessage] = useState(null);
@@ -54,7 +54,7 @@ function SavedContactsForm() {
 
     return (
         <div>
-            <h1 className={styles.title}>AUTOSQUEAK Delivery Premium Upgrade</h1>
+            <h3 className={styles.title}>AUTOSQUEAK Delivery Premium Upgrade</h3>
             <Form
               name="login"
               style={{

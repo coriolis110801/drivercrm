@@ -1,7 +1,8 @@
 import React from 'react';
 import {useHistory} from "react-router-dom";
+import { Button } from 'antd';
 
-const DashboardComponent = () => {
+const Logout = () => {
     const history = useHistory();
     const handleLogout = () => {
         localStorage.removeItem('access');
@@ -12,9 +13,9 @@ const DashboardComponent = () => {
 
     return (
         <div>
-            <button onClick={handleLogout}>Logout</button>
+            <Button color="primary" variant="filled" onClick={handleLogout}>Logout</Button>
         </div>
     );
 }
 
-export default DashboardComponent;
+export default Logout;
