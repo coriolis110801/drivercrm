@@ -2,8 +2,8 @@
   "name": "contact-manager",
   "version": "0.1.0",
   "engines": {
-    "node": ">=16.x",
-    "npm": ">=8.x"
+    "node": "14.17.4",
+    "npm": ">=6.x"
   },
   "private": true,
   "dependencies": {
@@ -60,7 +60,6 @@
       "last 1 safari version"
     ]
   },
-  "packageManager": "yarn@1.22.22",
   "devDependencies": {
     "eslint-config-prettier": "^9.1.0",
     "prettier": "^3.4.2"
