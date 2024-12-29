@@ -1,20 +1,32 @@
-import React, { useState, useMemo } from 'react';
-import { Button, Form, Input, Flex } from 'antd';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { Button, Form, Input, Flex, InputNumber } from 'antd';
 import styles from '../style/ProductForm.module.css';
 
 const ProductForm = ({
-  addNewContact,
+  addNewProduct,
   onClose,
-  contact,
-  updateContact,
+  product,
+  updateProduct,
   type = false,
   DelData,
 }) => {
+  const formRef = useRef();
+
+  useEffect(() => {
+    if (product && formRef.current) {
+      formRef.current.setFieldsValue({
+        ...product,
+        discount_amount: Number(product.discount_amount),
+        price: Number(product.price),
+      });
+    }
+  }, [product]);
+
   const [quantity, setQuantity] = useState(
-    contact ? (contact.quantity ?? 1) : 1,
+    product ? (product.quantity ?? 1) : 1,
   );
 
-  const { price, discount_amount, product_name } = contact || {};
+  const { price, discount_amount, product_name } = product || {};
 
   const Total = useMemo(() => {
     return (Number(price) - Number(discount_amount)) * Number(quantity);
@@ -24,38 +36,41 @@ const ProductForm = ({
     return Number((Number(price) * Number(quantity)).toFixed(2));
   }, [quantity, price, discount_amount]);
 
-  const onSubmit = () => {
-    if (contact && !type) {
-      console.log('print');
-      updateContact(
+  const onSubmit = (values) => {
+    const { product_name, price, discount_amount, quantity } = values;
+    console.log(values);
+
+    if (product && !type) {
+      updateProduct(
         product_name,
         discount_amount,
         price,
-        contact.id,
-        contact.responsible_person,
+        product.id,
+        product.responsible_person,
       );
       onClose();
     } else {
-      addNewContact(
+      addNewProduct(
         product_name,
         discount_amount,
         price,
         quantity,
-        contact ? (contact.id ?? null) : null,
+        product ? (product.id ?? null) : null,
       );
       onClose();
     }
   };
   function Del() {
-    DelData(contact.id);
+    DelData(product.id);
   }
 
   return (
     <div>
       <Form
-        name="contact"
+        ref={formRef}
+        name="product"
         layout="vertical"
-        initialValues={contact}
+        initialValues={product}
         onFinish={onSubmit}
       >
         <Form.Item
@@ -84,7 +99,7 @@ const ProductForm = ({
             },
           ]}
         >
-          <Input />
+          <InputNumber style={{ width: '100%' }} />
         </Form.Item>
         <Form.Item
           name="discount_amount"
@@ -100,7 +115,7 @@ const ProductForm = ({
             },
           ]}
         >
-          <Input />
+          <InputNumber style={{ width: '100%' }} />
         </Form.Item>
         {type && (
           <div>
@@ -144,42 +159,42 @@ const ProductForm = ({
             </div>
           </div>
         )}
-      </Form>
-      {contact ? (
-        <Flex
-          style={{ width: '100%' }}
-          align={'center'}
-          justify={'space-between'}
-        >
+        {product ? (
+          <Flex
+            style={{ width: '100%' }}
+            align={'center'}
+            justify={'space-between'}
+          >
+            <Button
+              htmlType="submit"
+              color="primary"
+              variant="solid"
+              className={styles.alignSelfEnd}
+            >
+              Update Product
+            </Button>
+            {product.quantity && (
+              <Button
+                onClick={Del}
+                color="danger"
+                variant="solid"
+                className={styles.alignSelfEnd}
+              >
+                Delete
+              </Button>
+            )}
+          </Flex>
+        ) : (
           <Button
-            onClick={onSubmit}
+            htmlType="submit"
             color="primary"
             variant="solid"
             className={styles.alignSelfEnd}
           >
-            Update Product
+            Add Product
           </Button>
-          {contact.quantity && (
-            <Button
-              onClick={Del}
-              color="danger"
-              variant="solid"
-              className={styles.alignSelfEnd}
-            >
-              Delete
-            </Button>
-          )}
-        </Flex>
-      ) : (
-        <Button
-          onClick={onSubmit}
-          color="primary"
-          variant="solid"
-          className={styles.alignSelfEnd}
-        >
-          Add Product
-        </Button>
-      )}
+        )}
+      </Form>
     </div>
   );
 };

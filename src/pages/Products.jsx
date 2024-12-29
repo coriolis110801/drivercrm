@@ -1,11 +1,4 @@
-import {
-  productAddDriverStock,
-  productGetDriverStock,
-  productUpdateDriverStock,
-  productDeleteDriverStock,
-} from '../apis/product';
-import React, { useEffect, useState } from 'react';
-
+import React, { useEffect } from 'react';
 import ContactCard from '../components/ContactCard';
 import ProductForm from '../components/ProductForm';
 import KModal from '../components/KModal';
@@ -16,112 +9,106 @@ import {
   PlusOutlined,
   SearchOutlined,
 } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  createProduct,
+  deleteProduct,
+  getProductsList,
+  updateEditOpen,
+  updateOpen,
+  updateProduct,
+  updateProductId,
+  updateSearchData,
+} from '../store/reducers/productSlice';
+
 const { Title } = Typography;
 const { confirm } = Modal;
 
 const Products = () => {
-  const [open, setOpen] = useState(false);
-  const [editOpen, setEditOpen] = useState(false);
-  const [searchData, setSearchData] = useState('');
-  const [contacts, setContacts] = useState([]);
-  const [contactId, setContactId] = useState();
+  const { products, productId, editOpen, open, searchData } = useSelector(
+    (state) => state.product,
+  );
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchContacts = async () => {
-      const data = await productGetDriverStock();
-      const tempArray = [];
-      if (data !== null) {
-        Object.entries(data).forEach(([key, value]) => {
-          tempArray.push({ id: key, ...value });
-        });
-      }
-      setContacts(tempArray);
-    };
-    fetchContacts();
-  }, []);
+    dispatch(getProductsList());
+  }, [dispatch]);
 
-  const addNewContact = async (product_name, discount_amount, price) => {
-    const data = await productAddDriverStock(
-      product_name,
-      discount_amount,
-      price,
+  const addNewProduct = async (product_name, discount_amount, price) => {
+    dispatch(
+      createProduct({
+        product_name,
+        discount_amount,
+        price,
+      }),
     );
-    console.log(data);
-    setContacts([...contacts, data]);
   };
 
-  let searchContacts = contacts.filter((contact) =>
-    contact.product_name.includes(searchData),
+  let searchProducts = products.filter((product) =>
+    product.product_name.includes(searchData),
   );
 
-  const getContactId = (id) => {
-    setContactId(id);
-  };
-
-  const updateContact = async (
+  const _updateProduct = async (
     product_name,
     discount_amount,
     price,
     id,
     responsible_person,
   ) => {
-    const data = await productUpdateDriverStock(
-      product_name,
-      discount_amount,
-      price,
-      id,
-      responsible_person,
+    dispatch(
+      updateProduct({
+        product_name,
+        discount_amount,
+        price,
+        id,
+        responsible_person,
+      }),
     );
-
-    setContacts((prev) => [
-      ...contacts.filter((contact) => contact.id !== id),
-      data,
-    ]);
   };
 
-  const deleteContact = async (id) => {
+  const _openEditContact = (id) => {
+    dispatch(updateProductId(id));
+    dispatch(updateEditOpen(true));
+  };
+
+  const _deleteProduct = async (id) => {
     confirm({
       title: 'Delete confirm',
       icon: <ExclamationCircleFilled />,
       content: 'Confirm deleting？',
       async onOk() {
-        const data = await productDeleteDriverStock(id);
-        if (!data) {
-          setContacts((prev) => [
-            ...contacts.filter((contact) => contact.id !== id),
-          ]);
-        }
+        dispatch(deleteProduct(id));
       },
       onCancel() {
         console.log('Cancel');
       },
     });
   };
-  let selectContact = contacts.find((contact) => contact.id === contactId);
+  let selectProduct = products.find((product) => product.id === productId);
 
   return (
     <>
       <KModal
         isOpen={open}
         title={'Add New Product'}
-        onOpen={() => setOpen(true)}
-        onClose={() => setOpen(false)}
+        onOpen={() => dispatch(updateOpen(true))}
+        onClose={() => dispatch(updateOpen(false))}
       >
         <ProductForm
-          addNewContact={addNewContact}
-          onClose={() => setOpen(false)}
+          addNewProduct={addNewProduct}
+          onClose={() => dispatch(updateOpen(false))}
         />
       </KModal>
       <KModal
         isOpen={editOpen}
         title={'Update New Contact'}
-        onOpen={() => setEditOpen(true)}
-        onClose={() => setEditOpen(false)}
+        onOpen={() => dispatch(updateEditOpen(true))}
+        onClose={() => dispatch(updateEditOpen(false))}
       >
         <ProductForm
-          updateContact={updateContact}
-          contact={selectContact}
-          onClose={() => setEditOpen(false)}
+          updateProduct={_updateProduct}
+          product={selectProduct}
+          onClose={() => dispatch(updateEditOpen(false))}
         />
       </KModal>
       <div>
@@ -134,7 +121,7 @@ const Products = () => {
             type="primary"
             block
             icon={<PlusOutlined />}
-            onClick={() => setOpen(true)}
+            onClick={() => dispatch(updateOpen(true))}
           >
             Add Product
           </Button>
@@ -146,17 +133,16 @@ const Products = () => {
             placeholder="Search Product..."
             prefix={<SearchOutlined />}
             value={searchData}
-            onChange={(e) => setSearchData(e.target.value)}
+            onChange={(e) => dispatch(updateSearchData(e.target.value))}
           />
         </div>
         <div className={styles.p4}>
-          {searchContacts.map((contact) => (
+          {searchProducts.map((product) => (
             <ContactCard
-              getContactId={getContactId}
-              onOpen={() => setEditOpen(true)}
-              contact={contact}
-              key={contact.id}
-              deleteContact={deleteContact}
+              contact={product}
+              key={product.id}
+              handleEdit={_openEditContact}
+              deleteContact={_deleteProduct}
             />
           ))}
         </div>

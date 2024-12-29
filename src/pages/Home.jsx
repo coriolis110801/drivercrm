@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
-import { listInvoice, upAllInvoice } from '../apis/invoice';
 import { Button, message, Flex, Modal, Skeleton } from 'antd';
 import {
   CheckOutlined,
@@ -8,41 +7,22 @@ import {
   PlusOutlined,
 } from '@ant-design/icons';
 import styles from '../style/Home.module.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { getInvoiceList, upAllInvoices } from '../store/reducers/invoiceSlice';
 
 const { confirm } = Modal;
 
 export default function Home() {
-  const [invoices, setInvoices] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [jia, setJia] = useState({
-    discount: 0,
-    total_amount: 0,
-  });
-
   let history = useHistory();
+  const dispatch = useDispatch();
+  const { invoices, discount, totalAmount, loading } = useSelector(
+    (state) => state.invoice,
+  );
   const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
-    setLoading(true);
-    listInvoice()
-      .then((res) => {
-        let arr = res?.invoices || [];
-        let discount = 0;
-        let zong = arr.reduce((prev, currentValue) => {
-          prev += currentValue.total_amount;
-          discount += currentValue.discount;
-          return prev;
-        }, 0);
-        setInvoices(res?.invoices || []);
-        setJia({
-          discount,
-          total_amount: zong,
-        });
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+    dispatch(getInvoiceList());
+  }, [dispatch]);
 
   function toMakeNewInvoice() {
     history.push('/make');
@@ -56,7 +36,7 @@ export default function Home() {
       onOk() {
         messageApi.info('Submiting...');
         let params = invoices.map((it) => it.id);
-        upAllInvoice(params).then(() => {
+        dispatch(upAllInvoices(params)).then(() => {
           messageApi.success('Submit Success。。。');
           history.push('/');
         });
@@ -110,10 +90,10 @@ export default function Home() {
       <div className={styles.bottom}>
         <div className={styles.priceWrapper}>
           <div>
-            总折扣: <span className={styles.price}>{jia.discount}</span>
+            总折扣: <span className={styles.price}>{discount}</span>
           </div>
           <div>
-            总金额: <span className={styles.price}>{jia.total_amount}</span>
+            总金额: <span className={styles.price}>{totalAmount}</span>
           </div>
         </div>
         <Button onClick={submit} block type="primary" icon={<CheckOutlined />}>

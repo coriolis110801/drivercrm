@@ -3,15 +3,10 @@ import axios from 'axios';
 
 const REACT_APP_SERVER = process.env.REACT_APP_SERVER;
 
-export const addContactOnServer = async (
-  customer_name,
-  email,
-  customer_address,
-  city,
-  postcode,
-  phone,
-) => {
+export const addContactOnServer = async (obj, thunkAPI) => {
   try {
+    const { customer_name, email, customer_address, city, postcode, phone } =
+      obj;
     const userInfo = getUserInfo();
     const { data } = await axios.post(
       `${REACT_APP_SERVER}/create-driver-customer/`,
@@ -27,11 +22,11 @@ export const addContactOnServer = async (
     );
     return data;
   } catch (error) {
-    console.log(error);
+    return thunkAPI.rejectWithValue(error.message);
   }
 };
 
-export const getAllContacts = async () => {
+export const getAllContacts = async (thunkAPI) => {
   try {
     const userInfo = getUserInfo();
     const { data } = await axios.get(
@@ -39,20 +34,21 @@ export const getAllContacts = async () => {
     );
     return data;
   } catch (error) {
-    console.log(error);
+    return thunkAPI.rejectWithValue(error.message);
   }
 };
 
-export const updateContactOnServer = async (
-  customer_name,
-  email,
-  id,
-  customer_address,
-  city,
-  postcode,
-  phone,
-) => {
+export const updateContactOnServer = async (obj, thunkAPI) => {
   try {
+    const {
+      customer_name,
+      email,
+      id,
+      customer_address,
+      city,
+      postcode,
+      phone,
+    } = obj;
     const userInfo = getUserInfo();
     const { data } = await axios.patch(
       `${REACT_APP_SERVER}/api/responsible_persons_edit/${userInfo.id}/customers/${id}/`,
@@ -68,11 +64,11 @@ export const updateContactOnServer = async (
     );
     return data;
   } catch (error) {
-    console.log(error);
+    return thunkAPI.rejectWithValue(error.message);
   }
 };
 
-export const deleteContactOnServer = async (id) => {
+export const deleteContactOnServer = async (id, thunkAPI) => {
   try {
     const userInfo = getUserInfo();
     const { data } = await axios.delete(
@@ -80,11 +76,11 @@ export const deleteContactOnServer = async (id) => {
     );
     return data;
   } catch (error) {
-    console.log(error);
+    return thunkAPI.rejectWithValue(error.message);
   }
 };
 
-export const getContactById = async (id) => {
+export const getContactById = async (id, thunkAPI) => {
   try {
     const userInfo = getUserInfo();
     const { data } = await axios.get(
@@ -92,6 +88,18 @@ export const getContactById = async (id) => {
     );
     return data;
   } catch (error) {
-    console.log(error);
+    return thunkAPI.rejectWithValue(error.message);
+  }
+};
+
+export const updateCustomer = async (obj, thunkAPI) => {
+  try {
+    const { data } = await axios.post(
+      `${REACT_APP_SERVER}/api/user/update_customer_laokehu/`,
+      obj,
+    );
+    return data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.message);
   }
 };

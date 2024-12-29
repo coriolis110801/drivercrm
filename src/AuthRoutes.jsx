@@ -13,7 +13,7 @@ export default function AuthRoutes({ location }) {
   console.log('%c FrontendAuth', 'color:#fff; background:red');
   console.log(location);
 
-  let info = localStorage.getItem('user_info') || '{}';
+  let info = localStorage.getItem('user_info');
   info = JSON.parse(info);
 
   if (info) {

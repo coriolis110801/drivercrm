@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import dayjs from 'dayjs';
 import { delInvoice, saveInvoice, upDateInvoice } from '../apis/invoice';
 import ProductForm from '../components/ProductForm';
 import KModal from '../components/KModal';
 import html2canvas from 'html2canvas';
 
-import { Button, Input, Flex, message, Modal, Table } from 'antd';
+import { Button, Input, Flex, message, Modal, Table, DatePicker } from 'antd';
 import {
   CaretDownOutlined,
   DeleteOutlined,
@@ -18,6 +17,31 @@ import {
 } from '@ant-design/icons';
 import styles from '../style/Make.module.css';
 import ChooseDrawer from '../components/ChooseDrawer';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  createInvoice,
+  deleteInvoice,
+  updateContact,
+  updateEditOpen,
+  updateInvoice,
+  updateIsCanvas,
+  updateOpen,
+  updateParams,
+  updateType,
+} from '../store/reducers/invoiceSlice';
+import dayjs from 'dayjs';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import localeData from 'dayjs/plugin/localeData';
+import weekday from 'dayjs/plugin/weekday';
+import weekOfYear from 'dayjs/plugin/weekOfYear';
+import weekYear from 'dayjs/plugin/weekYear';
+dayjs.extend(customParseFormat);
+dayjs.extend(advancedFormat);
+dayjs.extend(weekday);
+dayjs.extend(localeData);
+dayjs.extend(weekOfYear);
+dayjs.extend(weekYear);
 
 const { TextArea } = Input;
 const { confirm } = Modal;
@@ -43,46 +67,31 @@ const { confirm } = Modal;
 // }
 
 export default function MakeNewInvoice({ ...props }) {
-  const [isCanvas, setIsCanvas] = useState(true);
   let history = useHistory();
   const { state } = useLocation();
-  const [open, setOpen] = useState(false);
-  const [editOpen, setEditOpen] = useState(false);
-  const [type, setType] = useState('type1');
-  const [contact, setContact] = useState({});
-
-  const [params, setParams] = useState(
-    state
-      ? state
-      : {
-          customer_name: '',
-          customer_address: '',
-          customer_postal_code: '',
-          customer_city: '',
-          customer_email: '',
-          customer_phone: '',
-          description: '',
-          invoice_date: dayjs().format('YYYY-MM-DD'),
-          footerdescription: '',
-          product_details: [],
-          discount: 0,
-          total_amount: 0,
-        },
+  const { isCanvas, open, editOpen, type, contact, params } = useSelector(
+    (state) => state.invoice,
   );
-
+  const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
+
+  useEffect(() => {
+    if (state) {
+      dispatch(updateParams(state));
+    }
+  }, [state, dispatch]);
 
   function Cancel() {
     history.go(-1);
   }
 
   function go(t) {
-    setOpen(true);
-    setType(t);
+    dispatch(updateOpen(true));
+    dispatch(updateType(t));
   }
 
   function onClose__() {
-    setOpen(false);
+    dispatch(updateOpen(false));
   }
 
   function setpice(arr) {
@@ -102,15 +111,17 @@ export default function MakeNewInvoice({ ...props }) {
     console.log(obj);
     let { customer_name, customer_address, postcode, city, email, phone } = obj;
     if (T === 'type1') {
-      setParams({
-        ...params,
-        customer_name,
-        customer_address,
-        customer_postal_code: postcode,
-        customer_city: city,
-        customer_email: email,
-        customer_phone: phone,
-      });
+      dispatch(
+        updateParams({
+          ...params,
+          customer_name,
+          customer_address,
+          customer_postal_code: postcode,
+          customer_city: city,
+          customer_email: email,
+          customer_phone: phone,
+        }),
+      );
     } else {
       let arr = params.product_details;
       let is = arr.findIndex((item) => item.id === obj.id);
@@ -125,12 +136,14 @@ export default function MakeNewInvoice({ ...props }) {
         id: obj.id,
       });
       let { zong, discount } = setpice(arr);
-      setParams({
-        ...params,
-        product_details: arr,
-        discount: discount,
-        total_amount: zong,
-      });
+      dispatch(
+        updateParams({
+          ...params,
+          product_details: arr,
+          discount: discount,
+          total_amount: zong,
+        }),
+      );
     }
     setTimeout(() => {
       onClose__();
@@ -139,27 +152,33 @@ export default function MakeNewInvoice({ ...props }) {
 
   function Save() {
     messageApi.info('Saving。。。');
-    saveInvoice(params).then(() => {
+    dispatch(createInvoice(params)).then(() => {
       messageApi.success('Save success。。。');
       history.push('/info');
     });
   }
 
-  function setTime(e) {
+  function setTime(date, dateString) {
     console.log('%c 测试', 'color:#fff; background:red');
-    console.log(e.target.value);
-    setParams({ ...params, invoice_date: e.target.value });
+    dispatch(
+      updateParams({
+        ...params,
+        invoice_date: dateString,
+      }),
+    );
   }
 
   function EDITFun(e) {
     if (state?.readonly) {
       return;
     }
-    setContact({
-      ...e,
-      product_name: e.name,
-    });
-    setEditOpen(true);
+    dispatch(
+      updateContact({
+        ...e,
+        product_name: e.name,
+      }),
+    );
+    dispatch(updateEditOpen(true));
   }
 
   const addNewContact = (
@@ -181,12 +200,14 @@ export default function MakeNewInvoice({ ...props }) {
       },
     );
     let { zong, discount } = setpice(arr);
-    setParams({
-      ...params,
-      product_details: arr,
-      discount: discount,
-      total_amount: zong,
-    });
+    dispatch(
+      updateParams({
+        ...params,
+        product_details: arr,
+        discount: discount,
+        total_amount: zong,
+      }),
+    );
   };
 
   function DelData(id) {
@@ -196,18 +217,20 @@ export default function MakeNewInvoice({ ...props }) {
       1,
     );
     let { zong, discount } = setpice(arr);
-    setParams({
-      ...params,
-      product_details: arr,
-      discount: discount,
-      total_amount: zong,
-    });
-    setEditOpen(false);
+    dispatch(
+      updateParams({
+        ...params,
+        product_details: arr,
+        discount: discount,
+        total_amount: zong,
+      }),
+    );
+    dispatch(updateEditOpen(false));
   }
 
   function EditSave() {
     messageApi.info('Saving。。。');
-    upDateInvoice(params).then(() => {
+    dispatch(updateInvoice(params)).then(() => {
       messageApi.success('Save success。。。');
       history.push('/info');
     });
@@ -220,7 +243,7 @@ export default function MakeNewInvoice({ ...props }) {
       content: 'Confirm delete this invoice？',
       async onOk() {
         messageApi.info('Deleting。。。');
-        delInvoice(params).then(() => {
+        dispatch(deleteInvoice(params)).then(() => {
           messageApi.success('Delete Success。。。');
           history.push('/info');
         });
@@ -235,7 +258,7 @@ export default function MakeNewInvoice({ ...props }) {
     messageApi.info('保存中。。。');
     document.getElementById('CanvasSave').style.padding = '20px';
     let time = Date.now();
-    setIsCanvas(false);
+    dispatch(updateIsCanvas(false));
     queueMicrotask(() => {
       html2canvas(document.getElementById('CanvasSave')).then(
         function (canvas) {
@@ -247,7 +270,7 @@ export default function MakeNewInvoice({ ...props }) {
           setTimeout(
             () => {
               document.getElementById('CanvasSave').style.padding = 'initial';
-              setIsCanvas(true);
+              dispatch(updateIsCanvas(true));
             },
             500 - (time2 - time),
           );
@@ -292,7 +315,9 @@ export default function MakeNewInvoice({ ...props }) {
               placeholder="description"
               value={params.description}
               onChange={(e) =>
-                setParams({ ...params, description: e.target.value })
+                dispatch(
+                  updateParams({ ...params, description: e.target.value }),
+                )
               }
             />
             <div className={styles.date}>
@@ -300,10 +325,8 @@ export default function MakeNewInvoice({ ...props }) {
                 <div>Date</div>
                 <div>
                   {isCanvas && !state?.readonly ? (
-                    <input
-                      style={{ background: 'transparent' }}
-                      type="date"
-                      value={params.invoice_date}
+                    <DatePicker
+                      value={dayjs(params.invoice_date)}
                       onChange={setTime}
                     />
                   ) : (
@@ -363,7 +386,12 @@ export default function MakeNewInvoice({ ...props }) {
               placeholder="Add Note or include your T&Cs"
               value={params.footerdescription}
               onChange={(e) =>
-                setParams({ ...params, footerdescription: e.target.value })
+                dispatch(
+                  updateParams({
+                    ...params,
+                    footerdescription: e.target.value,
+                  }),
+                )
               }
             />
           </div>
@@ -428,18 +456,18 @@ export default function MakeNewInvoice({ ...props }) {
         SetCustomer={SetCustomer}
         type={type}
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={() => dispatch(updateOpen(false))}
       />
       )
       <KModal
         isOpen={editOpen}
         title={'Edit Product'}
-        onOpen={() => setEditOpen(true)}
-        onClose={() => setEditOpen(false)}
+        onOpen={() => dispatch(updateEditOpen(true))}
+        onClose={() => dispatch(updateEditOpen(false))}
       >
         <ProductForm
           contact={contact}
-          onClose={() => setEditOpen(false)}
+          onClose={() => dispatch(updateEditOpen(false))}
           addNewContact={addNewContact}
           DelData={DelData}
           type={true}

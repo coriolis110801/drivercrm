@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const REACT_APP_SERVER = process.env.REACT_APP_SERVER;
 
-export const login = async (obj) => {
+export const login = async (obj, thunkAPI) => {
   try {
     const { data } = await axios.post(
       `${REACT_APP_SERVER}/api/manager/login/`,
@@ -10,7 +10,7 @@ export const login = async (obj) => {
     );
     return data;
   } catch (error) {
-    console.log(error);
+    return thunkAPI.rejectWithValue(error.message);
   }
 };
 

@@ -1,25 +1,22 @@
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getContactById } from '../apis/contact';
 import { Flex, Typography } from 'antd';
 import styles from '../style/Contact.module.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { getContact } from '../store/reducers/contactSlice';
 
 const ContactInfo = () => {
-  const [contact, setContact] = useState();
+  const { contact } = useSelector((state) => state.contact);
 
+  const dispatch = useDispatch();
   const params = useParams();
 
   useEffect(() => {
-    const fetchContact = async () => {
-      const data = await getContactById(params.id);
-      setContact(data);
-    };
-    fetchContact();
-  }, []);
+    dispatch(getContact(params.id));
+  }, [params, dispatch]);
 
-  console.log(contact);
   return (
     <>
       {contact && (
@@ -29,7 +26,9 @@ const ContactInfo = () => {
               <FontAwesomeIcon size="3x" icon={faUser} mr="4" />
             </div>
             <div>
-              <Typography className={styles.text}>{contact.name}</Typography>
+              <Typography className={styles.text}>
+                {contact.customer_name}
+              </Typography>
               <Typography className={styles.text}>{contact.email}</Typography>
             </div>
           </Flex>

@@ -5,10 +5,9 @@ import { Link } from 'react-router-dom';
 import styles from '../style/ContactCard.module.css';
 import { Flex, Typography } from 'antd';
 
-const ContactCard = ({ contact, onOpen, getContactId, deleteContact }) => {
+const ContactCard = ({ contact, handleEdit, deleteContact }) => {
   const updateHandler = (id) => {
-    getContactId(id);
-    onOpen();
+    handleEdit(id);
   };
 
   const deleteContactHandler = (id) => {

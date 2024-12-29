@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { getAllContacts } from '../apis/contact';
 import { productGetDriverStock } from '../apis/product';
 import KModal from './KModal';
@@ -7,6 +7,13 @@ import ProductForm from './ProductForm';
 
 import { Drawer, Radio, Button, Flex, Typography } from 'antd';
 import { PlusSquareOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  updateAddModalOpen,
+  updateContacts,
+  updateCreateContact,
+  updateValue,
+} from '../store/reducers/invoiceSlice';
 
 //随机生成16位id
 function generateRandomId() {
@@ -23,20 +30,10 @@ function generateRandomId() {
 }
 
 function ChooseDrawer({ open, onClose, type, SetCustomer }) {
-  const [addModalOpen, setAddModalOpen] = useState(false);
-  const [contacts, setContacts] = useState([]);
-  const [value, setValue] = useState(null);
-  const [contact, setContact] = useState({});
-  const [OBJ, setObj] = useState({
-    type1: {
-      title: 'Choose Customer',
-      head: 'Add New Customer',
-    },
-    type2: {
-      title: 'Choose Product',
-      head: 'Add New Product',
-    },
-  });
+  const { addModalOpen, contacts, value, createContact, OBJ } = useSelector(
+    (state) => state.invoice,
+  );
+  const dispatch = useDispatch();
 
   const fetchContacts = async () => {
     const data =
@@ -47,19 +44,19 @@ function ChooseDrawer({ open, onClose, type, SetCustomer }) {
         tempArray.push({ id: key, ...value });
       });
     }
-    setContacts(tempArray);
+    dispatch(updateContacts(tempArray));
   };
 
   useEffect(() => {
     fetchContacts();
-  }, [fetchContacts]);
+  }, []);
 
   function closeDrawer() {
     setTimeout(() => {
       onClose();
     }, 300);
-    setValue(null);
-    setContacts([]);
+    dispatch(updateValue(null));
+    dispatch(updateContacts([]));
   }
 
   function handleChoose(e) {
@@ -79,12 +76,14 @@ function ChooseDrawer({ open, onClose, type, SetCustomer }) {
 
   function ChangeRadio(e) {
     const value = e.target.value;
-    setValue(Number(value));
+    dispatch(updateValue(Number(value)));
     if (type === 'type1') {
       handleChoose(value);
     } else {
-      setContact(contacts.find((item) => item.id === Number(value)));
-      setAddModalOpen(true);
+      dispatch(
+        updateCreateContact(contacts.find((item) => item.id === Number(value))),
+      );
+      dispatch(updateAddModalOpen(true));
     }
   }
 
@@ -136,9 +135,9 @@ function ChooseDrawer({ open, onClose, type, SetCustomer }) {
           type="primary"
           block
           onClick={() => {
-            setValue(1);
-            setContact(null);
-            setAddModalOpen(true);
+            dispatch(updateValue(1));
+            dispatch(updateCreateContact(null));
+            dispatch(updateAddModalOpen(true));
           }}
         >
           {head}
@@ -167,18 +166,18 @@ function ChooseDrawer({ open, onClose, type, SetCustomer }) {
       <KModal
         isOpen={addModalOpen}
         title={head}
-        onOpen={() => setAddModalOpen(true)}
-        onClose={() => setAddModalOpen(false)}
+        onOpen={() => dispatch(updateAddModalOpen(true))}
+        onClose={() => dispatch(updateAddModalOpen(false))}
       >
         {type === 'type1' ? (
           <ContactForm
-            onClose={() => setAddModalOpen(false)}
+            onClose={() => dispatch(updateAddModalOpen(false))}
             addNewContact={addNewContact}
           />
         ) : (
           <ProductForm
-            contact={contact}
-            onClose={() => setAddModalOpen(false)}
+            contact={createContact}
+            onClose={() => dispatch(updateAddModalOpen(false))}
             addNewContact={addNewProduct}
             type={true}
           />

@@ -1,12 +1,21 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Button, Form, Input } from 'antd';
 import styles from '../style/ContactForm.module.css';
 const { TextArea } = Input;
 
 const ContactForm = ({ addNewContact, onClose, contact, updateContact }) => {
+  const formRef = useRef();
+
+  useEffect(() => {
+    if (contact && formRef.current) {
+      formRef.current.setFieldsValue(contact);
+    }
+  }, [contact]);
+
   const onSubmit = (values) => {
     const { email, customer_name, customer_address, city, postcode, phone } =
       values;
+
     if (contact) {
       updateContact(
         customer_name,
@@ -34,6 +43,7 @@ const ContactForm = ({ addNewContact, onClose, contact, updateContact }) => {
   return (
     <div>
       <Form
+        ref={formRef}
         name="contact"
         layout="vertical"
         initialValues={contact}

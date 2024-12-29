@@ -1,10 +1,3 @@
-import {
-  addContactOnServer,
-  deleteContactOnServer,
-  getAllContacts,
-  updateContactOnServer,
-} from '../apis/contact';
-
 import React, { useEffect, useState } from 'react';
 import ContactCard from '../components/ContactCard';
 import ContactForm from '../components/ContactForm';
@@ -17,32 +10,29 @@ import {
   SearchOutlined,
 } from '@ant-design/icons';
 import styles from '../style/App.module.css';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  createContact,
+  deleteContact,
+  getContactsList,
+  updateContact,
+  updateContactId,
+  updateEditOpen,
+  updateOpen,
+  updateSearchData,
+} from '../store/reducers/contactSlice';
 const { confirm } = Modal;
 const { Title } = Typography;
 
 const Contacts = () => {
-  const [open, setOpen] = useState(false);
-  const [editOpen, setEditOpen] = useState(false);
-  const [searchData, setSearchData] = useState('');
-  const [contacts, setContacts] = useState([]);
-  const [contactId, setContactId] = useState();
-
-  const [messageApi, contextHolder] = message.useMessage();
+  const { contacts, contactId, editOpen, open, searchData } = useSelector(
+    (state) => state.contact,
+  );
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchContacts = async () => {
-      const data = await getAllContacts();
-      const tempArray = [];
-      if (data !== null) {
-        Object.entries(data).forEach(([key, value]) => {
-          tempArray.push({ id: key, ...value });
-        });
-      }
-
-      setContacts(tempArray);
-    };
-    fetchContacts();
-  }, []);
+    dispatch(getContactsList());
+  }, [dispatch]);
 
   const addNewContact = async (
     customer_name,
@@ -52,27 +42,23 @@ const Contacts = () => {
     postcode,
     phone,
   ) => {
-    const data = await addContactOnServer(
-      customer_name,
-      email,
-      customer_address,
-      city,
-      postcode,
-      phone,
+    dispatch(
+      createContact({
+        customer_name,
+        email,
+        customer_address,
+        city,
+        postcode,
+        phone,
+      }),
     );
-    console.log(data);
-    setContacts([...contacts, data]);
   };
 
   let searchContacts = contacts.filter((contact) =>
     contact.customer_name.includes(searchData),
   );
 
-  const getContactId = (id) => {
-    setContactId(id);
-  };
-
-  const updateContact = async (
+  const _updateContact = async (
     customer_name,
     email,
     id,
@@ -81,66 +67,63 @@ const Contacts = () => {
     postcode,
     phone,
   ) => {
-    const data = await updateContactOnServer(
-      customer_name,
-      email,
-      id,
-      customer_address,
-      city,
-      postcode,
-      phone,
+    dispatch(
+      updateContact({
+        customer_name,
+        email,
+        id,
+        customer_address,
+        city,
+        postcode,
+        phone,
+      }),
     );
-
-    setContacts((prev) => [
-      ...contacts.filter((contact) => contact.id !== id),
-      data,
-    ]);
   };
 
-  const deleteContact = (id) => {
+  const _deleteContact = (id) => {
     confirm({
       title: 'Delete confirm',
       icon: <ExclamationCircleFilled />,
       content: '是否删除？Confirm deleting?',
       async onOk() {
-        const data = await deleteContactOnServer(id);
-        if (!data) {
-          setContacts((prev) => [
-            ...contacts.filter((contact) => contact.id !== id),
-          ]);
-        }
+        dispatch(deleteContact(id));
       },
       onCancel() {
         console.log('Cancel');
       },
     });
   };
+
+  const _openEditContact = (id) => {
+    dispatch(updateContactId(id));
+    dispatch(updateEditOpen(true));
+  };
+
   let selectContact = contacts.find((contact) => contact.id === contactId);
 
   return (
     <>
-      {contextHolder}
       <KModal
         isOpen={open}
         title={'Add New Contact'}
-        onOpen={() => setOpen(true)}
-        onClose={() => setOpen(false)}
+        onOpen={() => dispatch(updateOpen(true))}
+        onClose={() => dispatch(updateOpen(false))}
       >
         <ContactForm
           addNewContact={addNewContact}
-          onClose={() => setOpen(false)}
+          onClose={() => dispatch(updateOpen(false))}
         />
       </KModal>
       <KModal
         isOpen={editOpen}
         title={'Update New Contact'}
-        onOpen={() => setEditOpen(true)}
-        onClose={() => setEditOpen(false)}
+        onOpen={() => dispatch(updateEditOpen(true))}
+        onClose={() => dispatch(updateEditOpen(false))}
       >
         <ContactForm
-          updateContact={updateContact}
+          updateContact={_updateContact}
           contact={selectContact}
-          onClose={() => setEditOpen(false)}
+          onClose={() => dispatch(updateEditOpen(false))}
         />
       </KModal>
       <div>
@@ -153,7 +136,7 @@ const Contacts = () => {
           <Button
             type="primary"
             block
-            onClick={() => setOpen(true)}
+            onClick={() => dispatch(updateOpen(true))}
             icon={<PlusOutlined />}
           >
             Add Contact
@@ -166,17 +149,16 @@ const Contacts = () => {
             placeholder="Search Contact..."
             prefix={<SearchOutlined />}
             value={searchData}
-            onChange={(e) => setSearchData(e.target.value)}
+            onChange={(e) => dispatch(updateSearchData(e.target.value))}
           />
         </div>
         <div className={styles.pContent}>
           {searchContacts.map((contact) => (
             <ContactCard
-              getContactId={getContactId}
-              onOpen={() => setEditOpen(true)}
               contact={contact}
               key={contact.id}
-              deleteContact={deleteContact}
+              handleEdit={_openEditContact}
+              deleteContact={_deleteContact}
             />
           ))}
         </div>

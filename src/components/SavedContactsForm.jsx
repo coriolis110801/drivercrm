@@ -1,27 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
 import styles from '../style/SavedContactsForm.module.css';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  updateContactCustomer,
+  updateResponseColor,
+  updateResponseMessage,
+} from '../store/reducers/contactSlice';
 
 function SavedContactsForm() {
-  const [responseMessage, setResponseMessage] = useState(null);
-  const [responseColor, setResponseColor] = useState('#000000');
+  const { responseMessage, responseColor } = useSelector(
+    (state) => state.contact,
+  );
+  const dispatch = useDispatch();
 
   const handleSubmit = async (values) => {
     const { username, password } = values;
     const payload = { name: username, password };
 
     try {
-      const response = await fetch(
-        'https://www.butt-and-co.co.uk/api/user/update_customer_laokehu/',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        },
-      );
-
-      const data = await response.json();
+      const data = await dispatch(updateContactCustomer(payload));
 
       let message;
       let color;
@@ -47,11 +46,11 @@ function SavedContactsForm() {
           color = '#000000';
       }
 
-      setResponseMessage(message);
-      setResponseColor(color);
+      dispatch(updateResponseMessage(message));
+      dispatch(updateResponseColor(color));
     } catch (error) {
-      setResponseMessage(`Error: ${error.message}`);
-      setResponseColor('#ff0000');
+      dispatch(updateResponseMessage(`Error: ${error.message}`));
+      dispatch(updateResponseColor('#ff0000'));
     }
   };
 

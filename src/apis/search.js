@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const REACT_APP_SERVER = process.env.REACT_APP_SERVER;
 
-export const searchResponsiblePerson = async (obj) => {
+export const searchResponsiblePerson = async (obj, thunkAPI) => {
   try {
     const { data } = await axios.get(
       `${REACT_APP_SERVER}/api/search_responsible_person/`,
@@ -12,11 +12,11 @@ export const searchResponsiblePerson = async (obj) => {
     );
     return data;
   } catch (error) {
-    console.log(error);
+    return thunkAPI.rejectWithValue(error.message);
   }
 };
 
-export const searchOverdueInvoices = async (obj) => {
+export const searchOverdueInvoices = async (obj, thunkAPI) => {
   try {
     const { data } = await axios.post(
       `${REACT_APP_SERVER}/api/overdue_invoices/`,
@@ -26,6 +26,6 @@ export const searchOverdueInvoices = async (obj) => {
     );
     return data;
   } catch (error) {
-    console.log(error);
+    return thunkAPI.rejectWithValue(error.message);
   }
 };

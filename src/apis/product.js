@@ -3,12 +3,9 @@ import axios from 'axios';
 
 const REACT_APP_SERVER = process.env.REACT_APP_SERVER;
 
-export const productAddDriverStock = async (
-  product_name,
-  discount_amount,
-  price,
-) => {
+export const productAddDriverStock = async (obj, thunkAPI) => {
   try {
+    const { product_name, discount_amount, price } = obj;
     const userInfo = getUserInfo();
     const { data } = await axios.post(
       `${REACT_APP_SERVER}/responsible-persons/${userInfo.id}/driver-stocks/`,
@@ -20,18 +17,14 @@ export const productAddDriverStock = async (
     );
     return data;
   } catch (error) {
-    console.log(error);
+    return thunkAPI.rejectWithValue(error.message);
   }
 };
 
-export const productUpdateDriverStock = async (
-  product_name,
-  discount_amount,
-  price,
-  id,
-  responsible_person,
-) => {
+export const productUpdateDriverStock = async (obj, thunkAPI) => {
   try {
+    const { product_name, discount_amount, price, id, responsible_person } =
+      obj;
     const userInfo = getUserInfo();
     const { data } = await axios.put(
       `${REACT_APP_SERVER}/responsible-persons/${userInfo.id}/driver-stocks/${id}/`,
@@ -44,11 +37,11 @@ export const productUpdateDriverStock = async (
     );
     return data;
   } catch (error) {
-    console.log(error);
+    return thunkAPI.rejectWithValue(error.message);
   }
 };
 
-export const productDeleteDriverStock = async (id) => {
+export const productDeleteDriverStock = async (id, thunkAPI) => {
   try {
     const userInfo = getUserInfo();
     const { data } = await axios.delete(
@@ -56,11 +49,11 @@ export const productDeleteDriverStock = async (id) => {
     );
     return data;
   } catch (error) {
-    console.log(error);
+    return thunkAPI.rejectWithValue(error.message);
   }
 };
 
-export const productGetDriverStock = async () => {
+export const productGetDriverStock = async (thunkAPI) => {
   try {
     const userInfo = getUserInfo();
     const { data } = await axios.get(
@@ -68,6 +61,6 @@ export const productGetDriverStock = async () => {
     );
     return data;
   } catch (error) {
-    console.log(error);
+    return thunkAPI.rejectWithValue(error.message);
   }
 };

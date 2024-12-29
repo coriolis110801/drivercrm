@@ -1,33 +1,24 @@
 import React from 'react';
 import styles from '../style/Login.module.css';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Form, Input, message } from 'antd';
-import { login } from '../apis/user';
+import { Button, Form, Input } from 'antd';
+import { useDispatch } from 'react-redux';
+import { userLogin } from '../store/reducers/userSlice';
 
 const LoginComponent = (props) => {
-  const [messageApi, contextHolder] = message.useMessage();
+  const dispatch = useDispatch();
 
   const handleLogin = async (values) => {
     const { username, password } = values;
-    messageApi.info('登陆中。。。');
-    try {
-      const response = await login({
-        username,
-        password,
-      });
-      localStorage.setItem('access', response.access);
-      localStorage.setItem('refresh', response.refresh);
-      localStorage.setItem('user_info', JSON.stringify(response));
-      messageApi.success('登陆成功。。。');
+
+    const response = await dispatch(userLogin({ username, password }));
+    if (!response.error) {
       props.history.push('/info/home');
-    } catch (e) {
-      messageApi.error('登录失败，请检查用户名或密码.');
     }
   };
 
   return (
     <div className={styles.container}>
-      {contextHolder}
       <div className={styles.LoginBox}>
         <h2>Login</h2>
         <Form

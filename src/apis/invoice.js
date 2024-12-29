@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const REACT_APP_SERVER = process.env.REACT_APP_SERVER;
 
-export const saveInvoice = async (obj) => {
+export const saveInvoice = async (obj, thunkAPI) => {
   try {
     const userInfo = getUserInfo();
     const { data } = await axios.post(`${REACT_APP_SERVER}/api/invoice/`, {
@@ -12,10 +12,10 @@ export const saveInvoice = async (obj) => {
     });
     return data;
   } catch (error) {
-    console.log(error);
+    return thunkAPI.rejectWithValue(error.message);
   }
 };
-export const listInvoice = async () => {
+export const listInvoice = async (thunkAPI) => {
   try {
     const userInfo = getUserInfo();
     const { data } = await axios.post(
@@ -26,12 +26,12 @@ export const listInvoice = async () => {
     );
     return data;
   } catch (error) {
-    console.log(error);
+    return thunkAPI.rejectWithValue(error.message);
   }
 };
 // /api/invoiceupdate/<invoice_id>/
 
-export const upDateInvoice = async (obj) => {
+export const upDateInvoice = async (obj, thunkAPI) => {
   try {
     const userInfo = getUserInfo();
     const { data } = await axios.post(
@@ -43,22 +43,22 @@ export const upDateInvoice = async (obj) => {
     );
     return data;
   } catch (error) {
-    console.log(error);
+    return thunkAPI.rejectWithValue(error.message);
   }
 };
 
-export const delInvoice = async (obj) => {
+export const delInvoice = async (obj, thunkAPI) => {
   try {
     const { data } = await axios.post(
       `${REACT_APP_SERVER}/api/invoicedelete/${obj.id}/`,
     );
     return data;
   } catch (error) {
-    console.log(error);
+    return thunkAPI.rejectWithValue(error.message);
   }
 };
 
-export const upAllInvoice = async (obj) => {
+export const upAllInvoice = async (obj, thunkAPI) => {
   try {
     const { data } = await axios.post(
       `${REACT_APP_SERVER}/update_invoice_status/`,
@@ -68,11 +68,11 @@ export const upAllInvoice = async (obj) => {
     );
     return data;
   } catch (error) {
-    console.log(error);
+    return thunkAPI.rejectWithValue(error.message);
   }
 };
 
-export const upAllComplete = async (obj) => {
+export const upAllComplete = async (obj, thunkAPI) => {
   try {
     const { data } = await axios.post(
       `${REACT_APP_SERVER}/update_invoice_complete/`,
@@ -82,6 +82,6 @@ export const upAllComplete = async (obj) => {
     );
     return data;
   } catch (error) {
-    console.log(error);
+    return thunkAPI.rejectWithValue(error.message);
   }
 };
