@@ -9,7 +9,7 @@ import Contacts from './pages/Contacts';
 import Products from './pages/Products';
 import Home from './pages/Home';
 
-export default function AuthRoutes({ location }) {
+export default function App({ location }) {
   console.log('%c FrontendAuth', 'color:#fff; background:red');
   console.log(location);
 

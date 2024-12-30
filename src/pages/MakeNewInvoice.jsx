@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   createInvoice,
   deleteInvoice,
+  resetParams,
   updateContact,
   updateEditOpen,
   updateInvoice,
@@ -78,6 +79,8 @@ export default function MakeNewInvoice({ ...props }) {
   useEffect(() => {
     if (state) {
       dispatch(updateParams(state));
+    } else {
+      dispatch(resetParams());
     }
   }, [state, dispatch]);
 

@@ -49,7 +49,7 @@ function ChooseDrawer({ open, onClose, type, SetCustomer }) {
 
   useEffect(() => {
     fetchContacts();
-  }, []);
+  }, [type]);
 
   function closeDrawer() {
     setTimeout(() => {

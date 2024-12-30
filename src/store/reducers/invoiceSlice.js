@@ -78,6 +78,22 @@ const invoiceSlice = createSlice({
     updateParams: (state, action) => {
       state.params = action.payload;
     },
+    resetParams: (state, action) => {
+      state.params = {
+        customer_name: '',
+        customer_address: '',
+        customer_postal_code: '',
+        customer_city: '',
+        customer_email: '',
+        customer_phone: '',
+        description: '',
+        invoice_date: dayjs().format('YYYY-MM-DD'),
+        footerdescription: '',
+        product_details: [],
+        discount: 0,
+        total_amount: 0,
+      };
+    },
     updateAddModalOpen: (state, action) => {
       state.addModalOpen = action.payload;
     },
@@ -126,6 +142,7 @@ export const {
   updateContacts,
   updateValue,
   updateCreateContact,
+  resetParams,
 } = invoiceSlice.actions;
 
 export default invoiceSlice.reducer;
