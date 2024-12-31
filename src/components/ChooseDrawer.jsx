@@ -48,8 +48,10 @@ function ChooseDrawer({ open, onClose, type, SetCustomer }) {
   };
 
   useEffect(() => {
-    fetchContacts();
-  }, [type]);
+    if (open) {
+      fetchContacts();
+    }
+  }, [type, open]);
 
   function closeDrawer() {
     setTimeout(() => {
@@ -176,9 +178,9 @@ function ChooseDrawer({ open, onClose, type, SetCustomer }) {
           />
         ) : (
           <ProductForm
-            contact={createContact}
+            product={createContact}
             onClose={() => dispatch(updateAddModalOpen(false))}
-            addNewContact={addNewProduct}
+            addNewProduct={addNewProduct}
             type={true}
           />
         )}

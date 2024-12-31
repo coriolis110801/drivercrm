@@ -126,7 +126,7 @@ export default function MakeNewInvoice({ ...props }) {
         }),
       );
     } else {
-      let arr = params.product_details;
+      let arr = [...params.product_details];
       let is = arr.findIndex((item) => item.id === obj.id);
       if (is !== -1) {
         arr.splice(is, 1);
@@ -461,7 +461,6 @@ export default function MakeNewInvoice({ ...props }) {
         open={open}
         onClose={() => dispatch(updateOpen(false))}
       />
-      )
       <KModal
         isOpen={editOpen}
         title={'Edit Product'}
@@ -471,7 +470,7 @@ export default function MakeNewInvoice({ ...props }) {
         <ProductForm
           contact={contact}
           onClose={() => dispatch(updateEditOpen(false))}
-          addNewContact={addNewContact}
+          addNewProduct={addNewContact}
           DelData={DelData}
           type={true}
         />

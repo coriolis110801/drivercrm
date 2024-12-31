@@ -38,7 +38,6 @@ const ProductForm = ({
 
   const onSubmit = (values) => {
     const { product_name, price, discount_amount, quantity } = values;
-    console.log(values);
 
     if (product && !type) {
       updateProduct(
@@ -70,7 +69,7 @@ const ProductForm = ({
         ref={formRef}
         name="product"
         layout="vertical"
-        initialValues={product}
+        initialValues={{...product, quantity}}
         onFinish={onSubmit}
       >
         <Form.Item
