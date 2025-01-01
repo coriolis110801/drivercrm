@@ -46,7 +46,6 @@ const ProductForm = ({
         product_name,
         discount_amount,
         price,
-        quantity,
         product.id,
         product.responsible_person,
       );
