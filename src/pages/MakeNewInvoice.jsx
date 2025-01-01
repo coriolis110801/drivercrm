@@ -191,17 +191,17 @@ export default function MakeNewInvoice({ ...props }) {
     quantity,
     id,
   ) => {
-    let arr = [...params.product_details];
-    arr.splice(
-      arr.findIndex((item) => item.id === id),
-      1,
-      {
-        name: product_name,
-        price: Number(price),
-        quantity: Number(quantity),
-        discount_amount: Number(discount_amount),
-      },
-    );
+    let arr = JSON.parse(JSON.stringify(params.product_details));
+
+    if (id) {
+      const matchedProduct = arr.find(item => item.id === id)
+      if (matchedProduct) {
+        matchedProduct.name = product_name
+        matchedProduct.price = Number(price)
+        matchedProduct.quantity = Number(quantity)
+        matchedProduct.discount_amount = Number(discount_amount)
+      }
+    }
     let { zong, discount } = setpice(arr);
     dispatch(
       updateParams({
