@@ -191,7 +191,7 @@ export default function MakeNewInvoice({ ...props }) {
     quantity,
     id,
   ) => {
-    let arr = params.product_details;
+    let arr = [...params.product_details];
     arr.splice(
       arr.findIndex((item) => item.id === id),
       1,
@@ -214,7 +214,7 @@ export default function MakeNewInvoice({ ...props }) {
   };
 
   function DelData(id) {
-    let arr = params.product_details;
+    let arr = [...params.product_details];
     arr.splice(
       arr.findIndex((item) => item.id === id),
       1,
@@ -359,6 +359,11 @@ export default function MakeNewInvoice({ ...props }) {
                   { title: 'price', dataIndex: 'price', key: 'price' },
                   { title: 'quantity', dataIndex: 'quantity', key: 'quantity' },
                 ]}
+                onRow={(record) => {
+                  return {
+                    onClick: () => EDITFun(record)
+                  };
+                }}
               />
             )}
           </div>
@@ -468,7 +473,7 @@ export default function MakeNewInvoice({ ...props }) {
         onClose={() => dispatch(updateEditOpen(false))}
       >
         <ProductForm
-          contact={contact}
+          product={contact}
           onClose={() => dispatch(updateEditOpen(false))}
           addNewProduct={addNewContact}
           DelData={DelData}

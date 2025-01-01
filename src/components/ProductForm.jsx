@@ -19,6 +19,8 @@ const ProductForm = ({
         discount_amount: Number(product.discount_amount),
         price: Number(product.price),
       });
+
+      setQuantity(product ? (product.quantity ?? 1) : 1)
     }
   }, [product]);
 
@@ -37,13 +39,14 @@ const ProductForm = ({
   }, [quantity, price, discount_amount]);
 
   const onSubmit = (values) => {
-    const { product_name, price, discount_amount, quantity } = values;
+    const { product_name, price, discount_amount } = values;
 
     if (product && !type) {
       updateProduct(
         product_name,
         discount_amount,
         price,
+        quantity,
         product.id,
         product.responsible_person,
       );
