@@ -3,6 +3,11 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 100px;
+  position: fixed; /* 固定位置 */
+  top: 0; /* 固定在页面顶部 */
+  left: 0; /* 从左侧开始 */
+  width: 100%; /* 占满整个宽度 */
+  z-index: 1000; /* 确保在其他元素之上 */
 }
 
 .headerRight {
@@ -14,7 +19,6 @@
     background-color: #001529;
     color: #fff;
     height: 80px;
-    width: 100%;
   }
   .headerLeft {
     width: 50%;
@@ -44,7 +48,6 @@
     background-color: #001529;
     color: #fff;
     height: 50px;
-    width: 100%;
   }
   .headerLeft {
     float: left;

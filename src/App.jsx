@@ -4,6 +4,7 @@ import MakeNewInvoice from './pages/MakeNewInvoice';
 import ContactInfo from './pages/ContactInfo';
 import LoginComponent from './pages/Login';
 import Header from './components/Header';
+import Footer from './components/Footer'; // 引入 Footer 组件
 import Manager from './pages/Manager';
 import Contacts from './pages/Contacts';
 import Products from './pages/Products';
@@ -30,7 +31,7 @@ export default function App({ location }) {
       return (
         <>
           <Route path="/make" exact>
-            <MakeNewInvoice></MakeNewInvoice>
+            <MakeNewInvoice />
           </Route>
           <Route path="/contact/:id" exact>
             <ContactInfo />
@@ -40,19 +41,20 @@ export default function App({ location }) {
               <div>
                 <Switch>
                   <Route path="/info/contacts" exact>
-                    <Contacts></Contacts>
+                    <Contacts />
                   </Route>
                   <Route path="/info/products" exact>
-                    <Products></Products>
+                    <Products />
                   </Route>
                   <Route path="/info/home" exact>
-                    <Home></Home>
+                    <Home />
                   </Route>
                   <Route path="/info/" exact>
-                    <Home></Home>
+                    <Home />
                   </Route>
                 </Switch>
               </div>
+              <Footer /> {/* 添加 Footer 组件 */}
             </Header>
           </Route>
         </>
@@ -63,15 +65,16 @@ export default function App({ location }) {
           <Route path="/info">
             <Header>
               <Route path="/info/home" exact>
-                <Manager></Manager>
+                <Manager />
               </Route>
               <Route path="/info/" exact>
-                <Manager></Manager>
+                <Manager />
               </Route>
+              <Footer /> {/* 添加 Footer 组件 */}
             </Header>
           </Route>
           <Route path="/make" exact>
-            <MakeNewInvoice></MakeNewInvoice>
+            <MakeNewInvoice />
           </Route>
         </>
       );
