@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ContactCard from '../components/ContactCard';
 import ProductForm from '../components/ProductForm';
 import KModal from '../components/KModal';
 import styles from '../style/ProductAddressBook.module.css';
-import { Flex, Typography, Button, Input, Modal } from 'antd';
+import { Flex, Typography, Button, Input, Select, Modal } from 'antd';
 import {
   ExclamationCircleFilled,
   PlusOutlined,
@@ -23,12 +23,15 @@ import {
 
 const { Title } = Typography;
 const { confirm } = Modal;
+const { Option } = Select;
 
 const Products = () => {
   const { products, productId, editOpen, open, searchData } = useSelector(
     (state) => state.product,
   );
   const dispatch = useDispatch();
+
+  const [sortOrder, setSortOrder] = useState('');
 
   useEffect(() => {
     dispatch(getProductsList());
@@ -47,6 +50,21 @@ const Products = () => {
   let searchProducts = products.filter((product) =>
     product.product_name.toLowerCase().includes(searchData.toLowerCase()),
   );
+
+  // Sorting logic
+  if (sortOrder === 'name-asc') {
+    searchProducts = searchProducts.sort((a, b) =>
+      a.product_name.localeCompare(b.product_name),
+    );
+  } else if (sortOrder === 'name-desc') {
+    searchProducts = searchProducts.sort((a, b) =>
+      b.product_name.localeCompare(a.product_name),
+    );
+  } else if (sortOrder === 'price-asc') {
+    searchProducts = searchProducts.sort((a, b) => a.price - b.price);
+  } else if (sortOrder === 'price-desc') {
+    searchProducts = searchProducts.sort((a, b) => b.price - a.price);
+  }
 
   const _updateProduct = async (
     product_name,
@@ -135,6 +153,18 @@ const Products = () => {
             value={searchData}
             onChange={(e) => dispatch(updateSearchData(e.target.value))}
           />
+        </div>
+        <div className={styles.p4}>
+          <Select
+            placeholder="Sort By"
+            style={{ width: '100%' }}
+            onChange={(value) => setSortOrder(value)}
+          >
+            <Option value="name-asc">Name A-Z</Option>
+            <Option value="name-desc">Name Z-A</Option>
+            <Option value="price-asc">Price Low-High</Option>
+            <Option value="price-desc">Price High-Low</Option>
+          </Select>
         </div>
         <div className={styles.p4}>
           {searchProducts.map((product) => (
