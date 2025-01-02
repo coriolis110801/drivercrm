@@ -333,6 +333,13 @@ export default function MakeNewInvoice({ ...props }) {
                   { title: 'product name', dataIndex: 'name', key: 'name' },
                   { title: 'price', dataIndex: 'price', key: 'price' },
                   { title: 'quantity', dataIndex: 'quantity', key: 'quantity' },
+                  {
+                    title: 'Subtotal',
+                    key: 'subtotal',
+                    render: (text, record) => (
+                      <span>{(record.price * record.quantity).toFixed(2)}</span>
+                    )
+                  }
                 ]}
                 onRow={(record) => {
                   return {
