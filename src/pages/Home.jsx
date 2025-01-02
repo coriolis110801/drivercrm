@@ -15,10 +15,11 @@ const { confirm } = Modal;
 export default function Home() {
   let history = useHistory();
   const dispatch = useDispatch();
-  const { invoices, discount, totalAmount, loading } = useSelector(
+  const { product_details_summary, invoices, discount, totalAmount, loading } = useSelector(
     (state) => state.invoice,
   );
   const [messageApi, contextHolder] = message.useMessage();
+  const [isModalVisible, setIsModalVisible] = useState(false); // 控制模态框可见性
 
   useEffect(() => {
     dispatch(getInvoiceList());
@@ -45,6 +46,14 @@ export default function Home() {
         console.log('Cancel');
       },
     });
+  }
+
+  function viewProductDetailsSummary() {
+    setIsModalVisible(true); // 打开模态框
+  }
+
+  function handleModalClose() {
+    setIsModalVisible(false); // 关闭模态框
   }
 
   return (
@@ -99,8 +108,32 @@ export default function Home() {
         <Button onClick={submit} block type="primary" icon={<CheckOutlined />}>
           Submit All Today Invoice
         </Button>
+        <Button
+          onClick={viewProductDetailsSummary}
+          block
+          type="default"
+          style={{ marginTop: '10px' }}
+        >
+          查看product_details_summary
+        </Button>
       </div>
       {contextHolder}
+
+      {/* 模态框 */}
+      <Modal
+        title="Product Details Summary"
+        visible={isModalVisible}
+        onCancel={handleModalClose}
+        footer={null} // 隐藏默认的底部按钮
+      >
+        <ul>
+          {product_details_summary.map((item, index) => (
+            <li key={index}>
+              <strong>{item.name}</strong>: {item.total_quantity}
+            </li>
+          ))}
+        </ul>
+      </Modal>
     </div>
   );
 }

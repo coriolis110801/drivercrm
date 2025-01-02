@@ -8,14 +8,11 @@ import {
 } from '../../apis/invoice';
 import dayjs from 'dayjs';
 
+// 异步操作定义
 export const getInvoiceList = createAsyncThunk('invoice/list', listInvoice);
-
 export const createInvoice = createAsyncThunk('invoice/create', saveInvoice);
-
 export const updateInvoice = createAsyncThunk('invoice/update', upDateInvoice);
-
 export const deleteInvoice = createAsyncThunk('invoice/delete', delInvoice);
-
 export const upAllInvoices = createAsyncThunk('invoice/upAll', upAllInvoice);
 
 const invoiceSlice = createSlice({
@@ -25,6 +22,7 @@ const invoiceSlice = createSlice({
     invoices: [],
     discount: 0,
     totalAmount: 0,
+    product_details_summary: [], // 新增字段
     isCanvas: true,
     open: false,
     editOpen: false,
@@ -132,17 +130,21 @@ const invoiceSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(getInvoiceList.fulfilled, (state, action) => {
-      const { invoices = [] } = action.payload;
-      state.invoices = invoices;
+      const { invoices = [], product_details_summary = [] } = action.payload;
+
+      state.invoices = invoices; // 更新发票列表
+      state.product_details_summary = product_details_summary; // 更新产品详情汇总
+
       let discount = 0;
       let totalAmount = invoices.reduce((prev, currentValue) => {
         prev += currentValue.total_amount;
         discount += currentValue.discount;
         return prev;
       }, 0);
-      state.discount = discount;
-      state.totalAmount = totalAmount;
-      state.loading = false;
+
+      state.discount = discount; // 更新总折扣
+      state.totalAmount = totalAmount; // 更新总金额
+      state.loading = false; // 加载结束
     });
     builder.addCase(upAllInvoices.fulfilled, (state, action) => {});
     builder.addCase(createInvoice.fulfilled, (state, action) => {});
@@ -167,7 +169,7 @@ export const {
   updateChooseProductOpen,
   updateAddProductModalOpen,
   updateSearchContactTerm,
-  updateSearchProductTerm
+  updateSearchProductTerm,
 } = invoiceSlice.actions;
 
 export default invoiceSlice.reducer;
