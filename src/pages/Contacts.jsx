@@ -3,7 +3,7 @@ import ContactCard from '../components/ContactCard';
 import ContactForm from '../components/ContactForm';
 import KModal from '../components/KModal';
 import SavedContactsForm from '../components/SavedContactsForm';
-import { Button, Input, Flex, Typography, message, Modal } from 'antd';
+import { Button, Input, Flex, Typography, Select, Modal } from 'antd';
 import {
   ExclamationCircleFilled,
   PlusOutlined,
@@ -21,14 +21,18 @@ import {
   updateOpen,
   updateSearchData,
 } from '../store/reducers/contactSlice';
+
 const { confirm } = Modal;
 const { Title } = Typography;
+const { Option } = Select;
 
 const Contacts = () => {
   const { contacts, contactId, editOpen, open, searchData } = useSelector(
     (state) => state.contact,
   );
   const dispatch = useDispatch();
+
+  const [sortOrder, setSortOrder] = useState('');
 
   useEffect(() => {
     dispatch(getContactsList());
@@ -57,6 +61,17 @@ const Contacts = () => {
   let searchContacts = contacts.filter((contact) =>
     contact.customer_name.toLowerCase().includes(searchData.toLowerCase()),
   );
+
+  // Sorting logic
+  if (sortOrder === 'asc') {
+    searchContacts = searchContacts.sort((a, b) =>
+      a.customer_name.localeCompare(b.customer_name),
+    );
+  } else if (sortOrder === 'desc') {
+    searchContacts = searchContacts.sort((a, b) =>
+      b.customer_name.localeCompare(a.customer_name),
+    );
+  }
 
   const _updateContact = async (
     customer_name,
@@ -151,6 +166,16 @@ const Contacts = () => {
             value={searchData}
             onChange={(e) => dispatch(updateSearchData(e.target.value))}
           />
+        </div>
+        <div className={styles.pContent}>
+          <Select
+            placeholder="Sort By"
+            style={{ width: '100%' }}
+            onChange={(value) => setSortOrder(value)}
+          >
+            <Option value="asc">Name A-Z</Option>
+            <Option value="desc">Name Z-A</Option>
+          </Select>
         </div>
         <div className={styles.pContent}>
           {searchContacts.map((contact) => (
