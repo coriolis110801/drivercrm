@@ -1,50 +1,32 @@
 import React, { useEffect } from 'react';
 import { getAllContacts } from '../apis/contact';
-import { productGetDriverStock } from '../apis/product';
 import KModal from './KModal';
 import ContactForm from './ContactForm';
-import ProductForm from './ProductForm';
-
-import { Drawer, Radio, Button, Flex, Typography } from 'antd';
-import { PlusSquareOutlined } from '@ant-design/icons';
+import { Drawer, Radio, Button, Flex, Typography, Input } from 'antd';
+import { PlusSquareOutlined, SearchOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   updateAddModalOpen,
   updateContacts,
   updateCreateContact,
+  updateSearchContactTerm,
   updateValue,
 } from '../store/reducers/invoiceSlice';
+import styles from '../style/ChooseDrawer.module.css';
 
-//随机生成16位id
-function generateRandomId() {
-  const characters =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let id = '';
-
-  for (let i = 0; i < 16; i++) {
-    const randomIndex = Math.floor(Math.random() * characters.length);
-    id += characters.charAt(randomIndex);
-  }
-
-  return id;
-}
-
-function ChooseDrawer({ open, onClose, type, SetCustomer }) {
-  const { addModalOpen, contacts, value, createContact, OBJ } = useSelector(
+function ChooseContactDrawer({ open, onClose, type, SetCustomer }) {
+  const { addModalOpen, contacts, value, OBJ, searchContactTerm } = useSelector(
     (state) => state.invoice,
   );
   const dispatch = useDispatch();
 
   const fetchContacts = async () => {
-    const data =
-      type === 'type1' ? await getAllContacts() : await productGetDriverStock();
-    const tempArray = [];
+    const data = await getAllContacts();
     if (data !== null) {
-      Object.entries(data).forEach(([key, value]) => {
-        tempArray.push({ id: key, ...value });
-      });
+      dispatch(updateContacts(
+        Object.entries(data).map(([key, value]) => ({ id: key, ...value }))
+      ));
     }
-    dispatch(updateContacts(tempArray));
   };
 
   useEffect(() => {
@@ -59,16 +41,16 @@ function ChooseDrawer({ open, onClose, type, SetCustomer }) {
     }, 300);
     dispatch(updateValue(null));
     dispatch(updateContacts([]));
+    dispatch(updateSearchContactTerm(''));
   }
 
   function handleChoose(e) {
     if (typeof e !== 'object') {
       SetCustomer(
-        contacts.find((item) => item.id === Number(e)),
-        type,
+        contacts.find((item) => item.id === Number(e))
       );
     } else {
-      SetCustomer(e, type);
+      SetCustomer(e);
     }
 
     setTimeout(() => {
@@ -79,14 +61,7 @@ function ChooseDrawer({ open, onClose, type, SetCustomer }) {
   function ChangeRadio(e) {
     const value = e.target.value;
     dispatch(updateValue(Number(value)));
-    if (type === 'type1') {
-      handleChoose(value);
-    } else {
-      dispatch(
-        updateCreateContact(contacts.find((item) => item.id === Number(value))),
-      );
-      dispatch(updateAddModalOpen(true));
-    }
+    handleChoose(value);
   }
 
   const addNewContact = async (
@@ -105,19 +80,6 @@ function ChooseDrawer({ open, onClose, type, SetCustomer }) {
       postcode,
       phone,
     });
-  };
-
-  const addNewProduct = async (
-    product_name,
-    discount_amount,
-    price,
-    quantity,
-    id,
-  ) => {
-    if ([null, undefined, ''].includes(id)) {
-      id = generateRandomId();
-    }
-    handleChoose({ product_name, discount_amount, price, quantity, id });
   };
 
   let { head, title } = OBJ[type];
@@ -146,9 +108,19 @@ function ChooseDrawer({ open, onClose, type, SetCustomer }) {
         </Button>
         <div className="DrawerBody_main">
           <div className="label">Saved Contacts</div>
+          <div className={styles.searchInput}>
+            <Input
+              size="large"
+              type="text"
+              placeholder="Search Contact..."
+              prefix={<SearchOutlined />}
+              value={searchContactTerm}
+              onChange={(e) => dispatch(updateSearchContactTerm(e.target.value))}
+            />
+          </div>
           <div className="over">
             <Radio.Group onChange={ChangeRadio} value={value}>
-              {contacts.map((item, index) => {
+              {contacts.filter(contact => !searchContactTerm || (searchContactTerm && contact.customer_name.toLowerCase().includes(searchContactTerm.toLowerCase()))).map((item, index) => {
                 return (
                   <Flex
                     style={{ height: '50px' }}
@@ -171,19 +143,10 @@ function ChooseDrawer({ open, onClose, type, SetCustomer }) {
         onOpen={() => dispatch(updateAddModalOpen(true))}
         onClose={() => dispatch(updateAddModalOpen(false))}
       >
-        {type === 'type1' ? (
-          <ContactForm
-            onClose={() => dispatch(updateAddModalOpen(false))}
-            addNewContact={addNewContact}
-          />
-        ) : (
-          <ProductForm
-            product={createContact}
-            onClose={() => dispatch(updateAddModalOpen(false))}
-            addNewProduct={addNewProduct}
-            type={true}
-          />
-        )}
+        <ContactForm
+          onClose={() => dispatch(updateAddModalOpen(false))}
+          addNewContact={addNewContact}
+        />
       </KModal>
     </>
   );
@@ -200,4 +163,4 @@ function ContactItem({ contact }) {
   );
 }
 
-export default ChooseDrawer;
+export default ChooseContactDrawer;

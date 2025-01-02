@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { delInvoice, saveInvoice, upDateInvoice } from '../apis/invoice';
 import ProductForm from '../components/ProductForm';
 import KModal from '../components/KModal';
 import html2canvas from 'html2canvas';
@@ -16,12 +15,12 @@ import {
   PlusOutlined,
 } from '@ant-design/icons';
 import styles from '../style/Make.module.css';
-import ChooseDrawer from '../components/ChooseDrawer';
+import ChooseContactDrawer from '../components/ChooseContactDrawer';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   createInvoice,
   deleteInvoice,
-  resetParams,
+  resetParams, updateChooseProductOpen,
   updateContact,
   updateEditOpen,
   updateInvoice,
@@ -37,6 +36,8 @@ import localeData from 'dayjs/plugin/localeData';
 import weekday from 'dayjs/plugin/weekday';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import weekYear from 'dayjs/plugin/weekYear';
+import { setpice } from '../utils/utils';
+import ChooseProductDrawer from '../components/ChooseProductDrawer';
 dayjs.extend(customParseFormat);
 dayjs.extend(advancedFormat);
 dayjs.extend(weekday);
@@ -47,30 +48,10 @@ dayjs.extend(weekYear);
 const { TextArea } = Input;
 const { confirm } = Modal;
 
-// function eqs(v1,v2) {
-//     if(typeof v1 !== 'object'|| v1===null||typeof v2 !== 'object'|| v2===null){
-//         return v1===v2
-//     }
-//     let v1keys = Object.keys(v1)
-//     let v2keys = Object.keys(v2)
-//     if(v1keys.length!==v2keys.length){
-//         return false
-//     }
-//     for (let key of v1keys){
-//         if(!v2keys.includes(key)){
-//             return false
-//         }
-//         if(!eqs(v1[key],v2[key])){
-//             return false
-//         }
-//     }
-//     return true
-// }
-
 export default function MakeNewInvoice({ ...props }) {
   let history = useHistory();
   const { state } = useLocation();
-  const { isCanvas, open, editOpen, type, contact, params } = useSelector(
+  const { isCanvas, open, editOpen, type, contact, params, chooseProductOpen } = useSelector(
     (state) => state.invoice,
   );
   const dispatch = useDispatch();
@@ -89,7 +70,11 @@ export default function MakeNewInvoice({ ...props }) {
   }
 
   function go(t) {
-    dispatch(updateOpen(true));
+    if (t === 'type1') {
+      dispatch(updateOpen(true));
+    } else {
+      dispatch(updateChooseProductOpen(true));
+    }
     dispatch(updateType(t));
   }
 
@@ -97,57 +82,47 @@ export default function MakeNewInvoice({ ...props }) {
     dispatch(updateOpen(false));
   }
 
-  function setpice(arr) {
-    let zong = arr.reduce((total, item) => {
-      total += item.quantity * (item.price - item.discount_amount);
-      return total;
-    }, 0);
-    let discount = arr.reduce((total, item) => {
-      total += item.quantity * item.discount_amount;
-      return total;
-    }, 0);
-    return { zong, discount };
+  const handleChooseContact = (obj) => {
+    let { customer_name, customer_address, postcode, city, email, phone } = obj;
+    dispatch(
+      updateParams({
+        ...params,
+        customer_name,
+        customer_address,
+        customer_postal_code: postcode,
+        customer_city: city,
+        customer_email: email,
+        customer_phone: phone,
+      }),
+    );
+    setTimeout(() => {
+      onClose__();
+    }, 300);
   }
 
-  function SetCustomer(obj, T) {
-    console.log('%c 测试', 'color:#fff; background:red');
-    console.log(obj);
-    let { customer_name, customer_address, postcode, city, email, phone } = obj;
-    if (T === 'type1') {
-      dispatch(
-        updateParams({
-          ...params,
-          customer_name,
-          customer_address,
-          customer_postal_code: postcode,
-          customer_city: city,
-          customer_email: email,
-          customer_phone: phone,
-        }),
-      );
-    } else {
-      let arr = [...params.product_details];
-      let is = arr.findIndex((item) => item.id === obj.id);
-      if (is !== -1) {
-        arr.splice(is, 1);
-      }
-      arr.push({
-        name: obj.product_name,
-        price: Number(obj.price),
-        quantity: Number(obj.quantity),
-        discount_amount: Number(obj.discount_amount),
-        id: obj.id,
-      });
-      let { zong, discount } = setpice(arr);
-      dispatch(
-        updateParams({
-          ...params,
-          product_details: arr,
-          discount: discount,
-          total_amount: zong,
-        }),
-      );
+  const handleChooseProduct = (obj) => {
+    let arr = [...params.product_details];
+    let is = arr.findIndex((item) => item.id === obj.id);
+    if (is !== -1) {
+      arr.splice(is, 1);
     }
+    arr.push({
+      name: obj.product_name,
+      price: Number(obj.price),
+      quantity: Number(obj.quantity),
+      discount_amount: Number(obj.discount_amount),
+      id: obj.id,
+    });
+    let { zong, discount } = setpice(arr);
+    dispatch(
+      updateParams({
+        ...params,
+        product_details: arr,
+        discount: discount,
+        total_amount: zong,
+      }),
+    );
+
     setTimeout(() => {
       onClose__();
     }, 300);
@@ -460,11 +435,17 @@ export default function MakeNewInvoice({ ...props }) {
           )}
         </div>
       </div>
-      <ChooseDrawer
-        SetCustomer={SetCustomer}
+      <ChooseContactDrawer
+        SetCustomer={handleChooseContact}
         type={type}
         open={open}
         onClose={() => dispatch(updateOpen(false))}
+      />
+      <ChooseProductDrawer
+        SetCustomer={handleChooseProduct}
+        type={type}
+        open={chooseProductOpen}
+        onClose={() => dispatch(updateChooseProductOpen(false))}
       />
       <KModal
         isOpen={editOpen}

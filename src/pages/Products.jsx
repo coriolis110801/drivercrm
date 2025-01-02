@@ -45,7 +45,7 @@ const Products = () => {
   };
 
   let searchProducts = products.filter((product) =>
-    product.product_name.includes(searchData),
+    product.product_name.toLowerCase().includes(searchData.toLowerCase()),
   );
 
   const _updateProduct = async (
@@ -129,7 +129,7 @@ const Products = () => {
         <div className={styles.p4}>
           <Input
             size="large"
-            type="tel"
+            type="text"
             placeholder="Search Product..."
             prefix={<SearchOutlined />}
             value={searchData}

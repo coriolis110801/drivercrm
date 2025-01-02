@@ -46,6 +46,7 @@ const invoiceSlice = createSlice({
     },
     addModalOpen: false,
     contacts: [],
+    products: [],
     value: null,
     createContact: {},
     OBJ: {
@@ -58,6 +59,10 @@ const invoiceSlice = createSlice({
         head: 'Add New Product',
       },
     },
+    chooseProductOpen: false,
+    addProductModalOpen: false,
+    searchContactTerm: '',
+    searchProductTerm: '',
   },
   reducers: {
     updateIsCanvas: (state, action) => {
@@ -100,11 +105,26 @@ const invoiceSlice = createSlice({
     updateContacts: (state, action) => {
       state.contacts = action.payload;
     },
+    updateProducts: (state, action) => {
+      state.products = action.payload;
+    },
     updateValue: (state, action) => {
       state.value = action.payload;
     },
     updateCreateContact: (state, action) => {
       state.createContact = action.payload;
+    },
+    updateChooseProductOpen: (state, action) => {
+      state.chooseProductOpen = action.payload;
+    },
+    updateAddProductModalOpen: (state, action) => {
+      state.addProductModalOpen = action.payload;
+    },
+    updateSearchContactTerm: (state, action) => {
+      state.searchContactTerm = action.payload;
+    },
+    updateSearchProductTerm: (state, action) => {
+      state.searchProductTerm = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -140,9 +160,14 @@ export const {
   updateParams,
   updateAddModalOpen,
   updateContacts,
+  updateProducts,
   updateValue,
   updateCreateContact,
   resetParams,
+  updateChooseProductOpen,
+  updateAddProductModalOpen,
+  updateSearchContactTerm,
+  updateSearchProductTerm
 } = invoiceSlice.actions;
 
 export default invoiceSlice.reducer;

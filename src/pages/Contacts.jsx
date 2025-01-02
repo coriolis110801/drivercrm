@@ -55,7 +55,7 @@ const Contacts = () => {
   };
 
   let searchContacts = contacts.filter((contact) =>
-    contact.customer_name.includes(searchData),
+    contact.customer_name.toLowerCase().includes(searchData.toLowerCase()),
   );
 
   const _updateContact = async (
@@ -145,7 +145,7 @@ const Contacts = () => {
         <div className={styles.pContent}>
           <Input
             size="large"
-            type="tel"
+            type="text"
             placeholder="Search Contact..."
             prefix={<SearchOutlined />}
             value={searchData}
