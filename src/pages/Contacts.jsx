@@ -177,6 +177,25 @@ const Contacts = () => {
             <Option value="desc">Name Z-A</Option>
           </Select>
         </div>
+        {/* Add New Buttons Below Sort By Dropdown */}
+        <div className={styles.pContent}>
+          <Button
+            type="default"
+            block
+            onClick={() => console.log('Create New Route Clicked')}
+          >
+            创建新路线
+          </Button>
+        </div>
+        <div className={styles.pContent}>
+          <Button
+            type="default"
+            block
+            onClick={() => console.log('Select Clicked')}
+          >
+            选择
+          </Button>
+        </div>
         <div className={styles.pContent}>
           {searchContacts.map((contact) => (
             <ContactCard
