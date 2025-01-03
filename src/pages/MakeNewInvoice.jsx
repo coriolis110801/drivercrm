@@ -46,10 +46,10 @@ dayjs.extend(weekOfYear);
 dayjs.extend(weekYear);
 
 const companyInfo = {
-  name: "123 Ltd",
-  email: "123@gmail.com",
-  registrationNumber: "123448",
-  bankAccount: "10445757",
+  name: "BUTT & CO (UK) Ltd",
+  email: "lee@butt-and-co.co.uk",
+  registrationNumber: "10445756",
+  bankAccount: "10478849",
   bankSortCode: "04-00-04",
   vatNumber: "324855100",
 };
