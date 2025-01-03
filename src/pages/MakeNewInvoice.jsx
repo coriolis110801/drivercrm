@@ -4,6 +4,7 @@ import ProductForm from '../components/ProductForm';
 import KModal from '../components/KModal';
 import html2canvas from 'html2canvas';
 
+
 import { Button, Input, Flex, message, Modal, Table, DatePicker } from 'antd';
 import {
   CaretDownOutlined,
@@ -247,6 +248,8 @@ export default function MakeNewInvoice({ ...props }) {
     printArea.style.padding = '20px';
     printArea.style.fontFamily = 'Arial, sans-serif';
 
+    const now = dayjs();
+    const filename = `INV-${now.format('YYYYMMDDHHmmss')}.png`;
     printArea.innerHTML = `
       <div style="text-align: center; margin-bottom: 20px;">
         <h1>Invoice</h1>
@@ -311,7 +314,7 @@ export default function MakeNewInvoice({ ...props }) {
     html2canvas(printArea).then(canvas => {
       const a = document.createElement('a');
       a.href = canvas.toDataURL('image/png');
-      a.download = 'invoice.png';
+      a.download = filename; // Use dynamic filename
       a.click();
       document.body.removeChild(printArea);
       messageApi.success('Invoice generated successfully!');
