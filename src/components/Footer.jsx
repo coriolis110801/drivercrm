@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <div className={styles.footer}>
       <div className={styles.footerNav}>
-        <NavLink activeClassName={styles.active} to={'/info/schedule'}>
+        <NavLink activeClassName={styles.active} to={'/info/futurehome'}>
           <div>Schedule</div>
         </NavLink>
         <NavLink activeClassName={styles.active} to={'/info/todolist'}>

@@ -15,11 +15,37 @@ export const saveInvoice = async (obj, thunkAPI) => {
     return thunkAPI.rejectWithValue(error.message);
   }
 };
+export const saveInvoicefuture = async (obj, thunkAPI) => {
+  try {
+    const userInfo = getUserInfo();
+    const { data } = await axios.post(`${REACT_APP_SERVER}/api/futureinvoice/`, {
+      ...obj,
+      responsible_person_id: userInfo.id,
+    });
+    return data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.message);
+  }
+};
 export const listInvoice = async (thunkAPI) => {
   try {
     const userInfo = getUserInfo();
     const { data } = await axios.post(
       `${REACT_APP_SERVER}/api/unpaid_invoices/`,
+      {
+        responsible_person_id: userInfo.id,
+      },
+    );
+    return data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.message);
+  }
+};
+export const listInvoicefuture = async (thunkAPI) => {
+  try {
+    const userInfo = getUserInfo();
+    const { data } = await axios.post(
+      `${REACT_APP_SERVER}/api/future_invoices/`,
       {
         responsible_person_id: userInfo.id,
       },
@@ -71,7 +97,19 @@ export const upAllInvoice = async (obj, thunkAPI) => {
     return thunkAPI.rejectWithValue(error.message);
   }
 };
-
+export const upAllInvoicefuture = async (obj, thunkAPI) => {
+  try {
+    const { data } = await axios.post(
+      `${REACT_APP_SERVER}/future_update_invoice_status/`,
+      {
+        invoice_ids: obj,
+      },
+    );
+    return data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.message);
+  }
+};
 export const upAllComplete = async (obj, thunkAPI) => {
   try {
     const { data } = await axios.post(

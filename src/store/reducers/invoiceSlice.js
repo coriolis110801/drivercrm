@@ -2,27 +2,37 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
   delInvoice,
   listInvoice,
+  listInvoicefuture,
   saveInvoice,
+  saveInvoicefuture,
   upAllInvoice,
+  upAllInvoicefuture,
   upDateInvoice,
 } from '../../apis/invoice';
 import dayjs from 'dayjs';
 
 // 异步操作定义
 export const getInvoiceList = createAsyncThunk('invoice/list', listInvoice);
+export const getInvoiceListfuture = createAsyncThunk('invoice/listfuture', listInvoicefuture);
 export const createInvoice = createAsyncThunk('invoice/create', saveInvoice);
+export const createInvoicefuture = createAsyncThunk('invoice/createfuture', saveInvoicefuture);
 export const updateInvoice = createAsyncThunk('invoice/update', upDateInvoice);
 export const deleteInvoice = createAsyncThunk('invoice/delete', delInvoice);
 export const upAllInvoices = createAsyncThunk('invoice/upAll', upAllInvoice);
+export const upAllInvoicesfuture = createAsyncThunk('invoice/upAllfuture', upAllInvoicefuture);
 
 const invoiceSlice = createSlice({
   name: 'invoice',
   initialState: {
     loading: false,
     invoices: [],
+    invoicesFuture: [], // 新增字段存储未来的发票
     discount: 0,
     totalAmount: 0,
-    product_details_summary: [], // 新增字段
+    product_details_summary: [],
+    discountfuture: 0, // 新增未来折扣
+    totalAmountfuture: 0, // 新增未来总金额
+    product_details_summary_future: [], // 新增未来产品详情汇总
     isCanvas: true,
     open: false,
     editOpen: false,
@@ -132,8 +142,8 @@ const invoiceSlice = createSlice({
     builder.addCase(getInvoiceList.fulfilled, (state, action) => {
       const { invoices = [], product_details_summary = [] } = action.payload;
 
-      state.invoices = invoices; // 更新发票列表
-      state.product_details_summary = product_details_summary; // 更新产品详情汇总
+      state.invoices = invoices;
+      state.product_details_summary = product_details_summary;
 
       let discount = 0;
       let totalAmount = invoices.reduce((prev, currentValue) => {
@@ -142,12 +152,38 @@ const invoiceSlice = createSlice({
         return prev;
       }, 0);
 
-      state.discount = discount; // 更新总折扣
-      state.totalAmount = totalAmount; // 更新总金额
-      state.loading = false; // 加载结束
+      state.discount = discount;
+      state.totalAmount = totalAmount;
+      state.loading = false;
+    });
+    builder.addCase(getInvoiceListfuture.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(getInvoiceListfuture.fulfilled, (state, action) => {
+      const { invoicesFuture = [], product_details_summary_future = [] } = action.payload;
+
+      state.invoicesFuture = invoicesFuture;
+      state.product_details_summary_future = product_details_summary_future;
+
+      let discountfuture = 0;
+      let totalAmountfuture = invoicesFuture.reduce((prev, currentValue) => {
+        prev += currentValue.total_amount;
+        discountfuture += currentValue.discount;
+        return prev;
+      }, 0);
+
+      state.discountfuture = discountfuture;
+      state.totalAmountfuture = totalAmountfuture;
+      state.loading = false;
+    });
+    builder.addCase(createInvoice.fulfilled, (state, action) => {});
+    builder.addCase(createInvoicefuture.fulfilled, (state, action) => {
+      state.invoicesFuture.push(action.payload);
     });
     builder.addCase(upAllInvoices.fulfilled, (state, action) => {});
-    builder.addCase(createInvoice.fulfilled, (state, action) => {});
+    builder.addCase(upAllInvoicesfuture.fulfilled, (state, action) => {
+      state.invoicesFuture = action.payload;
+    });
     builder.addCase(updateInvoice.fulfilled, (state, action) => {});
     builder.addCase(deleteInvoice.fulfilled, (state, action) => {});
   },
