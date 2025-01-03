@@ -286,9 +286,9 @@ export default function MakeNewInvoice({ ...props }) {
             ${params.product_details.map(item => `
               <tr>
                 <td>${item.name}</td>
-                <td>${item.price.toFixed(2)}</td>
+                <td>£${item.price.toFixed(2)}</td>
                 <td>${item.quantity}</td>
-                <td>${(item.price * item.quantity).toFixed(2)}</td>
+                <td>£${(item.price * item.quantity).toFixed(2)}</td>
               </tr>
             `).join('')}
           </tbody>
@@ -296,9 +296,9 @@ export default function MakeNewInvoice({ ...props }) {
       </div>
       <div style="margin-top: 20px;">
         <h3>Total</h3>
-        <p>Discount: ${params.discount}</p>
-        <p>VAT Included: ${(params.total_amount - params.total_amount / 1.2).toFixed(2)}</p>
-        <p>Total Amount: ${params.total_amount}</p>
+        <p>Discount: £${params.discount.toFixed(2)}</p>
+        <p>VAT Included: £${(params.total_amount - params.total_amount / 1.2).toFixed(2)}</p>
+        <p>Total Amount: £${params.total_amount.toFixed(2)}</p>
       </div>
       <div style="margin-top: 20px;">
         <h3>Footer</h3>
