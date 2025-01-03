@@ -45,6 +45,15 @@ dayjs.extend(localeData);
 dayjs.extend(weekOfYear);
 dayjs.extend(weekYear);
 
+const companyInfo = {
+  name: "123 Ltd",
+  email: "123@gmail.com",
+  registrationNumber: "123448",
+  bankAccount: "10445757",
+  bankSortCode: "04-00-04",
+  vatNumber: "324855100",
+};
+
 const { TextArea } = Input;
 const { confirm } = Modal;
 
@@ -233,30 +242,82 @@ export default function MakeNewInvoice({ ...props }) {
   }
 
   function DownloadPng() {
-    messageApi.info('保存中。。。');
-    document.getElementById('CanvasSave').style.padding = '20px';
-    let time = Date.now();
-    dispatch(updateIsCanvas(false));
-    queueMicrotask(() => {
-      html2canvas(document.getElementById('CanvasSave')).then(
-        function (canvas) {
-          let a = document.createElement('a');
-          a.href = canvas.toDataURL('image/png');
-          a.download = 'invoice.png';
-          let time2 = Date.now();
-          a.click();
-          setTimeout(
-            () => {
-              document.getElementById('CanvasSave').style.padding = 'initial';
-              dispatch(updateIsCanvas(true));
-            },
-            500 - (time2 - time),
-          );
-          messageApi.success('Success。。。');
-        },
-      );
+    messageApi.info('Generating invoice...');
+    const printArea = document.createElement('div');
+    printArea.style.padding = '20px';
+    printArea.style.fontFamily = 'Arial, sans-serif';
+
+    printArea.innerHTML = `
+      <div style="text-align: center; margin-bottom: 20px;">
+        <h1>Invoice</h1>
+        <p>${companyInfo.name}</p>
+        <p>Email: ${companyInfo.email}</p>
+        <p>Registration Number: ${companyInfo.registrationNumber}</p>
+        <p>Bank Account: ${companyInfo.bankAccount}</p>
+        <p>Sort Code: ${companyInfo.bankSortCode}</p>
+        <p>VAT Number: ${companyInfo.vatNumber}</p>
+      </div>
+      <div>
+        <h3>Customer Details</h3>
+        <p>Name: ${params.customer_name || 'N/A'}</p>
+        <p>Address: ${params.customer_address || 'N/A'}</p>
+        <p>City: ${params.customer_city || 'N/A'}</p>
+        <p>Postal Code: ${params.customer_postal_code || 'N/A'}</p>
+        <p>Phone: ${params.customer_phone || 'N/A'}</p>
+        <p>Email: ${params.customer_email || 'N/A'}</p>
+      </div>
+      <div style="margin-top: 20px;">
+        <h3>Invoice Details</h3>
+        <p>Date: ${params.invoice_date}</p>
+        <p>Description: ${params.description || ' '}</p>
+      </div>
+      <div style="margin-top: 20px;">
+        <h3>Products and Services</h3>
+        <table style="width: 100%; border-collapse: collapse;" border="1">
+          <thead>
+            <tr>
+              <th>Product Name</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${params.product_details.map(item => `
+              <tr>
+                <td>${item.name}</td>
+                <td>${item.price.toFixed(2)}</td>
+                <td>${item.quantity}</td>
+                <td>${(item.price * item.quantity).toFixed(2)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top: 20px;">
+        <h3>Total</h3>
+        <p>Discount: ${params.discount}</p>
+        <p>VAT Included: ${(params.total_amount - params.total_amount / 1.2).toFixed(2)}</p>
+        <p>Total Amount: ${params.total_amount}</p>
+      </div>
+      <div style="margin-top: 20px;">
+        <h3>Footer</h3>
+        <p>${params.footerdescription || ' '}</p>
+      </div>
+    `;
+
+    document.body.appendChild(printArea);
+
+    html2canvas(printArea).then(canvas => {
+      const a = document.createElement('a');
+      a.href = canvas.toDataURL('image/png');
+      a.download = 'invoice.png';
+      a.click();
+      document.body.removeChild(printArea);
+      messageApi.success('Invoice generated successfully!');
     });
   }
+
   return (
     <div>
       <div className={styles.btn_head}>
