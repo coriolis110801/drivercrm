@@ -142,7 +142,7 @@ export default function FutureMakeNewInvoice({ ...props }) {
     messageApi.info('Saving。。。');
     dispatch(createInvoicefuture(params)).then(() => {
       messageApi.success('Save success。。。');
-      history.push('/info');
+      history.push('/info/futurehome');
     });
   }
 
@@ -220,7 +220,7 @@ export default function FutureMakeNewInvoice({ ...props }) {
     messageApi.info('Saving。。。');
     dispatch(updateInvoice(params)).then(() => {
       messageApi.success('Save success。。。');
-      history.push('/info');
+      history.push('/info/futurehome');
     });
   }
 
@@ -233,7 +233,7 @@ export default function FutureMakeNewInvoice({ ...props }) {
         messageApi.info('Deleting。。。');
         dispatch(deleteInvoice(params)).then(() => {
           messageApi.success('Delete Success。。。');
-          history.push('/info');
+          history.push('/info/futurehome');
         });
       },
       onCancel() {
