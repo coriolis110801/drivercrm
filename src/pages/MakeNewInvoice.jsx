@@ -273,8 +273,9 @@ export default function MakeNewInvoice({ ...props }) {
               onClick={() => !state?.readonly && go('type1')}
               block
               type="primary"
-              icon={!params.customer_name ? <PlusOutlined /> : <EditOutlined />}
-            >
+              icon={
+                !params.customer_name ? <PlusOutlined /> : <EditOutlined />
+              }>
               {params.customer_name || 'Choose Customer'}
             </Button>
           </div>
@@ -320,8 +321,7 @@ export default function MakeNewInvoice({ ...props }) {
               onClick={() => !state?.readonly && go('type2')}
               block
               type="primary"
-              icon={<PlusOutlined />}
-            >
+              icon={<PlusOutlined />}>
               Add Product
             </Button>
             {params.product_details.length > 0 && (
@@ -338,12 +338,12 @@ export default function MakeNewInvoice({ ...props }) {
                     key: 'subtotal',
                     render: (text, record) => (
                       <span>{(record.price * record.quantity).toFixed(2)}</span>
-                    )
-                  }
+                    ),
+                  },
                 ]}
                 onRow={(record) => {
                   return {
-                    onClick: () => EDITFun(record)
+                    onClick: () => EDITFun(record),
                   };
                 }}
               />
@@ -354,16 +354,23 @@ export default function MakeNewInvoice({ ...props }) {
             <Flex
               justify={'space-between'}
               align={'center'}
-              style={{ width: '100%', height: '40px' }}
-            >
+              style={{ width: '100%', height: '40px' }}>
               <span>Discount Total:</span>
               <span>{params.discount}</span>
             </Flex>
             <Flex
               justify={'space-between'}
               align={'center'}
-              style={{ width: '100%', height: '40px' }}
-            >
+              style={{ width: '100%', height: '40px' }}>
+              <span>Vat included:</span>
+              <span>
+                {(params.total_amount - params.total_amount / 1.2).toFixed(2)}
+              </span>
+            </Flex>
+            <Flex
+              justify={'space-between'}
+              align={'center'}
+              style={{ width: '100%', height: '40px' }}>
               <span>Total:</span>
               <span>{params.total_amount}</span>
             </Flex>
@@ -394,8 +401,7 @@ export default function MakeNewInvoice({ ...props }) {
                 block
                 onClick={DownloadPng}
                 type="primary"
-                icon={<LinkOutlined />}
-              >
+                icon={<LinkOutlined />}>
                 Download
               </Button>
               {state?.readonly ? null : (
@@ -404,8 +410,7 @@ export default function MakeNewInvoice({ ...props }) {
                     onClick={EditSave}
                     block
                     type="primary"
-                    icon={<CaretDownOutlined />}
-                  >
+                    icon={<CaretDownOutlined />}>
                     Save
                   </Button>
                   <Button
@@ -413,8 +418,7 @@ export default function MakeNewInvoice({ ...props }) {
                     block
                     color="danger"
                     variant="solid"
-                    icon={<DeleteOutlined />}
-                  >
+                    icon={<DeleteOutlined />}>
                     Delete
                   </Button>
                 </>
@@ -426,16 +430,14 @@ export default function MakeNewInvoice({ ...props }) {
                 block
                 type="primary"
                 onClick={DownloadPng}
-                icon={<LinkOutlined />}
-              >
+                icon={<LinkOutlined />}>
                 Download
               </Button>
               <Button
                 onClick={Save}
                 block
                 type="primary"
-                icon={<CaretDownOutlined />}
-              >
+                icon={<CaretDownOutlined />}>
                 Save
               </Button>
             </>
@@ -458,8 +460,7 @@ export default function MakeNewInvoice({ ...props }) {
         isOpen={editOpen}
         title={'Edit Product'}
         onOpen={() => dispatch(updateEditOpen(true))}
-        onClose={() => dispatch(updateEditOpen(false))}
-      >
+        onClose={() => dispatch(updateEditOpen(false))}>
         <ProductForm
           product={contact}
           onClose={() => dispatch(updateEditOpen(false))}
