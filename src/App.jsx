@@ -2,6 +2,7 @@ import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import MakeNewInvoice from './pages/MakeNewInvoice';
 import FutureMakeNewInvoice from './pages/FutureMakeNewInvoice';
+import NotpaidMakeNewInvoice from './pages/NotpaidMakeNewInvoice';
 import ContactInfo from './pages/ContactInfo';
 import LoginComponent from './pages/Login';
 import Header from './components/Header';
@@ -11,6 +12,7 @@ import Contacts from './pages/Contacts';
 import Products from './pages/Products';
 import Home from './pages/Home';
 import FutureHome from './pages/futureHome';
+import NotpaidHome from './pages/notpaidHome';
 
 export default function App({ location }) {
   console.log('%c FrontendAuth', 'color:#fff; background:red');
@@ -38,6 +40,9 @@ export default function App({ location }) {
           <Route path="/makefuture" exact>
             <FutureMakeNewInvoice />
           </Route>
+          <Route path="/makenotpaid" exact>
+            <NotpaidMakeNewInvoice />
+          </Route>
           <Route path="/contact/:id" exact>
             <ContactInfo />
           </Route>
@@ -56,6 +61,9 @@ export default function App({ location }) {
                   </Route>
                   <Route path="/info/futurehome" exact>
                     <FutureHome />
+                  </Route>
+                  <Route path="/info/notpaidhome" exact>
+                    <NotpaidHome />
                   </Route>
                   <Route path="/info/" exact>
                     <Home />
@@ -86,6 +94,9 @@ export default function App({ location }) {
           </Route>
           <Route path="/makefuture" exact>
             <FutureMakeNewInvoice />
+          </Route>
+          <Route path="/makenotpaid" exact>
+            <NotpaidMakeNewInvoice />
           </Route>
         </>
       );
