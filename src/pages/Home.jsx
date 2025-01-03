@@ -112,10 +112,11 @@ export default function Home() {
           onClick={viewProductDetailsSummary}
           block
           type="default"
-          style={{ marginTop: '10px' }}
+          className={styles.summaryBtn} // 添加这个样式类
         >
           查看product_details_summary
         </Button>
+
       </div>
       {contextHolder}
 

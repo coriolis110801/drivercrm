@@ -28,9 +28,32 @@
 .bottom {
   position: fixed;
   width: calc(100% - 80px);
-  bottom: 10px;
+  bottom: 60px;
   left: 40px;
+  display: flex; /* Flex 布局 */
+  flex-direction: column; /* 按列排列按钮 */
+  gap: 10px; /* 按钮之间间距 */
 }
+
+.bottom .summaryBtn {
+  width: 100%;
+  padding: 10px;
+  background-color: #f0f2f5; /* 自定义背景色 */
+  border: 1px solid #d9d9d9; /* 自定义边框 */
+  border-radius: 4px;
+  color: #000;
+  font-size: 16px;
+  text-align: center;
+}
+
+.submitBtn {
+  /* 特殊样式定义（如有需要） */
+}
+
+.summaryBtn {
+  /* 特殊样式定义（如有需要） */
+}
+
 
 .priceWrapper {
   position: absolute;
