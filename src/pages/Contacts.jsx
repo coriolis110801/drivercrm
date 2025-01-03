@@ -184,9 +184,9 @@ const Contacts = () => {
             style={{ width: '100%' }}
             onChange={(value) => console.log('Selected:', value)}
           >
-            <Option value="option1">Option 1</Option>
-            <Option value="option2">Option 2</Option>
-            <Option value="option3">Option 3</Option>
+            <Option value="北京之旅">Option 1</Option>
+            <Option value="上海美食路线">Option 2</Option>
+            <Option value="广州历史探索">Option 3</Option>
           </Select>
         </div>
         <div className={styles.pContent}>
